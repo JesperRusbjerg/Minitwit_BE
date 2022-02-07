@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinitwitBE.Api", "Minitwit_BE\MinitwitBE.Api.csproj", "{D5C26895-F4C5-435D-AD25-5BBEE8AB99E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinitwitBE.Domain", "MinitwitBE.Domain\MinitwitBE.Domain.csproj", "{A4EF4569-B16F-40F4-A311-2AA584938CEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minitwit.DomainServices", "Minitwit.DomainServices\Minitwit.DomainServices.csproj", "{617050F4-36CE-4F14-8240-29F91C186508}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minitwit.Persistance", "Minitwit.Persistance\Minitwit.Persistance.csproj", "{44879394-147C-4CC7-84BD-DAF3444EEABA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D5C26895-F4C5-435D-AD25-5BBEE8AB99E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5C26895-F4C5-435D-AD25-5BBEE8AB99E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5C26895-F4C5-435D-AD25-5BBEE8AB99E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5C26895-F4C5-435D-AD25-5BBEE8AB99E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4EF4569-B16F-40F4-A311-2AA584938CEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4EF4569-B16F-40F4-A311-2AA584938CEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4EF4569-B16F-40F4-A311-2AA584938CEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4EF4569-B16F-40F4-A311-2AA584938CEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{617050F4-36CE-4F14-8240-29F91C186508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{617050F4-36CE-4F14-8240-29F91C186508}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{617050F4-36CE-4F14-8240-29F91C186508}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{617050F4-36CE-4F14-8240-29F91C186508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44879394-147C-4CC7-84BD-DAF3444EEABA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44879394-147C-4CC7-84BD-DAF3444EEABA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44879394-147C-4CC7-84BD-DAF3444EEABA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44879394-147C-4CC7-84BD-DAF3444EEABA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB1CB5B6-7774-4BE6-9520-4391A87ED041}
+	EndGlobalSection
+EndGlobal

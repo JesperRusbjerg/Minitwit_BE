@@ -1,4 +1,7 @@
-﻿namespace Minitwit_BE.Api
+﻿using Microsoft.EntityFrameworkCore;
+using Minitwit_BE.Persistence;
+
+namespace Minitwit_BE.Api
 {
     public class Startup
     {
@@ -13,6 +16,7 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().AddControllersAsServices();
+            services.AddDbContext<TwitContext>();
         }
 
         // to configure HTTP request pipeline.
@@ -38,6 +42,13 @@
                 // Required to have operational REST endpoints
                 endpoints.MapControllers();
             });
+
+
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<TwitContext>();
+                db.Database.EnsureCreated();
+            }
         }
     }
 }

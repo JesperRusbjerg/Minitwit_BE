@@ -15,14 +15,17 @@ namespace Minitwit_BE.Persistence
         {
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = Environment.GetFolderPath(folder);
-            _dbPath = Path.Join(path, "twit.db");
-
-            // for me it's C:\Users\<USER>\AppData\Local
+            _dbPath = Path.Join(path, "twit.db");                           // for me it's C:\Users\<USER>\AppData\Local
         }
 
         // The following configures EF to create a Sqlite database file in the
         // special "local" folder for your platform.
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite($"Data Source={_dbPath}");
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+        }
     }
 }

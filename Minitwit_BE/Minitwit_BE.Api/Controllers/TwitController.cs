@@ -8,31 +8,36 @@ namespace Minitwit_BE.Api.Controllers
     [Route("api/twit")]
     public class TwitController : ControllerBase
     {
+        private readonly TwitContext _twitContext;          // To dependency inject the context instance.
+        
+        public TwitController(TwitContext twitContext)
+        {
+            _twitContext = twitContext;
+        }
+        
         [HttpGet("test")]
         public async Task<string> TestEndpoint()
         {
             return await Task.FromResult("test");
         }
 
-        // TODO: Adding to the database should be POST. The message should be taken from the request body.
+        // TODO: Adding to the database should be POST/PUT. The message should be taken from the request body.
         [HttpGet("add")]
         public async Task<string> AddTwit()
         {
-            using (var db = new TwitContext())
-            {
-                // Add new twit
-                Console.WriteLine("Inserting a new twit");
-                // TODO: It has to be investigated how to autoincrement primary keys, etc.
-                db.Add(new Message 
-                { 
-                    AuthorId = 1,
-                    Flagged = false,
-                    PublishDate = DateTime.Now,
-                    MessageId = 1,
-                    Text = "TestText"
-                });
-                db.SaveChanges();
-            }
+            
+            // Add new twit
+            Console.WriteLine("Inserting a new twit");
+            // Primary keys should be auto incremented when you add entity to the table and dont explicitely specify specify the ID
+            _twitContext.Add(new Message 
+            { 
+                AuthorId = 1,
+                Flagged = false,
+                PublishDate = DateTime.Now,
+                Text = "jjjjjjjjjjjjjjj"
+            });
+            _twitContext.SaveChanges();
+            
 
             return "OK";
         }
@@ -40,12 +45,9 @@ namespace Minitwit_BE.Api.Controllers
         [HttpGet("getall")]
         public async Task<string> GetTwit()
         {
-            using (var db = new TwitContext())
-            {
-                // Print all to console
-                Console.WriteLine("Reading");
-                db.Messages.OrderBy(m => m.MessageId).AsEnumerable().ToList().ForEach(e => Console.WriteLine(e.Text));
-            }
+            // Print all to console
+            Console.WriteLine("Reading");
+            _twitContext.Messages.OrderBy(m => m.MessageId).AsEnumerable().ToList().ForEach(e => Console.WriteLine($"Id: {e.MessageId}, Text: {e.Text}"));
 
             return "OK";
         }

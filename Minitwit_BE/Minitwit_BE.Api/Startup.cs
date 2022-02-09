@@ -12,11 +12,18 @@ namespace Minitwit_BE.Api
             this.configuration = configuration;
         }
 
-        // to add services to the container. For instance healthcheck, etc.
+        // to add services to the application container. For instance healthcheck, etc.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().AddControllersAsServices();
-            services.AddDbContext<TwitContext>();
+            services.AddDbContext<TwitContext>(opt =>
+            {
+                var folder = Environment.SpecialFolder.LocalApplicationData;
+                var path = Environment.GetFolderPath(folder);
+                var dbPath = Path.Join(path, "twit.db");                        // for me it's C:\Users\<USER>\AppData\Local
+
+                opt.UseSqlite($"Data Source={dbPath}");
+            });
         }
 
         // to configure HTTP request pipeline.
@@ -44,6 +51,7 @@ namespace Minitwit_BE.Api
             });
 
 
+            // to create a database if it's not there
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<TwitContext>();

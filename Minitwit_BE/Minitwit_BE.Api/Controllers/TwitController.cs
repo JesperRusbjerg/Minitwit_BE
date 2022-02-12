@@ -53,5 +53,28 @@ namespace Minitwit_BE.Api.Controllers
             Console.WriteLine("Reading");
             return Ok(_twitContext.Messages.ToList().Where(msg => msg.AuthorId == id));
         }
+
+        [HttpPut("mark-message")]
+        public async Task<ActionResult<string>> markMessage([FromBody]FlaggingInput input)
+        {
+            Message? flaggedMsg = _twitContext.Messages.SingleOrDefault(msg => msg.MessageId == input.MessageId);
+            if (flaggedMsg != null)
+            {
+                if (input.FlaggingAction == 1)
+                {
+                    flaggedMsg.Flagged = true;
+                }
+                else
+                {
+                    flaggedMsg.Flagged = false;
+                }
+                _twitContext.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
     }
 }

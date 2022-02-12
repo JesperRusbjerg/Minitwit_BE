@@ -15,7 +15,7 @@ namespace Minitwit_BE.Api.Controllers
             _twitContext = twitContext;
         }
 
-        [HttpGet("followers-list/{id}")]
+        [HttpGet("list/{id}")]
         public async Task<ActionResult<List<Follower>>> getFollowedUsers(int id)
         {
             List <Follower> followersList = _twitContext.Followers.Where(entry => entry.WhoId == id).ToList();
@@ -40,7 +40,7 @@ namespace Minitwit_BE.Api.Controllers
         [HttpDelete("unfollow/{id}")]
         public async Task<ActionResult<string>> unfollow(int id)
         {
-            Follower deletedFollow = _twitContext.Followers.SingleOrDefault(entry => entry.Id == id);
+            Follower? deletedFollow = _twitContext.Followers.SingleOrDefault(entry => entry.Id == id);
             if (deletedFollow != null)
             {
                 _twitContext.Remove(deletedFollow);

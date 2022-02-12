@@ -6,7 +6,6 @@
           <va-icon
             @click="handleSidebarClick"
             :name="isSidebarMinimized ? 'menu' : 'close'"
-            class="va-navbar__item"
             :color="iconColor"
           />
         </div>

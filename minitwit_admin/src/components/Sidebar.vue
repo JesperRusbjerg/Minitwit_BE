@@ -66,9 +66,6 @@ export default {
 
 <style lang="scss" scoped>
 #Sidebar {
-    .va-icon {
-        position: relative;
-        float: left !important;
-    }
+    
 }
 </style>

@@ -5,7 +5,7 @@
         <div class="left">
           <va-icon
             @click="handleSidebarClick"
-            :name="isSidebarMinimized ? 'close' : 'menu'"
+            :name="isSidebarMinimized ? 'menu' : 'close'"
             class="va-navbar__item"
             :color="iconColor"
           />
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 
 export default {
   name: "Navbar",
@@ -34,14 +34,13 @@ export default {
   },
   components: {},
   setup() {
-      const sidebarState = ref(false)
-      const isSidebarMinimized = computed(() => sidebarState.value)
+      const store = inject('store')
+      const isSidebarMinimized = computed(() => store.state.isSidebarMinimized)
 
-      const handleSidebarClick = () => {
-          sidebarState.value = !sidebarState.value
-      }
+      const handleSidebarClick = () => store.actions.toggleSidebar()
 
       return {
+          store,
           isSidebarMinimized,
           handleSidebarClick
       }

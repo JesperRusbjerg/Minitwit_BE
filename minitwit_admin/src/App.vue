@@ -18,7 +18,8 @@
 import Navbar from "@/components/Navbar.vue";
 import Sidebar from "@/components/Sidebar.vue";
 import { useColors } from "vuestic-ui";
-import { ref, computed } from "vue";
+import { ref, computed, provide } from "vue";
+import store from '@/compositionStore/index'
 
 export default {
   name: "App",
@@ -27,13 +28,14 @@ export default {
     Sidebar,
   },
   setup() {
+    provide('store', store)
     const { getColors } = useColors();
     const colors = computed(() => getColors());
     const useSidebarItems = () => {
       return [{ title: "Dashboard", icon: "house", to: "/", active: true }];
     };
     const getSidebarItems = computed(() => useSidebarItems());
-    const isSidebarMinimized = ref(false);
+    const isSidebarMinimized = computed(() => store.state.isSidebarMinimized)
     return {
       colors,
       isSidebarMinimized,

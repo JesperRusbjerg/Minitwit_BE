@@ -9,16 +9,21 @@ namespace Minitwit_BE.Api.Controllers
     public class FollowerController : ControllerBase
     {
         private readonly TwitContext _twitContext;          // To dependency inject the context instance.
-        
-        public FollowerController(TwitContext twitContext)
+        private readonly ILogger<FollowerController> _logger;
+
+        public FollowerController(TwitContext twitContext, ILogger<FollowerController> logger)
         {
             _twitContext = twitContext;
+            _logger = logger;
         }
 
         [HttpGet("list/{id}")]
-        public async Task<ActionResult<List<Follower>>> getFollowedUsers([FromRoute]int id)
+        public async Task<ActionResult<List<Follower>>> GetFollowedUsers([FromRoute]int id)
         {
+            _logger.LogInformation($"GetFollowedUsers endpoint was called for id: {id}");
+
             var followersList = _twitContext.Followers.Where(entry => entry.WhoId.Equals(id)).ToList();
+
             return Ok(followersList);
         }
 
@@ -26,6 +31,8 @@ namespace Minitwit_BE.Api.Controllers
         [HttpPost("follow")]
         public async Task<ActionResult> follow([FromBody]FollowerInput input)
         {
+            _logger.LogInformation($"Follow endpoint was called with whomid: {input.WhomId}, by: {input.WhoId}.");
+
             var newFollower = new Follower
             {
                 WhoId = input.WhoId,
@@ -38,9 +45,12 @@ namespace Minitwit_BE.Api.Controllers
         }
 
         [HttpDelete("unfollow/{id}")]
-        public async Task<ActionResult> unfollow([FromRoute]int id)
+        public async Task<ActionResult> Unfollow([FromRoute]int id)
         {
+            _logger.LogInformation($"Unfollow endpoint was called for id: {id}");
+
             var deletedFollow = _twitContext.Followers.FirstOrDefault(entry => entry.Id.Equals(id));
+
             if (deletedFollow != null)
             {
                 _twitContext.Remove(deletedFollow);

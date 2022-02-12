@@ -14,7 +14,7 @@ How to run guide:
 - Docker Setup
 To run the backend in a docker container:
 Step 1: Open a console and be in the solution folder (Minitwit_BE)
-Step 2: run: docker build -t twitbackend .
+Step 2: run: docker build -t twitbackend . (yes that is a dot at the end)
 Step 3: run: docker run -d -p 8080:80 --name twitbackend twitbackend
 Step 4: go to: http://localhost:8080/api/twit/test to confirm that it works
 

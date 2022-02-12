@@ -51,7 +51,7 @@ namespace Minitwit_BE.Api.Controllers
         public async Task<ActionResult<List<Message>>> GetPersonalTwits(int id)
         {
             Console.WriteLine("Reading");
-            return Ok(_twitContext.Messages.ToList().Where(x => x.AuthorId == id));
+            return Ok(_twitContext.Messages.ToList().Where(msg => msg.AuthorId == id));
         }
     }
 }

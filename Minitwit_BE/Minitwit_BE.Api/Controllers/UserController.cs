@@ -18,18 +18,33 @@ namespace Minitwit_BE.Api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<User>> registerUser([FromBody]UserInput input)
         {
-            // TODO: hash the password
+            string hashedPw = input.applyHash();
             User user = new User
             {
                 UserName = input.UserName,
                 Email = input.Email,
-                PwHash = input.Password
+                PwHash = hashedPw,
             };
 
             // TODO: handle if username/email exists
             _twitContext.Add(user);
             _twitContext.SaveChanges();
             return Ok(user);
+        }
+
+        [HttpGet("login")]
+        public async Task<ActionResult<int>> login([FromBody]UserInput input)
+        {
+            string hashedPw = input.applyHash();
+            User? authUser = _twitContext.Users.SingleOrDefault(user => user.UserName == input.UserName && user.PwHash == hashedPw);
+            if (authUser != null)
+            {
+                return Ok(authUser.UserId);
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
     }
 }

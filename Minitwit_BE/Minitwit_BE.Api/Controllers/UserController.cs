@@ -18,16 +18,16 @@ namespace Minitwit_BE.Api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<User>> registerUser([FromBody]UserInput input)
         {
-            User? existingUser = _twitContext.Users.SingleOrDefault(user => user.UserName == input.UserName || user.Email == input.Email);
+            var existingUser = _twitContext.Users.FirstOrDefault(user => user.UserName.Equals(input.UserName) || user.Email.Equals(input.Email));
             if (existingUser != null) {
                 return BadRequest("User with that nickname or email already exists!");
             }
-            string hashedPw = input.applyHash();
-            User user = new User
+
+            var user = new User
             {
                 UserName = input.UserName,
                 Email = input.Email,
-                PwHash = hashedPw,
+                PwHash = input.PwHash,
             };
 
             _twitContext.Add(user);
@@ -38,18 +38,10 @@ namespace Minitwit_BE.Api.Controllers
         [HttpGet("login")]
         public async Task<ActionResult<int>> login([FromBody]UserInput input)
         {
-            User? authUser = _twitContext.Users.SingleOrDefault(user => user.Email == input.Email);
+            var authUser = _twitContext.Users.FirstOrDefault(user => user.Email.Equals(input.Email) && user.PwHash.Equals(input.PwHash));
             if (authUser != null)
             {   
-                Boolean hashedPw = authUser.compareHash(input.Password);
-                if (hashedPw)
-                {
-                    return Ok(authUser.UserId);
-                }
-                else
-                {
-                    return Unauthorized();
-                }
+                return Ok(authUser.UserId);
             }
             else
             {

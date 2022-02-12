@@ -22,12 +22,12 @@ namespace Minitwit_BE.Api.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult<Message>> AddTwit([FromBody]MessageInput input)
+        public async Task<ActionResult> AddTwit([FromBody]MessageInput input)
         {
             // Add new twit
             Console.WriteLine("Inserting a new twit");
             // Primary keys should be auto incremented when you add entity to the table and dont explicitely specify specify the ID
-            Message msg = new Message 
+            var msg = new Message 
             { 
                 AuthorId = input.AuthorId,
                 Flagged = false,
@@ -37,7 +37,7 @@ namespace Minitwit_BE.Api.Controllers
             
             _twitContext.Add(msg);
             _twitContext.SaveChanges();
-            return Ok(msg);
+            return Ok();
         }
 
         [HttpGet("public-twits")]
@@ -48,19 +48,19 @@ namespace Minitwit_BE.Api.Controllers
         }
 
         [HttpGet("personal-twits/{id}")]
-        public async Task<ActionResult<List<Message>>> GetPersonalTwits(int id)
+        public async Task<ActionResult<List<Message>>> GetPersonalTwits([FromRoute]int id)
         {
             Console.WriteLine("Reading");
-            return Ok(_twitContext.Messages.ToList().Where(msg => msg.AuthorId == id));
+            return Ok(_twitContext.Messages.ToList().Where(msg => msg.AuthorId.Equals(id)));
         }
 
         [HttpPut("mark-message")]
         public async Task<ActionResult<string>> markMessage([FromBody]FlaggingInput input)
         {
-            Message? flaggedMsg = _twitContext.Messages.SingleOrDefault(msg => msg.MessageId == input.MessageId);
+            var flaggedMsg = _twitContext.Messages.FirstOrDefault(msg => msg.MessageId.Equals(input.MessageId));
             if (flaggedMsg != null)
             {
-                if (input.FlaggingAction == 1)
+                if (input.FlagMessage)
                 {
                     flaggedMsg.Flagged = true;
                 }

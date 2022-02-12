@@ -16,9 +16,9 @@ namespace Minitwit_BE.Api.Controllers
         }
 
         [HttpGet("list/{id}")]
-        public async Task<ActionResult<List<Follower>>> getFollowedUsers(int id)
+        public async Task<ActionResult<List<Follower>>> getFollowedUsers([FromRoute]int id)
         {
-            List <Follower> followersList = _twitContext.Followers.Where(entry => entry.WhoId == id).ToList();
+            var followersList = _twitContext.Followers.Where(entry => entry.WhoId.Equals(id)).ToList();
             return Ok(followersList);
         }
 
@@ -26,7 +26,7 @@ namespace Minitwit_BE.Api.Controllers
         [HttpPost("follow")]
         public async Task<ActionResult> follow([FromBody]FollowerInput input)
         {
-            Follower newFollower = new Follower
+            var newFollower = new Follower
             {
                 WhoId = input.WhoId,
                 WhomId = input.WhomId
@@ -38,9 +38,9 @@ namespace Minitwit_BE.Api.Controllers
         }
 
         [HttpDelete("unfollow/{id}")]
-        public async Task<ActionResult<string>> unfollow(int id)
+        public async Task<ActionResult> unfollow([FromRoute]int id)
         {
-            Follower? deletedFollow = _twitContext.Followers.SingleOrDefault(entry => entry.Id == id);
+            var deletedFollow = _twitContext.Followers.FirstOrDefault(entry => entry.Id.Equals(id));
             if (deletedFollow != null)
             {
                 _twitContext.Remove(deletedFollow);

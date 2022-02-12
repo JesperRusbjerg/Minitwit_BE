@@ -31,7 +31,7 @@
         <va-list-item-section icon>
           <va-icon
             class="icon"
-            :name="item.flagged ? 'plus-circle' : 'block-helper'"
+            :name="item.flagged ? 'house' : 'house'"
             :color="item.flagged ? 'green' : 'red'"
           />
         </va-list-item-section>

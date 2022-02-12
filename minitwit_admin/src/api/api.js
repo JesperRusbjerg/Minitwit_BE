@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/compositionStore/index'
 
-const apiURL = process.env.VUE_APP_ADMIN_API_URL
+const apiURL = "http://localhost:7249/"
 
 const apiRequest = (method, path, data, contentType) => {
     store.async.actions.setLoading(true)
@@ -23,8 +23,8 @@ const apiRequest = (method, path, data, contentType) => {
                 store.async.actions.setLoading(false)
             })
             .catch((error) => {
-                reject(error.response.data)
-                store.async.actions.setError(error.response.data)
+                reject(error)
+                store.async.actions.setError(error)
             })
     })
 }

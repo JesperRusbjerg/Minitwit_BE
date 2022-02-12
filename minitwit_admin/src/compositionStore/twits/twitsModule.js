@@ -10,20 +10,20 @@ const mutations = {
         state.twitList = twitList
     },
 
-    updateTwit: (messageId, flagAction) => {
+    updateTwit: (messageId, flagged) => {
         const twitIndex = state.twitList.findIndex(twitItem =>
             twitItem.messageId == messageId
         )
         const newTwit = {
             ...state.twitList[twitIndex],
-            flagAction
+            flagged
         }
 
-        state.twitList = {
+        state.twitList = [
             ...state.twitList.slice(0, twitIndex),
             newTwit,
             ...state.twitList.slice(twitIndex + 1)
-        }
+        ]
     }
 }
 
@@ -38,13 +38,13 @@ const actions = {
         }
     },
 
-    toggleFlag: async (messageId, flagAction) => {
+    toggleFlag: async (messageId, flagged) => {
         try {
             await twitsApi.flagTwit({
-                messageId,
-                flagAction
+                MessageId: messageId,
+                FlagMessage: !flagged
             })
-            mutations.updateTwit(messageId, !flagAction)
+            mutations.updateTwit(messageId, !flagged)
         } catch (error) {
             console.log(error)
             throw error

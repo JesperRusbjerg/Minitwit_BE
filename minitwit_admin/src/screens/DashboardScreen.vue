@@ -1,6 +1,6 @@
 <template>
   <div id="DashboardScreen" :style="{ backgroundColor: colors.darkGrey }">
-    <twit-list-component :items="twitList" :height="'100%'" />
+    <twit-list-component :items="twitList" :height="'100%'" @onClick="handleOnTwitClick"/>
   </div>
 </template>
 
@@ -22,11 +22,18 @@ export default {
     const twitList = computed(() => store.twits.state.twitList);
     
     const getTwitList = () => store.twits.actions.getTwitList();
+    const flagTwit = (messageId, flagged) => {
+      store.twits.actions.toggleFlag(messageId, flagged)
+    }
+    const handleOnTwitClick = (twit) => {
+      flagTwit(twit.messageId, twit.flagged)
+    }
 
     getTwitList();
     return {
       colors,
       twitList,
+      handleOnTwitClick
     };
   },
 };

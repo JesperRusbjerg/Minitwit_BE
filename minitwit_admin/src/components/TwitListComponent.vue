@@ -1,9 +1,9 @@
 <template>
   <div id="TwitListComponent" :style="{ height: height, width: width }">
     <va-list>
-        <va-list-label class="label" :color="labelColor">
-          {{ label }}
-        </va-list-label>
+      <va-list-label class="label" :color="labelColor">
+        {{ label }}
+      </va-list-label>
 
       <va-list-item
         v-for="(item, index) in items"
@@ -33,6 +33,7 @@
             class="icon"
             :name="item.flagged ? 'house' : 'house'"
             :color="item.flagged ? 'green' : 'red'"
+            @click="handleItemClick(item)"
           />
         </va-list-item-section>
       </va-list-item>
@@ -67,12 +68,12 @@ export default {
     labelColor: {
       type: String,
       required: false,
-      default: "#FFF"
+      default: "#FFF",
     },
     textColor: {
       type: String,
       required: false,
-      default: "#FFF"
+      default: "#FFF",
     },
     itemBackgroundColor: {
       type: String,
@@ -91,8 +92,14 @@ export default {
     },
   },
   components: {},
-  setup() {
-    return {};
+  emits: ["onClick"],
+  setup(props, context) {
+    const handleItemClick = (item) => {
+      context.emit("onClick", item);
+    };
+    return {
+      handleItemClick,
+    };
   },
 };
 </script>

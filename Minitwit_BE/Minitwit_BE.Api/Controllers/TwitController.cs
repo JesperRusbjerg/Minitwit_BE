@@ -21,35 +21,60 @@ namespace Minitwit_BE.Api.Controllers
             return await Task.FromResult("test");
         }
 
-        // TODO: Adding to the database should be POST/PUT. The message should be taken from the request body.
-        [HttpGet("add")]
-        public async Task<string> AddTwit()
+        [HttpPost("add")]
+        public async Task<ActionResult> AddTwit([FromBody]MessageInput input)
         {
-            
             // Add new twit
             Console.WriteLine("Inserting a new twit");
             // Primary keys should be auto incremented when you add entity to the table and dont explicitely specify specify the ID
-            _twitContext.Add(new Message 
+            var msg = new Message 
             { 
-                AuthorId = 1,
+                AuthorId = input.AuthorId,
                 Flagged = false,
                 PublishDate = DateTime.Now,
-                Text = "jjjjjjjjjjjjjjj"
-            });
-            _twitContext.SaveChanges();
+                Text = input.Text
+            };
             
-
-            return "OK";
+            _twitContext.Add(msg);
+            _twitContext.SaveChanges();
+            return Ok();
         }
 
-        [HttpGet("getall")]
-        public async Task<string> GetTwit()
+        [HttpGet("public-twits")]
+        public async Task<ActionResult<List<Message>>> GetTwits()
         {
-            // Print all to console
             Console.WriteLine("Reading");
-            _twitContext.Messages.OrderBy(m => m.MessageId).AsEnumerable().ToList().ForEach(e => Console.WriteLine($"Id: {e.MessageId}, Text: {e.Text}"));
+            return Ok(_twitContext.Messages.ToList());
+        }
 
-            return "OK";
+        [HttpGet("personal-twits/{id}")]
+        public async Task<ActionResult<List<Message>>> GetPersonalTwits([FromRoute]int id)
+        {
+            Console.WriteLine("Reading");
+            return Ok(_twitContext.Messages.ToList().Where(msg => msg.AuthorId.Equals(id)));
+        }
+
+        [HttpPut("mark-message")]
+        public async Task<ActionResult<string>> markMessage([FromBody]FlaggingInput input)
+        {
+            var flaggedMsg = _twitContext.Messages.FirstOrDefault(msg => msg.MessageId.Equals(input.MessageId));
+            if (flaggedMsg != null)
+            {
+                if (input.FlagMessage)
+                {
+                    flaggedMsg.Flagged = true;
+                }
+                else
+                {
+                    flaggedMsg.Flagged = false;
+                }
+                _twitContext.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

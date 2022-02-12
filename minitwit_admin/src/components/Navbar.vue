@@ -1,17 +1,14 @@
 <template>
   <div id="Navbar">
-    <va-navbar>
+    <va-navbar :color="navbarColor">
       <template v-slot:left>
         <div class="left">
           <va-icon
             @click="handleSidebarClick"
             :name="isSidebarMinimized ? 'close' : 'menu'"
             class="va-navbar__item"
-            :color="colors.primaryColor"
+            :color="iconColor"
           />
-          <router-link to="/">
-            <va-icon name="house" />
-          </router-link>
         </div>
       </template>
     </va-navbar>
@@ -19,19 +16,25 @@
 </template>
 
 <script>
-import { useColors } from 'vuestic-ui'
 import { ref, computed } from 'vue'
 
 export default {
   name: "Navbar",
-  props: {},
+  props: {
+      navbarColor: {
+          type: String,
+          required: false,
+          default: '#AAAAAA'
+      },
+      iconColor: {
+            type: String,
+            required: false,
+            default: '#FFF'
+        },
+  },
   components: {},
   setup() {
-      const { getColors } = useColors()
-      const colors = computed(() => getColors())
-
       const sidebarState = ref(false)
-
       const isSidebarMinimized = computed(() => sidebarState.value)
 
       const handleSidebarClick = () => {
@@ -39,7 +42,6 @@ export default {
       }
 
       return {
-          colors,
           isSidebarMinimized,
           handleSidebarClick
       }

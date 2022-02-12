@@ -1,20 +1,34 @@
 <template>
-  <div id="nav">
-    <navbar />
-  </div>
+  <navbar :navbarColor="colors.black" :iconColor="colors.primaryColor" />
+  <sidebar :items="sidebarItems" :minimized="isSidebarMinimized" :color="colors.darkGrey" :iconColor="colors.primaryColor" />
   <router-view/>
 </template>
 
 <script>
 import Navbar from "@/components/Navbar.vue";
+import Sidebar from "@/components/Sidebar.vue";
+import { useColors } from 'vuestic-ui'
+import { ref, computed } from "vue"
+
 export default {
   name: "App",
   components: {
-    Navbar
+    Navbar,
+    Sidebar
   },
   setup() {
-
-    return {}
+    const { getColors } = useColors()
+      const colors = computed(() => getColors())
+    const useSidebarItems = () => {
+      return [{ title: "Dashboard", icon: "house", active: true }];
+    };
+    const getSidebarItems = computed(() => useSidebarItems());
+    const isSidebarMinimized = ref(false)
+    return {
+      colors,
+      isSidebarMinimized,
+      sidebarItems: getSidebarItems.value
+    }
   }
 }
 </script>

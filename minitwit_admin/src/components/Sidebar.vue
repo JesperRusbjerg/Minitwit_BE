@@ -6,7 +6,7 @@
       :minimizedWidth="minimizedWidth"
     >
       <template v-for="(item, index) in items" :key="index">
-        <va-sidebar-item :active="item.active" :active-color="color">
+        <va-sidebar-item :to="item.to" :active="item.active" :active-color="color">
           <va-sidebar-item-content>
             <va-icon :name="item.icon" :color="iconColor" />
             <va-sidebar-item-title v-if="!minimized" :style="`height: ${itemTitleHeight}`">

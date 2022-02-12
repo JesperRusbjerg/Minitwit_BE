@@ -30,7 +30,7 @@ export default {
     const { getColors } = useColors();
     const colors = computed(() => getColors());
     const useSidebarItems = () => {
-      return [{ title: "Dashboard", icon: "house", active: true }];
+      return [{ title: "Dashboard", icon: "house", to: "/", active: true }];
     };
     const getSidebarItems = computed(() => useSidebarItems());
     const isSidebarMinimized = ref(false);

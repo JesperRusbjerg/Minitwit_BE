@@ -1,6 +1,7 @@
 import { apiRequest } from "@/api/api.js";
 
 const fetchTwits = () => {
+  return mockTwitList
     return apiRequest("GET", "api/twits/public-twits")
 };
 

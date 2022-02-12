@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Minitwit_BE.Api.Dtos;
 using Minitwit_BE.Domain;
+using Minitwit_BE.DomainService;
 using Minitwit_BE.Persistence;
 
 namespace Minitwit_BE.Api.Controllers
@@ -10,11 +12,13 @@ namespace Minitwit_BE.Api.Controllers
     {
         private readonly TwitContext _twitContext;          // To dependency inject the context instance.
         private readonly ILogger<TwitController> _logger;
-        
-        public TwitController(TwitContext twitContext, ILogger<TwitController> logger)
+        private readonly MessageDomainService _messageService;
+
+        public TwitController(TwitContext twitContext, ILogger<TwitController> logger, MessageDomainService messageService)
         {
             _twitContext = twitContext;
             _logger = logger;
+            _messageService = messageService;
         }
         
         [HttpGet("test")]
@@ -26,7 +30,7 @@ namespace Minitwit_BE.Api.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult> AddTwit([FromBody]MessageInput input)
+        public async Task<ActionResult> AddTwit([FromBody]MessageDto input)
         {
             _logger.LogInformation("Inserting a new twit.");
             
@@ -61,7 +65,7 @@ namespace Minitwit_BE.Api.Controllers
         }
 
         [HttpPut("mark-message")]
-        public async Task<ActionResult<string>> MarkMessage([FromBody]FlaggingInput input)
+        public async Task<ActionResult<string>> MarkMessage([FromBody]FlaggingDto input)
         {
             _logger.LogInformation($"Mark message endpoint was called on msg id: {input.MessageId}.");
 

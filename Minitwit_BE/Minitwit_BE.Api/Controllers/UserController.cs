@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Minitwit_BE.Api.Dtos;
 using Minitwit_BE.Domain;
+using Minitwit_BE.DomainService;
 using Minitwit_BE.Persistence;
 
 namespace Minitwit_BE.Api.Controllers
@@ -10,15 +12,17 @@ namespace Minitwit_BE.Api.Controllers
     {
         private readonly TwitContext _twitContext;
         private readonly ILogger<UserController> _logger;
+        private readonly UserDomainService _userService;
 
-        public UserController(TwitContext twitContext, ILogger<UserController> logger)
+        public UserController(TwitContext twitContext, ILogger<UserController> logger, UserDomainService userService)
         {
             _twitContext = twitContext;
             _logger = logger;
+            _userService = userService;
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> RegisterUser([FromBody]UserInput input)
+        public async Task<ActionResult<User>> RegisterUser([FromBody]UserDto input)
         {
             _logger.LogInformation($"RegisterUser endpoint was called for user: {input.UserName}");
 
@@ -43,7 +47,7 @@ namespace Minitwit_BE.Api.Controllers
         }
 
         [HttpGet("login")]
-        public async Task<ActionResult<int>> Login([FromBody]UserInput input)
+        public async Task<ActionResult<int>> Login([FromBody]UserDto input)
         {
             _logger.LogInformation($"Login endpoint was called for user: {input.Email}");
 

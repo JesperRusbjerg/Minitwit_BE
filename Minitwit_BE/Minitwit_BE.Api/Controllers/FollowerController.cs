@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Minitwit_BE.Api.Dtos;
 using Minitwit_BE.Domain;
+using Minitwit_BE.DomainService;
 using Minitwit_BE.Persistence;
 
 namespace Minitwit_BE.Api.Controllers
@@ -8,29 +10,31 @@ namespace Minitwit_BE.Api.Controllers
     [Route("api/followers")]
     public class FollowerController : ControllerBase
     {
-        private readonly TwitContext _twitContext;          // To dependency inject the context instance.
         private readonly ILogger<FollowerController> _logger;
+        private readonly FollowerDomainService _followerService;
 
-        public FollowerController(TwitContext twitContext, ILogger<FollowerController> logger)
+        public FollowerController(ILogger<FollowerController> logger, FollowerDomainService followerService)
         {
-            _twitContext = twitContext;
             _logger = logger;
+            _followerService = followerService;
         }
 
         [HttpGet("list/{id}")]
         public async Task<ActionResult<List<Follower>>> GetFollowedUsers([FromRoute]int id)
         {
+            // Validate inputs
+            
             _logger.LogInformation($"GetFollowedUsers endpoint was called for id: {id}");
 
-            var followersList = _twitContext.Followers.Where(entry => entry.WhoId.Equals(id)).ToList();
-
-            return Ok(followersList);
+            return Ok(_followerService.GetFollowedUsers(id));
         }
 
 
         [HttpPost("follow")]
-        public async Task<ActionResult> follow([FromBody]FollowerInput input)
+        public async Task<ActionResult> Follow([FromBody]FollowerDto input)
         {
+            // Validate inputs
+
             _logger.LogInformation($"Follow endpoint was called with whomid: {input.WhomId}, by: {input.WhoId}.");
 
             var newFollower = new Follower
@@ -39,28 +43,21 @@ namespace Minitwit_BE.Api.Controllers
                 WhomId = input.WhomId
             };
 
-            _twitContext.Add(newFollower);
-            _twitContext.SaveChanges();
+            await _followerService.Follow(newFollower);
+
             return Ok();
         }
 
         [HttpDelete("unfollow/{id}")]
         public async Task<ActionResult> Unfollow([FromRoute]int id)
         {
+            // Validate inputs
+
             _logger.LogInformation($"Unfollow endpoint was called for id: {id}");
 
-            var deletedFollow = _twitContext.Followers.FirstOrDefault(entry => entry.Id.Equals(id));
+            await _followerService.UnFollow(id);
 
-            if (deletedFollow != null)
-            {
-                _twitContext.Remove(deletedFollow);
-                _twitContext.SaveChanges();
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
+            return Ok();
         }
     }
 }

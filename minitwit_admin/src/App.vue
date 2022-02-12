@@ -1,36 +1,46 @@
 <template>
-  <navbar :navbarColor="colors.black" :iconColor="colors.primaryColor" />
-  <sidebar :items="sidebarItems" :minimized="isSidebarMinimized" :color="colors.darkGrey" :iconColor="colors.primaryColor" />
-  <router-view/>
+  <div id="app">
+    <navbar :navbarColor="colors.black" :iconColor="colors.primaryColor" />
+    <div class="app-content">
+      <sidebar
+        class="sidebar"
+        :items="sidebarItems"
+        :minimized="isSidebarMinimized"
+        :color="colors.darkGrey"
+        :iconColor="colors.primaryColor"
+      />
+      <router-view class="router-content" />
+    </div>
+  </div>
 </template>
 
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Sidebar from "@/components/Sidebar.vue";
-import { useColors } from 'vuestic-ui'
-import { ref, computed } from "vue"
+import { useColors } from "vuestic-ui";
+import { ref, computed } from "vue";
 
 export default {
   name: "App",
   components: {
     Navbar,
-    Sidebar
+    Sidebar,
   },
   setup() {
-    const { getColors } = useColors()
-      const colors = computed(() => getColors())
+    const { getColors } = useColors();
+    const colors = computed(() => getColors());
     const useSidebarItems = () => {
       return [{ title: "Dashboard", icon: "house", active: true }];
     };
     const getSidebarItems = computed(() => useSidebarItems());
-    const isSidebarMinimized = ref(false)
+    const isSidebarMinimized = ref(false);
     return {
       colors,
       isSidebarMinimized,
-      sidebarItems: getSidebarItems.value
-    }
-  }
-}
+      sidebarItems: getSidebarItems.value,
+    };
+  },
+};
 </script>
 
 <style lang="scss">
@@ -53,5 +63,18 @@ export default {
       color: #42b983;
     }
   }
+}
+
+.app-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.router-content {
+  width: 100%;
+}
+
+.sidebar {
+  height: 100vh;
 }
 </style>

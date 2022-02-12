@@ -29,14 +29,28 @@ namespace Minitwit_BE.Api.Controllers
             // Add new twit
             Console.WriteLine("Inserting a new twit");
             // Primary keys should be auto incremented when you add entity to the table and dont explicitely specify specify the ID
-            _twitContext.Add(new Message 
-            { 
+
+           
+
+            var message = _twitContext.Messages.First();
+
+
+            var a = _twitContext.Messages.Find(2);
+
+
+            var twitter = from x in _twitContext.Messages where x.MessageId == 1 select x;
+
+
+            _twitContext.Add(new Message
+            {
                 AuthorId = 1,
                 Flagged = false,
                 PublishDate = DateTime.Now,
                 Text = "jjjjjjjjjjjjjjj"
             });
             _twitContext.SaveChanges();
+
+            
             
 
             return "OK";
@@ -47,9 +61,10 @@ namespace Minitwit_BE.Api.Controllers
         {
             // Print all to console
             Console.WriteLine("Reading");
-            _twitContext.Messages.OrderBy(m => m.MessageId).AsEnumerable().ToList().ForEach(e => Console.WriteLine($"Id: {e.MessageId}, Text: {e.Text}"));
+            var str = "";
+            _twitContext.Messages.OrderBy(m => m.MessageId).AsEnumerable().ToList().ForEach(e => str += $"Id: {e.MessageId}, Text: {e.Text}");
 
-            return "OK";
+            return str;
         }
     }
 }

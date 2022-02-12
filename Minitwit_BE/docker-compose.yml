@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  minitwit_be.api:
+    image: ${DOCKER_REGISTRY-}minitwitbeapi
+    build:
+      context: .
+      dockerfile: Minitwit_BE.Api/Dockerfile

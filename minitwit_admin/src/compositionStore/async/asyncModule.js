@@ -5,7 +5,7 @@ const state = reactive({
     error: undefined
 })
 
-const mutations = {
+const actions = {
     setLoading: (isLoading) => {
         state.isLoading = isLoading
     },
@@ -17,5 +17,5 @@ const mutations = {
 
 export default {
     state: readonly(state),
-    mutations: readonly(mutations)
+    actions: readonly(actions)
 }

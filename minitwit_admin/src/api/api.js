@@ -4,7 +4,7 @@ import store from '@/compositionStore/index'
 const apiURL = process.env.VUE_APP_ADMIN_API_URL
 
 const apiRequest = (method, path, data, contentType) => {
-    store.async.mutations.setLoading(true)
+    store.async.actions.setLoading(true)
     const url = `${apiURL}${path}`;
     // TODO: ADD "x-api-key": store.getters.apiKey IF NEEDED LATER
     const headers = {
@@ -20,11 +20,11 @@ const apiRequest = (method, path, data, contentType) => {
         return axios(axiosConfig)
             .then((response) => {
                 resolve(response.data)
-                store.async.mutations.setLoading(false)
+                store.async.actions.setLoading(false)
             })
             .catch((error) => {
                 reject(error.response.data)
-                store.async.mutations.setError(error.response.data)
+                store.async.actions.setError(error.response.data)
             })
     })
 }

@@ -5,16 +5,18 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minitwit_BE.Api", "Minitwit_BE.Api\Minitwit_BE.Api.csproj", "{A02CDCB1-0677-4001-BDC7-F0749B6CE3D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minitwit_BE.Domain", "Minitwit_BE.Domain\Minitwit_BE.Domain.csproj", "{72A83020-5123-4314-835A-47D6911FE8A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minitwit_BE.Domain", "Minitwit_BE.Domain\Minitwit_BE.Domain.csproj", "{72A83020-5123-4314-835A-47D6911FE8A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minitwit_BE.DomainService", "Minitwit_BE.DomainService\Minitwit_BE.DomainService.csproj", "{EB236E97-0BAB-4545-9F26-68F5A3E948CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minitwit_BE.DomainService", "Minitwit_BE.DomainService\Minitwit_BE.DomainService.csproj", "{EB236E97-0BAB-4545-9F26-68F5A3E948CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minitwit_BE.Persistence", "Minitwit_BE.Persistence\Minitwit_BE.Persistence.csproj", "{7512452F-7F49-4DD1-A469-2977A47BCA86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minitwit_BE.Persistence", "Minitwit_BE.Persistence\Minitwit_BE.Persistence.csproj", "{7512452F-7F49-4DD1-A469-2977A47BCA86}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D5D9B3EF-DF5D-411E-8FFE-240E99150C66}"
 	ProjectSection(SolutionItems) = preProject
 		READ_ME.txt = READ_ME.txt
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minitwit_BE.Test", "Minitwit_BE.Test\Minitwit_BE.Test.csproj", "{3062FB62-8BA5-4671-B822-3D4A5CB0F9F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{7512452F-7F49-4DD1-A469-2977A47BCA86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7512452F-7F49-4DD1-A469-2977A47BCA86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7512452F-7F49-4DD1-A469-2977A47BCA86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3062FB62-8BA5-4671-B822-3D4A5CB0F9F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3062FB62-8BA5-4671-B822-3D4A5CB0F9F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3062FB62-8BA5-4671-B822-3D4A5CB0F9F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3062FB62-8BA5-4671-B822-3D4A5CB0F9F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

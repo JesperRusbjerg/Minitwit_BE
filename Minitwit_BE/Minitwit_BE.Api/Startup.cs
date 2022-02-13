@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Minitwit_BE.Api.Middleware;
 using Minitwit_BE.DomainService;
+using Minitwit_BE.DomainService.Interfaces;
 using Minitwit_BE.Persistence;
 
 namespace Minitwit_BE.Api
@@ -17,11 +18,11 @@ namespace Minitwit_BE.Api
         // to add services to the application container. For instance healthcheck, etc.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().AddControllersAsServices();
-            services.AddSingleton<PersistenceService>();
-            services.AddSingleton<FollowerDomainService>();
-            services.AddSingleton<MessageDomainService>();
-            services.AddSingleton<UserDomainService>();
+            services.AddControllers();
+            services.AddScoped<IFollowerDomainService, FollowerDomainService>();
+            services.AddScoped<IMessageDomainService, MessageDomainService>();
+            services.AddScoped<IUserDomainService, UserDomainService>();
+            services.AddScoped<IPersistenceService, PersistenceService>();
             services.AddDbContext<TwitContext>(opt =>
             {
                 var folder = Environment.SpecialFolder.LocalApplicationData;

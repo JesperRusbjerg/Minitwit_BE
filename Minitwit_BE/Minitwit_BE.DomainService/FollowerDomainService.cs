@@ -1,15 +1,17 @@
 ﻿using Microsoft.Extensions.Logging;
 using Minitwit_BE.Domain;
+using Minitwit_BE.Domain.Exceptions;
+using Minitwit_BE.DomainService.Interfaces;
 using Minitwit_BE.Persistence;
 
 namespace Minitwit_BE.DomainService
 {
-    public class FollowerDomainService
+    public class FollowerDomainService : IFollowerDomainService
     {
-        private readonly PersistenceService _persistence;
+        private readonly IPersistenceService _persistence;
         private readonly ILogger<FollowerDomainService> _logger;
 
-        public FollowerDomainService(PersistenceService persistence, ILogger<FollowerDomainService> logger)
+        public FollowerDomainService(IPersistenceService persistence, ILogger<FollowerDomainService> logger)
         {
             _persistence = persistence;
             _logger = logger;
@@ -33,15 +35,17 @@ namespace Minitwit_BE.DomainService
         {
             Func<Follower, bool> queryExpresion = entry => entry.WhoId.Equals(id);
 
-            var deletedFollow = _persistence.GetFollowers(queryExpresion).Result.FirstOrDefault();
+            var getFollowsTask = await _persistence.GetFollowers(queryExpresion);
+
+            var deletedFollow = getFollowsTask.FirstOrDefault();
 
             if (deletedFollow != null)
             {
-                _persistence.DeleteFollower(deletedFollow);
+                await _persistence.DeleteFollower(deletedFollow);
             }
             else
             {
-                throw new InvalidOperationException("That user is not currently followed");
+                throw new UserUnfollowException("Cannot unfollow this user, as it is not currently followed!");
             }
         }
     }

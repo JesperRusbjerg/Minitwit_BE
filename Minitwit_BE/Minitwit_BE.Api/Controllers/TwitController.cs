@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Minitwit_BE.Api.Dtos;
 using Minitwit_BE.Domain;
-using Minitwit_BE.DomainService;
-using Minitwit_BE.Persistence;
+using Minitwit_BE.DomainService.Interfaces;
 
 namespace Minitwit_BE.Api.Controllers
 {
@@ -10,13 +9,11 @@ namespace Minitwit_BE.Api.Controllers
     [Route("api/twit")]
     public class TwitController : ControllerBase
     {
-        private readonly TwitContext _twitContext;          // To dependency inject the context instance.
         private readonly ILogger<TwitController> _logger;
-        private readonly MessageDomainService _messageService;
+        private readonly IMessageDomainService _messageService;
 
-        public TwitController(TwitContext twitContext, ILogger<TwitController> logger, MessageDomainService messageService)
+        public TwitController(ILogger<TwitController> logger, IMessageDomainService messageService)
         {
-            _twitContext = twitContext;
             _logger = logger;
             _messageService = messageService;
         }
@@ -30,8 +27,10 @@ namespace Minitwit_BE.Api.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult> AddTwit([FromBody]MessageDto input)
+        public async Task<ActionResult> AddTwit([FromBody] MessageDto input)
         {
+            ValidateMessageDto(input);
+
             _logger.LogInformation("Inserting a new twit.");
             
             var msg = new Message                                       // Primary keys should be auto incremented when you add entity to the table and dont explicitely specify specify the ID
@@ -42,8 +41,7 @@ namespace Minitwit_BE.Api.Controllers
                 Text = input.Text
             };
             
-            _twitContext.Add(msg);
-            _twitContext.SaveChanges();
+            await _messageService.AddTwit(msg);
 
             return Ok();
         }
@@ -53,35 +51,56 @@ namespace Minitwit_BE.Api.Controllers
         {
             _logger.LogInformation("Returning all public twits");
 
-            return Ok(_twitContext.Messages.ToList());
+            return Ok(_messageService.GetTwits().Result.ToList());
         }
 
         [HttpGet("personal-twits/{id}")]
-        public async Task<ActionResult<List<Message>>> GetPersonalTwits([FromRoute]int id)
+        public async Task<ActionResult<List<Message>>> GetPersonalTwits([FromRoute] int id)
         {
+            ValidateId(id);
+            
             _logger.LogInformation($"Returning all personal twits for user {id}.");
 
-            return Ok(_twitContext.Messages.ToList().Where(msg => msg.AuthorId.Equals(id)));
+            return Ok(_messageService.GetPersonalTwits(id).Result.ToList());
         }
 
         [HttpPut("mark-message")]
-        public async Task<ActionResult<string>> MarkMessage([FromBody]FlaggingDto input)
+        public async Task<ActionResult> MarkMessage([FromBody] FlaggingDto input)
         {
+            ValidateFlaggingDto(input);
+
+
             _logger.LogInformation($"Mark message endpoint was called on msg id: {input.MessageId}.");
 
-            var flaggedMsg = _twitContext.Messages.FirstOrDefault(msg => msg.MessageId.Equals(input.MessageId));
+            await _messageService.MarkMessage(input.MessageId, input.FlagMessage);
 
-            if (flaggedMsg != null)
-            {
-                flaggedMsg.Flagged = input.FlagMessage;
-                _twitContext.SaveChanges();
+            return Ok();
+        }
 
-                return Ok();
-            }
-            else
+        #region PrivateMethods
+        private void ValidateFlaggingDto(FlaggingDto input)
+        {
+            if (input == null || input.MessageId < 0)
             {
-                return BadRequest();
+                throw new ArgumentException("Input missing or not matching criteria");
             }
         }
+
+        private void ValidateId(int id)
+        {
+            if (id < 0)
+            {
+                throw new ArgumentException("Id cannot be negative");
+            }
+        }
+
+        private void ValidateMessageDto(MessageDto msg)
+        {
+            if (msg == null || msg.AuthorId < 0 || string.IsNullOrWhiteSpace(msg.Text))
+            {
+                throw new ArgumentException("Input missing or not matching criteria");
+            }
+        }
+        #endregion
     }
 }

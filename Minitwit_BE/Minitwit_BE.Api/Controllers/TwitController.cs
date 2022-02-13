@@ -51,7 +51,9 @@ namespace Minitwit_BE.Api.Controllers
         {
             _logger.LogInformation("Returning all public twits");
 
-            return Ok(_messageService.GetTwits().Result.ToList());
+            var twits = await _messageService.GetTwits();
+
+            return Ok(twits.ToList());
         }
 
         [HttpGet("personal-twits/{id}")]
@@ -61,7 +63,9 @@ namespace Minitwit_BE.Api.Controllers
             
             _logger.LogInformation($"Returning all personal twits for user {id}.");
 
-            return Ok(_messageService.GetPersonalTwits(id).Result.ToList());
+            var twits = await _messageService.GetPersonalTwits(id);
+
+            return Ok(twits.ToList());
         }
 
         [HttpPut("mark-message")]

@@ -4,7 +4,7 @@
 In order to work on this project together as a team, it is important to setup rules for how you develop on the project in parallel, we decided to create a workflow using GitHub which is a online implementation of Git.
 
 ### Repo setup
-Currently we are using 1 repoisitory to store all the different code bases.
+Currently we are using 1 repoisitory to store all the different code bases. We would like to refactor this so each appplication has its own repo for easier readability and deployability.
 
 ### Branching model & How to contribute
 When a developers is making changes to a codebase the developer creates a branch

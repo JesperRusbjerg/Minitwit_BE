@@ -31,7 +31,7 @@ export default {
         }
 
         const handleOnUnfollowClick = (item) => {
-            unfollowUser(item.WhomId)
+            unfollowUser(item.whomId)
         }
 
         getFollowers()

@@ -12,7 +12,7 @@ const mutations = {
 
   removeFollower: (userId) => {
     state.followers = [
-      ...state.followers.filter((followerItem) => followerItem.WhoId != userId),
+      ...state.followers.filter((followerItem) => followerItem.whoId != userId),
     ];
   },
 };

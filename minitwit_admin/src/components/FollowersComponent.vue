@@ -4,7 +4,7 @@
       <va-list-item v-for="(item, index) in followers" :key="index">
         <va-list-item-section>
           <va-list-item-label>
-            {{ item.WhomId }}
+            {{ item.whomId }}
           </va-list-item-label>
         </va-list-item-section>
         <va-list-item-section icon>

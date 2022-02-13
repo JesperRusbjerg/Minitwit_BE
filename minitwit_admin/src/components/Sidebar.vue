@@ -6,14 +6,16 @@
       :minimizedWidth="minimizedWidth"
     >
       <template v-for="(item, index) in items" :key="index">
-        <va-sidebar-item :to="item.to" :active="item.active" :active-color="color">
-          <va-sidebar-item-content>
-            <va-icon :name="item.icon" :color="iconColor" />
-            <va-sidebar-item-title v-if="!minimized" :style="`height: ${itemTitleHeight}`">
-              {{ item.title }}
-            </va-sidebar-item-title>
-          </va-sidebar-item-content>
-        </va-sidebar-item>
+        <div v-show="item.visible == 'always' ? true : item.visible.value">
+          <va-sidebar-item :to="item.to" :active="item.active" :active-color="color" @click="item.function">
+            <va-sidebar-item-content>
+              <va-icon :name="item.icon" :color="iconColor" />
+              <va-sidebar-item-title v-if="!minimized" :style="`height: ${itemTitleHeight}`">
+                {{ item.title }}
+              </va-sidebar-item-title>
+            </va-sidebar-item-content>
+          </va-sidebar-item>
+        </div>
       </template>
     </va-sidebar>
   </div>

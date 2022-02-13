@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/compositionStore/index'
 
-const apiURL = "http://localhost:7249/"
+const apiURL = "https://localhost:5001/"
 
 const apiRequest = (method, path, data, contentType) => {
     store.async.actions.setLoading(true)
@@ -22,9 +22,9 @@ const apiRequest = (method, path, data, contentType) => {
                 resolve(response.data)
                 store.async.actions.setLoading(false)
             })
-            .catch((error) => {
-                reject(error)
-                store.async.actions.setError(error)
+            .catch((e) => {
+                reject(e)
+                store.async.actions.setError(e)
             })
     })
 }

@@ -2,7 +2,7 @@ import { readonly, reactive } from 'vue'
 import twitsApi from '@/api/twits/twits.js'
 
 const state = reactive({
-    twitList: []
+    twitList: [],
 })
 
 const mutations = {
@@ -32,9 +32,17 @@ const actions = {
         try {
             const result = await twitsApi.fetchTwits()
             mutations.setTwitList(result)
-        } catch (error) {
-            console.log(error)
-            throw error
+        } catch (e) {
+            console.error(e)
+        }
+    },
+
+    getUsersTwitList: async (userId) => {
+        try {
+            const result = await twitsApi.fetchPersonalTwits(userId)
+            mutations.setTwitList(result)
+        } catch (e) {
+            console.error(e)
         }
     },
 
@@ -45,9 +53,16 @@ const actions = {
                 FlagMessage: !flagged
             })
             mutations.updateTwit(messageId, !flagged)
-        } catch (error) {
-            console.log(error)
-            throw error
+        } catch (e) {
+            console.error(e)
+        }
+    },
+
+    addTwit: async (twitData) => {
+        try {
+            await twitsApi.createTwit(twitData);
+        } catch (e) {
+            console.error(e)
         }
     }
 }

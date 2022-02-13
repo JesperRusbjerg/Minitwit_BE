@@ -1,6 +1,7 @@
 import { readonly, reactive } from 'vue'
 import async from '@/compositionStore/async/asyncModule'
 import twits from '@/compositionStore/twits/twitsModule'
+import users from '@/compositionStore/users/usersModule'
 
 const state = reactive({
     isSidebarMinimized: false
@@ -16,5 +17,6 @@ export default {
     state: readonly(state),
     actions: readonly(actions),
     async,
-    twits
+    twits,
+    users
 }

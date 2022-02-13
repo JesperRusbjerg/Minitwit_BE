@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <navbar :navbarColor="colors.black" :iconColor="colors.primaryColor" />
-    <div class="app-content">
-      <sidebar
-        class="sidebar"
-        :items="sidebarItems"
-        :minimized="isSidebarMinimized"
-        :color="colors.darkGrey"
-        :iconColor="colors.primaryColor"
-      />
-      <router-view class="router-content" />
-    </div>
+      <navbar :navbarColor="colors.black" :iconColor="colors.primaryColor" />
+      <div class="app-content">
+        <sidebar
+          class="sidebar"
+          :items="sidebarItems"
+          :minimized="isSidebarMinimized"
+          :color="colors.darkGrey"
+          :iconColor="colors.primaryColor"
+        />
+        <router-view class="router-content" />
+      </div>
   </div>
 </template>
 
@@ -29,17 +29,29 @@ export default {
   },
   setup() {
     provide('store', store)
-    const { getColors } = useColors();
-    const colors = computed(() => getColors());
+
     const useSidebarItems = () => {
-      return [{ title: "Dashboard", icon: "house", to: "/", active: true }];
+      return [
+        { title: "Dashboard", icon: "house", to: "/", active: true, visible: "always" },
+        { title: "Login or register", icon: "house", to: "user-entrance", active: false, visible: loggedOutUser },
+        { title: "User profile/create twit", icon: "house", to: "/user-profile", active: false, visible: loggedUser },
+        { title: "Logout", icon: "house", to: "/", active: false, visible: loggedUser, function: logoutUser }
+        ];
     };
+    const { getColors } = useColors();
+    const logoutUser = () => store.users.mutations.logoutUser();
+
+    const colors = computed(() => getColors());
     const getSidebarItems = computed(() => useSidebarItems());
     const isSidebarMinimized = computed(() => store.state.isSidebarMinimized)
+    const loggedUser = computed(() => store.users.state.loggedUser != 0 ? true : false);
+    const loggedOutUser = computed(() => store.users.state.loggedUser == 0 ? true : false);
+
     return {
       colors,
       isSidebarMinimized,
       sidebarItems: getSidebarItems.value,
+      loggedUser,
     };
   },
 };
@@ -70,13 +82,13 @@ export default {
 .app-content {
   display: flex;
   flex-direction: row;
+  height: 100vh;
 }
 
 .router-content {
   width: 100%;
+  height: 100%;
+  overflow: scroll;
 }
 
-.sidebar {
-  height: 100vh;
-}
 </style>

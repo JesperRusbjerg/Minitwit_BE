@@ -10,8 +10,8 @@ const actions = {
         state.isLoading = isLoading
     },
 
-    setError: (error) => {
-        state.error = error
+    setError: (e) => {
+        state.error = e
     }
 }
 

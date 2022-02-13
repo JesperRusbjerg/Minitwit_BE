@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Minitwit_BE.DomainService\Minitwit_BE.DomainService.csproj" />
     <ProjectReference Include="..\Minitwit_BE.Persistence\Minitwit_BE.Persistence.csproj" />
   </ItemGroup>
 

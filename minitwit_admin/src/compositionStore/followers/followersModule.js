@@ -21,7 +21,6 @@ const actions = {
   getFollowers: async (userId) => {
     try {
       const result = await followersApi.followedUsers(userId);
-      console.log("followedUsers", result)
       mutations.setFollowers(result);
     } catch (e) {
       console.log(e);

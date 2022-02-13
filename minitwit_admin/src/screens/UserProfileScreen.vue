@@ -1,7 +1,7 @@
 <template>
     <div class="user-profile-page">
         <div class="followers">
-            <followers-component :items="followers" />
+            <followers-component :items="followers" @onClick="handleOnUnfollowClick" />
         </div>
         <add-twit-component></add-twit-component>
     </div>

@@ -2,7 +2,7 @@ import { readonly, reactive } from 'vue'
 import usersApi from '@/api/users/users.js'
 
 const state = reactive({
-    loggedUser: 0,
+    loggedUser: 1,
 })
 
 const mutations = {

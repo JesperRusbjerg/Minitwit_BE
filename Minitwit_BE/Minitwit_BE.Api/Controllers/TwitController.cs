@@ -9,62 +9,79 @@ namespace Minitwit_BE.Api.Controllers
     public class TwitController : ControllerBase
     {
         private readonly TwitContext _twitContext;          // To dependency inject the context instance.
+        private readonly ILogger<TwitController> _logger;
         
-        public TwitController(TwitContext twitContext)
+        public TwitController(TwitContext twitContext, ILogger<TwitController> logger)
         {
             _twitContext = twitContext;
+            _logger = logger;
         }
         
         [HttpGet("test")]
         public async Task<string> TestEndpoint()
         {
+            _logger.LogInformation("Test endpoint was called!");
+            
             return await Task.FromResult("test");
         }
 
-        // TODO: Adding to the database should be POST/PUT. The message should be taken from the request body.
-        [HttpGet("add")]
-        public async Task<string> AddTwit()
+        [HttpPost("add")]
+        public async Task<ActionResult> AddTwit([FromBody]MessageInput input)
         {
+            _logger.LogInformation("Inserting a new twit.");
             
-            // Add new twit
-            Console.WriteLine("Inserting a new twit");
-            // Primary keys should be auto incremented when you add entity to the table and dont explicitely specify specify the ID
 
-           
-
-            var message = _twitContext.Messages.First();
-
-
-            var a = _twitContext.Messages.Find(2);
-
-
-            var twitter = from x in _twitContext.Messages where x.MessageId == 1 select x;
-
-
-            _twitContext.Add(new Message
-            {
-                AuthorId = 1,
+            var msg = new Message                                       // Primary keys should be auto incremented when you add entity to the table and dont explicitely specify specify the ID
+            { 
+                AuthorId = input.AuthorId,
                 Flagged = false,
                 PublishDate = DateTime.Now,
-                Text = "jjjjjjjjjjjjjjj"
-            });
+                Text = input.Text
+            };
+
+            
+            _twitContext.Add(msg);
             _twitContext.SaveChanges();
 
-            
-            
-
-            return "OK";
+            return Ok();
         }
 
-        [HttpGet("getall")]
-        public async Task<string> GetTwit()
+        [HttpGet("public-twits")]
+        public async Task<ActionResult<List<Message>>> GetTwits()
         {
-            // Print all to console
-            Console.WriteLine("Reading");
-            var str = "";
-            _twitContext.Messages.OrderBy(m => m.MessageId).AsEnumerable().ToList().ForEach(e => str += $"Id: {e.MessageId}, Text: {e.Text}");
 
-            return str;
+            _logger.LogInformation("Returning all public twits");
+
+            return Ok(_twitContext.Messages.ToList());
+        }
+
+        [HttpGet("personal-twits/{id}")]
+        public async Task<ActionResult<List<Message>>> GetPersonalTwits([FromRoute]int id)
+        {
+            _logger.LogInformation($"Returning all personal twits for user {id}.");
+
+            return Ok(_twitContext.Messages.ToList().Where(msg => msg.AuthorId.Equals(id)));
+        }
+
+        [HttpPut("mark-message")]
+        public async Task<ActionResult<string>> MarkMessage([FromBody]FlaggingInput input)
+        {
+            _logger.LogInformation($"Mark message endpoint was called on msg id: {input.MessageId}.");
+
+            var flaggedMsg = _twitContext.Messages.FirstOrDefault(msg => msg.MessageId.Equals(input.MessageId));
+
+            if (flaggedMsg != null)
+            {
+                flaggedMsg.Flagged = input.FlagMessage;
+                _twitContext.SaveChanges();
+
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+
         }
     }
 }

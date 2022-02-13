@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>3c3801fd-8601-40d9-9da9-ccf4baa2bb74</ProjectGuid>
+    <ProjectGuid>cfd8038a-7c80-43b0-a9a1-d7d0129cd849</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
     <DockerServiceName>minitwit_be.api</DockerServiceName>

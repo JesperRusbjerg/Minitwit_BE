@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Minitwit_BE.Api.Middleware;
 using Minitwit_BE.Persistence;
 
 namespace Minitwit_BE.Api
@@ -37,10 +38,11 @@ namespace Minitwit_BE.Api
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            //app.UseHttpsRedirection();
+            //app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseMiddleware<ExceptionMiddleware>();
 
             //app.UseAuthorization();
 

@@ -37,7 +37,7 @@ namespace Minitwit_BE.Api.Controllers
             return Ok(user);
         }
 
-        [HttpGet("login")]
+        [HttpPost("login")]
         public async Task<ActionResult<int>> Login([FromBody] UserDto input)
         {
             ValidateInput(input);

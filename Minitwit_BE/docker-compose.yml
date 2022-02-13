@@ -1,0 +1,7 @@
+version: '3.4'
+
+services:
+  minitwit_be.api:
+    image: jrusbjerg/twitbackend:latest
+    ports:
+      - "5000:443"

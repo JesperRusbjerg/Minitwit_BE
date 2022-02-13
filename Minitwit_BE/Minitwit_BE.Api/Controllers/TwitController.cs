@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Minitwit_BE.Api.Dtos;
 using Minitwit_BE.Domain;
-using Minitwit_BE.Persistence;
+using Minitwit_BE.DomainService.Interfaces;
 
 namespace Minitwit_BE.Api.Controllers
 {
@@ -8,73 +9,106 @@ namespace Minitwit_BE.Api.Controllers
     [Route("api/twit")]
     public class TwitController : ControllerBase
     {
-        private readonly TwitContext _twitContext;          // To dependency inject the context instance.
-        
-        public TwitController(TwitContext twitContext)
+        private readonly ILogger<TwitController> _logger;
+        private readonly IMessageDomainService _messageService;
+
+        public TwitController(ILogger<TwitController> logger, IMessageDomainService messageService)
         {
-            _twitContext = twitContext;
+            _logger = logger;
+            _messageService = messageService;
         }
         
         [HttpGet("test")]
         public async Task<string> TestEndpoint()
         {
+            _logger.LogInformation("Test endpoint was called!");
+            
             return await Task.FromResult("test");
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult> AddTwit([FromBody]MessageInput input)
+        public async Task<ActionResult> AddTwit([FromBody] MessageDto input)
         {
-            // Add new twit
-            Console.WriteLine("Inserting a new twit");
-            // Primary keys should be auto incremented when you add entity to the table and dont explicitely specify specify the ID
-            var msg = new Message 
+            ValidateMessageDto(input);
+
+            _logger.LogInformation("Inserting a new twit.");
+            
+
+            var msg = new Message                                       // Primary keys should be auto incremented when you add entity to the table and dont explicitely specify specify the ID
             { 
                 AuthorId = input.AuthorId,
                 Flagged = false,
                 PublishDate = DateTime.Now,
                 Text = input.Text
             };
+
             
-            _twitContext.Add(msg);
-            _twitContext.SaveChanges();
+            await _messageService.AddTwit(msg);
+
             return Ok();
         }
 
         [HttpGet("public-twits")]
         public async Task<ActionResult<List<Message>>> GetTwits()
         {
-            Console.WriteLine("Reading");
-            return Ok(_twitContext.Messages.ToList());
+
+            _logger.LogInformation("Returning all public twits");
+
+            var twits = await _messageService.GetTwits();
+
+            return Ok(twits.ToList());
         }
 
         [HttpGet("personal-twits/{id}")]
-        public async Task<ActionResult<List<Message>>> GetPersonalTwits([FromRoute]int id)
+        public async Task<ActionResult<List<Message>>> GetPersonalTwits([FromRoute] int id)
         {
-            Console.WriteLine("Reading");
-            return Ok(_twitContext.Messages.ToList().Where(msg => msg.AuthorId.Equals(id)));
+            ValidateId(id);
+            
+            _logger.LogInformation($"Returning all personal twits for user {id}.");
+
+            var twits = await _messageService.GetPersonalTwits(id);
+
+            return Ok(twits.ToList());
         }
 
         [HttpPut("mark-message")]
-        public async Task<ActionResult<string>> markMessage([FromBody]FlaggingInput input)
+        public async Task<ActionResult> MarkMessage([FromBody] FlaggingDto input)
         {
-            var flaggedMsg = _twitContext.Messages.FirstOrDefault(msg => msg.MessageId.Equals(input.MessageId));
-            if (flaggedMsg != null)
+            ValidateFlaggingDto(input);
+
+
+            _logger.LogInformation($"Mark message endpoint was called on msg id: {input.MessageId}.");
+
+            await _messageService.MarkMessage(input.MessageId, input.FlagMessage);
+
+            return Ok();
+        }
+
+        #region PrivateMethods
+        private void ValidateFlaggingDto(FlaggingDto input)
+        {
+            if (input == null || input.MessageId < 0)
             {
-                if (input.FlagMessage)
-                {
-                    flaggedMsg.Flagged = true;
-                }
-                else
-                {
-                    flaggedMsg.Flagged = false;
-                }
-                _twitContext.SaveChanges();
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
+                throw new ArgumentException("Input missing or not matching criteria");
             }
         }
+
+        private void ValidateId(int id)
+        {
+            if (id < 0)
+            {
+                throw new ArgumentException("Id cannot be negative");
+            }
+        }
+
+        private void ValidateMessageDto(MessageDto msg)
+        {
+            if (msg == null || msg.AuthorId < 0 || string.IsNullOrWhiteSpace(msg.Text))
+            {
+                throw new ArgumentException("Input missing or not matching criteria");
+            }
+
+        }
+        #endregion
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Minitwit_BE.Api.Dtos;
 using Minitwit_BE.Domain;
-using Minitwit_BE.Persistence;
+using Minitwit_BE.DomainService.Interfaces;
 
 namespace Minitwit_BE.Api.Controllers
 {
@@ -8,20 +9,21 @@ namespace Minitwit_BE.Api.Controllers
     [Route("api/user")]
     public class UserController : ControllerBase
     {
-        private readonly TwitContext _twitContext;
+        private readonly ILogger<UserController> _logger;
+        private readonly IUserDomainService _userService;
 
-        public UserController(TwitContext twitContext)
+        public UserController(ILogger<UserController> logger, IUserDomainService userService)
         {
-            _twitContext = twitContext;
+            _logger = logger;
+            _userService = userService;
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> registerUser([FromBody]UserInput input)
+        public async Task<ActionResult<User>> RegisterUser([FromBody] UserDto input)
         {
-            var existingUser = _twitContext.Users.FirstOrDefault(user => user.UserName.Equals(input.UserName) || user.Email.Equals(input.Email));
-            if (existingUser != null) {
-                return BadRequest("User with that nickname or email already exists!");
-            }
+            ValidateInput(input);
+
+            _logger.LogInformation($"RegisterUser endpoint was called for user: {input.UserName}");
 
             var user = new User
             {
@@ -30,23 +32,36 @@ namespace Minitwit_BE.Api.Controllers
                 PwHash = input.PwHash,
             };
 
-            _twitContext.Add(user);
-            _twitContext.SaveChanges();
+            await _userService.RegisterUser(user);
+
             return Ok(user);
         }
 
         [HttpGet("login")]
-        public async Task<ActionResult<int>> login([FromBody]UserInput input)
+        public async Task<ActionResult<int>> Login([FromBody] UserDto input)
         {
-            var authUser = _twitContext.Users.FirstOrDefault(user => user.Email.Equals(input.Email) && user.PwHash.Equals(input.PwHash));
-            if (authUser != null)
-            {   
-                return Ok(authUser.UserId);
-            }
-            else
+            ValidateInput(input);
+
+            _logger.LogInformation($"Login endpoint was called for user: {input.Email}");
+
+            var user = new User
             {
-                return Unauthorized();
-            }
+                UserName = input.UserName,
+                Email = input.Email,
+                PwHash = input.PwHash,
+            };
+
+            await _userService.Login(user);
+
+            return Ok(user.UserId);
         }
+
+        #region PrivateMethods
+        private void ValidateInput(UserDto user)
+        {
+            if (user == null || string.IsNullOrWhiteSpace(user.PwHash) || string.IsNullOrWhiteSpace(user.Email))
+                throw new ArgumentException("Password hash or user email missing!");
+        }
+        #endregion
     }
 }

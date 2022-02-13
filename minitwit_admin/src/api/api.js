@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/compositionStore/index'
 
-const apiURL = "https://localhost:5001/"
+const apiURL = process.env.VUE_APP_MINITWIT_BE_URL
 
 const apiRequest = (method, path, data, contentType) => {
     store.async.actions.setLoading(true)

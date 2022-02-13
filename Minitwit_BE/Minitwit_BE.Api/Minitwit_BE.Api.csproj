@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>1b9535dc-1592-4fc9-b9bf-519bad018205</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Minitwit_BE.DomainService\Minitwit_BE.DomainService.csproj" />
     <ProjectReference Include="..\Minitwit_BE.Persistence\Minitwit_BE.Persistence.csproj" />
   </ItemGroup>
 

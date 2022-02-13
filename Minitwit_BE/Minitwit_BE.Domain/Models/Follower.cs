@@ -9,10 +9,4 @@ namespace Minitwit_BE.Domain
         public int WhoId { get; set; }
         public int WhomId { get; set; }
     }
-
-    public class FollowerInput
-    {
-        public int WhoId { get; set; }
-        public int WhomId { get; set; }
-    }
 }

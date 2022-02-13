@@ -25,6 +25,15 @@ namespace Minitwit_BE.Api
 
                 opt.UseSqlite($"Data Source={dbPath}");
             });
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "_miniTwitAllowSpecificOrigins", builder => 
+                {
+                    builder.WithOrigins("http://localhost:8080")
+                                                .AllowAnyHeader()
+                                                .AllowAnyMethod();
+                });
+            });
         }
 
         // to configure HTTP request pipeline.
@@ -38,6 +47,7 @@ namespace Minitwit_BE.Api
                 app.UseHsts();
             }
 
+            app.UseCors("_miniTwitAllowSpecificOrigins");
             //app.UseHttpsRedirection();
             //app.UseStaticFiles();
 

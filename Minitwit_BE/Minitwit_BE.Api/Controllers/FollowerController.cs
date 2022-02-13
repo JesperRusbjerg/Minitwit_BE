@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Minitwit_BE.Api.Dtos;
 using Minitwit_BE.Domain;
-using Minitwit_BE.DomainService;
 using Minitwit_BE.DomainService.Interfaces;
 
 namespace Minitwit_BE.Api.Controllers

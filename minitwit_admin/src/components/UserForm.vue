@@ -60,7 +60,6 @@ export default {
                 "Email": email,
                 "PwHash": password
             };
-            console.log("userdata", userData)
             if (ifRegistrationForm) {
                 const username = document.getElementById(`${this.formDefinition}-username`).value;
                 userData.UserName = username;

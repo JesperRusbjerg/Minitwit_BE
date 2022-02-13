@@ -5,15 +5,15 @@ const followedUsers = (userId) => {
 }
 
 const followUser = (followData) => {
-    return apiRequest("GET", "api/followers/follow", followData)
+    return apiRequest("POST", "api/followers/follow", followData)
 }
 
-const followUser = (followEntryId) => {
-    return apiRequest("GET", `api/followers/follow/${followEntryId}`)
+const unfollowUser = (followEntryId) => {
+    return apiRequest("DELETE", `api/followers/unfollow/${followEntryId}`)
 }
 
 export default {
-    followUser,
+    followedUsers,
     followUser,
     unfollowUser
 }

@@ -27,7 +27,7 @@ export default {
     props: {
         ifRegistrationForm: {
             type: Boolean,
-            required: true,
+            required: false,
             default: false,
         }
     },
@@ -60,6 +60,7 @@ export default {
                 "Email": email,
                 "PwHash": password
             };
+            console.log("userdata", userData)
             if (ifRegistrationForm) {
                 const username = document.getElementById(`${this.formDefinition}-username`).value;
                 userData.UserName = username;
@@ -67,10 +68,9 @@ export default {
             } else {
                 await this.loginUser(userData);
             }
-            if (this.loggedUser != 0) {
+            if (this.loggedUser.value != 0) {
                 this.$router.push({path: '/'});
             }
-
         }
     }
 }

@@ -21,10 +21,10 @@ Written in Vue and is decoupled from the backend
 ## Mapping of features:
 
 ### Displaying twits
-Displaying twits will be available in our frontend and will be fetched from our backend
+Displaying twits is available in our frontend and will be fetched from our backend
 
 ### Flagging twits
-Flagging twits will be available in the frontend, when a twit is flagged a request is sent to our backend which then flags it in the database and it will no longer be displayed when fetching twits
+Flagging twits is available in the frontend, when a twit is flagged a request is sent to our backend which then flags it in the database and it will no longer be displayed when fetching twits
 
 ### Fetching twits, Flagging twits, Logging in etc.
 The following features are available through the backend which reflects all of the functionality within the python twit app:

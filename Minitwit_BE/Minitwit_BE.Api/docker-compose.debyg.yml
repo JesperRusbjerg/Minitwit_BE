@@ -1,11 +1,11 @@
 version: '3.4'
 
 services:
-  minitwit_be.api:
-    image: jrusbjerg/twitbackend
+  webapp:
+    image: minitwitbeapi:latest
     ports:
-      - "7000:80"
-      - "7001:443"
+      - 80
+      - 443
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80

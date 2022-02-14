@@ -54,8 +54,8 @@ namespace Minitwit_BE.Api
             }
 
             app.UseCors("_miniTwitAllowSpecificOrigins");
-            //app.UseHttpsRedirection();
-            //app.UseStaticFiles();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
             app.UseMiddleware<ExceptionMiddleware>();

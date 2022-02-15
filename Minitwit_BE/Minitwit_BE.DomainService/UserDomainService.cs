@@ -17,7 +17,7 @@ namespace Minitwit_BE.DomainService
         public async Task RegisterUser(User user)
         {
             var existingUser = (await _persistenceService.GetUsers(
-                u => u.UserName.Equals(u.UserName) || u.Email.Equals(user.Email))).FirstOrDefault();
+                u => u.UserName.Equals(user.UserName) || u.Email.Equals(user.Email))).FirstOrDefault();
 
             if (existingUser != null)
             {

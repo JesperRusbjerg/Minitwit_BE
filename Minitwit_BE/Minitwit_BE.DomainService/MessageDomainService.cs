@@ -48,7 +48,7 @@ namespace Minitwit_BE.DomainService
             if (user == null)
                 throw new ArgumentException("No user of that username exists");
             
-            return await _persistenceService.GetMessages(msg => msg.AuthorId.Equals(user.UserId) && msg.Flagged != true);
+            return await GetPersonalTwits(user.UserId);
         }
 
         public async Task MarkMessage(int msgId, bool flag)

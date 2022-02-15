@@ -52,6 +52,7 @@ namespace Minitwit_BE.Api.Controllers
             };
 
             int userId = await _userService.Login(user);
+
             return Ok(userId);
         }
 

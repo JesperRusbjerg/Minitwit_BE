@@ -82,6 +82,31 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             return Ok();
         }
 
+        [HttpGet("/fllws/{username}")]
+        public async Task<ActionResult<List<Follower>>> GetFollowedUsers([FromBody] FollowerDtoSimulation input, [FromRoute] string username)
+        {
+            _logger.LogInformation($"Follow endpoint was called with username: {username}");
+
+            var followedUsers = await _followerService.GetFollowedUsers(username);
+
+            return Ok(followedUsers.ToList());
+        }
+
+        [HttpPost("/fllws/{username}")]
+        public async Task<ActionResult> FollowOrUnfollowUser([FromBody] FollowerDtoSimulation input, [FromRoute] string username)
+        {
+            _logger.LogInformation($"Follow endpoint was called with username: {username}");
+
+            if (input.Follow != null)
+            {
+                await _followerService.Follow(username, input.Follow);
+            } else if (input.Unfollow != null)
+            {
+                await _followerService.UnFollow(username, input.Unfollow);
+            }
+
+            return Ok();
+        }
 
         #region PrivateMethods
         private void ValidateRegisterDto(RegisterDto obj)

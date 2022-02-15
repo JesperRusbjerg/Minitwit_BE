@@ -29,6 +29,52 @@ namespace Minitwit_BE.DomainService
             await _persistence.AddFollower(follower);
         }
 
+        public async Task Follow(string userNameWho, string userNameWhom)
+        {
+            var userWhoTask = _persistence.GetUsers(u => u.UserName.Equals(userNameWho));
+            var userWhomTask = _persistence.GetUsers(u => u.UserName.Equals(userNameWhom));
+            var taskList = new List<Task> { userWhoTask, userWhomTask };
+
+            await Task.WhenAll(taskList);
+
+            if (userWhoTask.Result.SingleOrDefault() == null || userWhomTask.Result.SingleOrDefault() == null)
+            {
+                throw new ArgumentException("Users do not exist");
+            } else
+            {
+                var follower = new Follower
+                {
+                    WhoId = userWhoTask.Result.SingleOrDefault().UserId,
+                    WhomId = userWhomTask.Result.SingleOrDefault().UserId
+                };
+
+                await _persistence.AddFollower(follower);
+            }
+        }
+
+        public async Task Unfollow(string userNameWho, string userNameWhom)
+        {
+            var userWhoTask = _persistence.GetUsers(u => u.UserName.Equals(userNameWho));
+            var userWhomTask = _persistence.GetUsers(u => u.UserName.Equals(userNameWhom));
+            var taskList = new List<Task> { userWhoTask, userWhomTask };
+
+            await Task.WhenAll(taskList);
+
+            if (userWhoTask.Result.SingleOrDefault() == null || userWhomTask.Result.SingleOrDefault() == null)
+            {
+                throw new ArgumentException("Users do not exist");
+            } else
+            {
+                var follower = new Follower
+                {
+                    WhoId = userWhoTask.Result.SingleOrDefault().UserId,
+                    WhomId = userWhomTask.Result.SingleOrDefault().UserId
+                };
+
+                await _persistence.DeleteFollower(follower);
+            }
+        }
+
         public async Task UnFollow(int id)
         {
             var deletedFollow = (await _persistence.GetFollowers(entry => entry.WhoId.Equals(id))).FirstOrDefault();

@@ -18,7 +18,7 @@ namespace Minitwit_BE.DomainService
         {
 
             var getUsersTask = await _persistenceService.GetUsers(
-                user => user.UserName.Equals(user.UserName) || user.Email.Equals(user.Email));
+                u => user.UserName.Equals(u.UserName) || user.Email.Equals(u.Email));
 
             if (getUsersTask.SingleOrDefault() != null)
             {
@@ -30,14 +30,16 @@ namespace Minitwit_BE.DomainService
             }
         }
 
-        public async Task Login(User input)
+        public async Task<int> Login(User input)
         {
             var getUsersTask = await _persistenceService.GetUsers(user => user.Email.Equals(input.Email) && user.PwHash.Equals(input.PwHash));
 
             if (getUsersTask.FirstOrDefault() == null)
             {
                 throw new UnauthorizedAccessException("Email or password does not match!");
-            }
+            } 
+            
+            return getUsersTask.FirstOrDefault().UserId;
         }
     }
 }

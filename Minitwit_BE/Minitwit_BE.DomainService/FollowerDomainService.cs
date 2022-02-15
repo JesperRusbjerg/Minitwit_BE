@@ -19,9 +19,7 @@ namespace Minitwit_BE.DomainService
 
         public async Task<IEnumerable<Follower>> GetFollowedUsers(int id)
         {
-            Func<Follower, bool> queryExpresion = entry => entry.WhoId.Equals(id);
-
-            var followersList = _persistence.GetFollowers(queryExpresion);
+            var followersList = _persistence.GetFollowers(entry => entry.WhoId.Equals(id));
 
             return await followersList;
         }
@@ -33,11 +31,7 @@ namespace Minitwit_BE.DomainService
 
         public async Task UnFollow(int id)
         {
-            Func<Follower, bool> queryExpresion = entry => entry.WhoId.Equals(id);
-
-            var getFollowsTask = await _persistence.GetFollowers(queryExpresion);
-
-            var deletedFollow = getFollowsTask.FirstOrDefault();
+            var deletedFollow = (await _persistence.GetFollowers(entry => entry.WhoId.Equals(id))).FirstOrDefault();
 
             if (deletedFollow != null)
             {

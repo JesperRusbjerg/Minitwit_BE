@@ -17,12 +17,11 @@ namespace Minitwit_BE.DomainService
         public async Task RegisterUser(User user)
         {
 
-            var existingUser = (await _persistenceService.GetUsers(
-                user => user.UserName.Equals(user.UserName) || user.Email.Equals(user.Email))).FirstOrDefault();
+            var existingUser = (await _persistenceService.GetUsers(e => e.UserName.Equals(user.UserName))).FirstOrDefault();
 
             if (existingUser != null)
             {
-                throw new UserAlreadyExistsException("User with that nickname or email already exists!");
+                throw new UserAlreadyExistsException("The username is already taken");
             }
             else
             {

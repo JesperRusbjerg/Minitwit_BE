@@ -17,14 +17,6 @@ namespace Minitwit_BE.Api.Controllers
             _logger = logger;
             _messageService = messageService;
         }
-        
-        [HttpGet("test")]
-        public async Task<string> TestEndpoint()
-        {
-            _logger.LogInformation("Test endpoint was called!");
-            
-            return await Task.FromResult("test");
-        }
 
         [HttpPost("add")]
         public async Task<ActionResult> AddTwit([FromBody] MessageDto input)

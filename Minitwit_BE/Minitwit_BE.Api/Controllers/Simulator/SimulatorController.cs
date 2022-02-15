@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Minitwit_BE.Api.Dtos.Simulation;
+using Minitwit_BE.Domain;
 using Minitwit_BE.DomainService.Interfaces;
 
 namespace Minitwit_BE.Api.Controllers.Simulator
@@ -26,13 +27,31 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult> AddTwit([FromBody] RegisterDto input)
+        public async Task<ActionResult> Register([FromBody] RegisterDto input)
         {
             ValidateRegisterDto(input);
 
-            _logger.LogInformation("Inserting a new twit.");
+            _logger.LogInformation("Register new user in the simulator");
+
+            await _userService.RegisterUser(new User
+            {
+                UserName = input.UserName,
+                Email = input.Email,
+                PwHash = input.Password
+            });
 
             return Ok();
+        }
+
+        [HttpPost("msgs")]
+        public async Task<ActionResult<List<Message>>> GetPublicMessages()
+        {
+            _logger.LogInformation("Get messages in the simulator");
+
+            // we have to map id of a user into concrete username
+            var msgs = await _messageService.GetTwits();
+
+            return Ok(msgs.ToList());
         }
 
 

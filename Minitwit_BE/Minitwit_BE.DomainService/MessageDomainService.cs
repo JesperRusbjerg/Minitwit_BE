@@ -21,12 +21,12 @@ namespace Minitwit_BE.DomainService
 
         public async Task<IEnumerable<Message>> GetTwits()
         {
-            return await _persistenceService.GetMessages(e => true);
+            return await _persistenceService.GetMessages(e => e.Flagged != true);
         }
 
         public async Task<IEnumerable<Message>> GetPersonalTwits(int id)
         {
-            return await _persistenceService.GetMessages(msg => msg.AuthorId.Equals(id));
+            return await _persistenceService.GetMessages(msg => msg.AuthorId.Equals(id) && msg.Flagged != true);
         }
 
         public async Task MarkMessage(int msgId, bool flag)

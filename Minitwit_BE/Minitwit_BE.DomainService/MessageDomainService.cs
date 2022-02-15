@@ -31,9 +31,7 @@ namespace Minitwit_BE.DomainService
 
         public async Task MarkMessage(int msgId, bool flag)
         {
-            var getFlaggedMessagesTask = await _persistenceService.GetMessages(msg => msg.MessageId.Equals(msgId));
-
-            var flaggedMessage = getFlaggedMessagesTask.SingleOrDefault();
+            var flaggedMessage = (await _persistenceService.GetMessages(msg => msg.MessageId.Equals(msgId))).SingleOrDefault();
 
             if (flaggedMessage != null)
             {

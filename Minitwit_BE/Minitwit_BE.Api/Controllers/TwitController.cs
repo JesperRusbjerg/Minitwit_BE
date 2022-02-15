@@ -73,7 +73,6 @@ namespace Minitwit_BE.Api.Controllers
         {
             ValidateFlaggingDto(input);
 
-
             _logger.LogInformation($"Mark message endpoint was called on msg id: {input.MessageId}.");
 
             await _messageService.MarkMessage(input.MessageId, input.FlagMessage);

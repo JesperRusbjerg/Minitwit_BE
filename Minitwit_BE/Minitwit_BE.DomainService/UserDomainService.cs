@@ -17,10 +17,10 @@ namespace Minitwit_BE.DomainService
         public async Task RegisterUser(User user)
         {
 
-            var getUsersTask = await _persistenceService.GetUsers(
-                user => user.UserName.Equals(user.UserName) || user.Email.Equals(user.Email));
+            var existingUser = (await _persistenceService.GetUsers(
+                user => user.UserName.Equals(user.UserName) || user.Email.Equals(user.Email))).FirstOrDefault();
 
-            if (getUsersTask.SingleOrDefault() != null)
+            if (existingUser != null)
             {
                 throw new UserAlreadyExistsException("User with that nickname or email already exists!");
             }
@@ -32,9 +32,10 @@ namespace Minitwit_BE.DomainService
 
         public async Task Login(User input)
         {
-            var getUsersTask = await _persistenceService.GetUsers(user => user.Email.Equals(input.Email) && user.PwHash.Equals(input.PwHash));
+            var loggedUser = (await _persistenceService.GetUsers(
+                user => user.Email.Equals(input.Email) && user.PwHash.Equals(input.PwHash))).FirstOrDefault();
 
-            if (getUsersTask.FirstOrDefault() == null)
+            if (loggedUser == null)
             {
                 throw new UnauthorizedAccessException("Email or password does not match!");
             }

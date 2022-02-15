@@ -43,7 +43,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             return Ok();
         }
 
-        [HttpPost("msgs")]
+        [HttpGet("msgs")]
         public async Task<ActionResult<List<Message>>> GetPublicMessages()
         {
             _logger.LogInformation("Get messages in the simulator");
@@ -52,6 +52,34 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             var msgs = await _messageService.GetTwits();
 
             return Ok(msgs.ToList());
+        }
+
+        [HttpGet("msgs/{username}")]
+        public async Task<ActionResult<List<Message>>> GetPersonalMessages([FromRoute] string username)
+        {
+            _logger.LogInformation("Get personal messages in the simulator");
+
+            // we have to map id of a user into concrete username
+            var msgs = await _messageService.GetPersonalTwits(username);
+
+            return Ok(msgs.ToList());
+        }
+
+        [HttpPost("msgs/{username}")]
+        public async Task<ActionResult> AddTwit([FromBody] AddMessageDto input, [FromRoute] string username)
+        {
+            _logger.LogInformation("Inserting a new twit.");
+
+            var msg = new Message
+            {
+                Flagged = false,
+                PublishDate = DateTime.Now,
+                Text = input.Content
+            };
+
+            await _messageService.AddTwit(msg, username);
+
+            return Ok();
         }
 
 

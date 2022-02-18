@@ -19,12 +19,12 @@ namespace Minitwit_BE.DomainService
 
         public async Task<IEnumerable<Follower>> GetFollowedUsers(string username)
         {
-            var follow = (await _persistence.GetFollowers(u => u.WhoId.Equals(username))).SingleOrDefault();
+            var user = (await _persistence.GetUsers(u => u.UserName.Equals(username))).SingleOrDefault();
 
-            if (follow == null)
+            if (user == null)
                 throw new ArgumentException("User does not exist!");
             
-            return await GetFollowedUsers(follow.WhoId);
+            return await GetFollowedUsers(user.UserId);
         }
 
         public async Task<IEnumerable<Follower>> GetFollowedUsers(int id)
@@ -36,11 +36,15 @@ namespace Minitwit_BE.DomainService
 
         public async Task Follow(Follower follower)
         {
+            // TODO: Check if follow relation alrready exisits in the DB
+
             await _persistence.AddFollower(follower);
         }
 
         public async Task Follow(string userNameWho, string userNameWhom)
         {
+            // TODO: Check if follow relation alrready exisits in the DB
+            
             var userWhoTask = _persistence.GetUsers(u => u.UserName.Equals(userNameWho));
             var userWhomTask = _persistence.GetUsers(u => u.UserName.Equals(userNameWhom));
             var taskList = new List<Task> { userWhoTask, userWhomTask };
@@ -93,7 +97,17 @@ namespace Minitwit_BE.DomainService
                     WhomId = userWhomTask.Result.SingleOrDefault().UserId
                 };
 
-                await _persistence.DeleteFollower(follower);
+                var deletedFollow = (await _persistence.GetFollowers(
+                    entry => entry.WhoId.Equals(follower.WhoId) && entry.WhomId.Equals(follower.WhomId))).SingleOrDefault();
+
+                if (deletedFollow != null)
+                {
+                    await _persistence.DeleteFollower(deletedFollow);
+                }
+                else
+                {
+                    throw new UserUnfollowException("Cannot unfollow this user, as it is not currently followed!");
+                }
             }
         }
     }

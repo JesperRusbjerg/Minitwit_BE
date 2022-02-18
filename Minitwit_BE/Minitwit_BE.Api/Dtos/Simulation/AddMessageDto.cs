@@ -1,7 +1,10 @@
-﻿namespace Minitwit_BE.Api.Dtos.Simulation
+﻿using Newtonsoft.Json;
+
+namespace Minitwit_BE.Api.Dtos.Simulation
 {
     public class AddMessageDto
     {
-        public string Content { get; set; }
+        [JsonProperty("content")]
+        public string Text { get; set; }
     }
 }

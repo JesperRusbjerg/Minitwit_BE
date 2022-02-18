@@ -18,7 +18,7 @@ namespace Minitwit_BE.Api
         // to add services to the application container. For instance healthcheck, etc.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddScoped<IFollowerDomainService, FollowerDomainService>();
             services.AddScoped<IMessageDomainService, MessageDomainService>();
             services.AddScoped<IUserDomainService, UserDomainService>();

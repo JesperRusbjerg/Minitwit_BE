@@ -74,7 +74,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             {
                 Flagged = false,
                 PublishDate = DateTime.Now,
-                Text = input.Content
+                Text = input.Text
             };
 
             await _messageService.AddTwit(msg, username);

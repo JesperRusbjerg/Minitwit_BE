@@ -21,6 +21,7 @@
 </template>
 <script>
 import { computed, inject } from "vue";
+import { useRouter } from 'vue-router'
 import { useSidebar } from "@/compositionStore/index"
 
 export default {
@@ -35,6 +36,7 @@ export default {
     components: { },
     setup(props) {
         const store = inject("store");
+        const router = useRouter()
         const { selectSidebar } = useSidebar()
 
         // computed
@@ -46,6 +48,7 @@ export default {
         const registerUser = (userData) => store.users.actions.registerUser(userData);
 
         return { 
+            router,
             formDefinition,
             loggedUser,
             loginUser,
@@ -71,8 +74,8 @@ export default {
                 await this.loginUser(userData);
             }
             if (this.loggedUser.value != 0) {
-                this.selectSidebar("Dashboard")
-                this.$router.push({path: '/user-profile'});
+                this.selectSidebar("User profile/create twit")
+                this.router.push({path: '/user-profile'});
             }
         }
     },

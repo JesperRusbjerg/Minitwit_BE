@@ -1,9 +1,9 @@
 <template>
-    <div class="add-twit-form">
+    <div class="form">
         <div>
             <div class="twit-input">
                 <label for="twit-text">Enter twit text: </label>
-                <input type="text" name="twit-text" id="twit-text" required>
+                <textarea name="twit-text" id="twit-text"/>
             </div>
             <div class="submit-btn">
                 <input type="submit" value="Submit" @click="sendRequest()">

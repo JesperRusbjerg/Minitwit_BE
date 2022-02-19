@@ -1,6 +1,6 @@
 <template>
     <div :class="[ifRegistrationForm ? 'registration-form' : 'login-form']">
-        <form>
+        <div class="form">
             <div v-show="ifRegistrationForm" class="username-input">
                 <label for="username">Enter your name: </label>
                 <input type="text" name="username" :id="ifRegistrationForm ? 'register-username' : 'login-username'" required>
@@ -16,7 +16,7 @@
             <div class="submit-btn">
                 <input type="submit" value="Submit" @click="sendRequest(ifRegistrationForm)">
             </div>
-        </form>
+        </div>
     </div>
 </template>
 <script>
@@ -72,10 +72,10 @@ export default {
             }
             if (this.loggedUser.value != 0) {
                 this.selectSidebar("Dashboard")
-                this.$router.push({path: '/'});
+                this.$router.push({path: '/user-profile'});
             }
         }
-    }
+    },
 }
 </script>
 <style lang="scss">
@@ -84,19 +84,7 @@ export default {
     height: max-content;
     text-align: left;
 
-    form {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        margin-bottom: 200px;
-        padding: 20px;
-        width: 25vw;
-        height: 40vh;
-        background: #f5f5fa;
-        border: 0;
-        border-radius: 8px;
-        box-shadow: -10px -10px 30px 0 #fff,10px 10px 30px 0 #1d0dca17;
-
+    .form {
         
         > * {
             padding: 1em;
@@ -113,20 +101,6 @@ export default {
                 border: 0;
                 border-radius: 10px;
                 box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
-            }
-
-            &.submit-btn {
-                align-self: center;
-
-                input { 
-                    border: 1px;
-                    background-color: #fcd997;
-                    transition: transform .2s;
-                }
-
-                input:hover {
-                    transform: scale(1.1);
-                }
             }
         }
     }

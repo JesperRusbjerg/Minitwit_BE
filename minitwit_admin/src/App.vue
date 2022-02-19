@@ -58,6 +58,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "./genericStyles.scss"; 
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -90,5 +92,4 @@ export default {
   height: 100%;
   overflow: scroll;
 }
-
 </style>

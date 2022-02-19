@@ -19,7 +19,7 @@ const actions = {
     registerUser: async (userData) => {
         try {
             const res = await usersApi.registerUser(userData);
-            mutations.loginUser(res);
+            mutations.loginUser(res.userId);
         } catch (e) {
             console.error(e)
         }
@@ -29,7 +29,7 @@ const actions = {
         try {
             const id = await usersApi.loginUser(userData)
             if (id == 0) {
-                throw Error("Encountered errors while registering the user.")
+                throw Error("Encountered errors while logging the user.")
             } else {
                 mutations.loginUser(id)
             }

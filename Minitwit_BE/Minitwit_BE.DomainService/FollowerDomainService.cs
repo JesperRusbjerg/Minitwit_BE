@@ -43,24 +43,32 @@ namespace Minitwit_BE.DomainService
 
         public async Task Follow(string userNameWho, string userNameWhom)
         {
-            // TODO: Check if follow relation alrready exisits in the DB
-            
-            var userWhoTask = _persistence.GetUsers(u => u.UserName.Equals(userNameWho));
-            var userWhomTask = _persistence.GetUsers(u => u.UserName.Equals(userNameWhom));
-            var taskList = new List<Task> { userWhoTask, userWhomTask };
-
-            await Task.WhenAll(taskList);
-            var userWho = userWhoTask.Result.SingleOrDefault();
-            var userWhom = userWhomTask.Result.SingleOrDefault();
-
-            if (userWho == null || userWhom == null)
-                throw new ArgumentException("Users do not exist");
-
-            await _persistence.AddFollower(new Follower
+            var userWhom = (await _persistence.GetUsers(u => u.UserName.Equals(userNameWhom))).SingleOrDefault();
+            if (userWhom == null)
             {
-                WhoId = userWho.UserId,
-                WhomId = userWhom.UserId,
-            });
+                throw new ArgumentException("Users might not exist");
+            } else 
+            {
+                var followings = (await GetFollowedUsers(userNameWho)).SingleOrDefault();
+                var isAlreadyFollowing = followings.Any(item => item.WhomId.Equals(userWhom.UserId));
+
+                if (isAlreadyFollowing)
+                {
+                    throw new ArgumentException("User is already followed");
+                } else
+                {
+                    var userWho = (await _persistence.GetUsers(u => u.UserName.Equals(userNameWho))).SingleOrDefault();
+
+                    if (userWho == null)
+                        throw new ArgumentException("Users might not exist");
+
+                    await _persistence.AddFollower(new Follower
+                    {
+                        WhoId = userWho.UserId,
+                        WhomId = userWhom.UserId,
+                    });
+                }
+            }
         }
 
         public async Task UnFollow(int id)

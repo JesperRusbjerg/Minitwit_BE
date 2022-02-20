@@ -36,9 +36,25 @@ namespace Minitwit_BE.DomainService
 
         public async Task Follow(Follower follower)
         {
-            // TODO: Check if follow relation alrready exisits in the DB
+            var userWhom = (await _persistence.GetUsers(u => u.UserId.Equals(follower.WhomId))).SingleOrDefault();
 
-            await _persistence.AddFollower(follower);
+            if (userWhom == null)
+            {
+                throw new ArgumentException("Users might not exist");
+            } else
+            {
+                var followings = (await GetFollowedUsers(userWhom.UserId)).ToList();
+                var isAlreadyFollowing = followings.Any(item => item.WhomId.Equals(userWhom.UserId));
+
+                if (isAlreadyFollowing)
+                {
+                    throw new ArgumentException("Users might not exist");
+                }
+                else
+                {
+                    await _persistence.AddFollower(follower);
+                }
+            }
         }
 
         public async Task Follow(string userNameWho, string userNameWhom)
@@ -49,7 +65,7 @@ namespace Minitwit_BE.DomainService
                 throw new ArgumentException("Users might not exist");
             } else 
             {
-                var followings = (await GetFollowedUsers(userNameWho)).SingleOrDefault();
+                var followings = (await GetFollowedUsers(userNameWho)).ToList();
                 var isAlreadyFollowing = followings.Any(item => item.WhomId.Equals(userWhom.UserId));
 
                 if (isAlreadyFollowing)

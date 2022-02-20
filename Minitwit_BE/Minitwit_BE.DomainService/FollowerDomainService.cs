@@ -27,11 +27,29 @@ namespace Minitwit_BE.DomainService
             return await GetFollowedUsers(user.UserId);
         }
 
+        public async Task<IEnumerable<Follower>> GetFollowedUsers(string username, int? numberOfRows)
+        {
+            var user = (await _persistence.GetUsers(u => u.UserName.Equals(username))).SingleOrDefault();
+
+            if (user == null)
+                throw new ArgumentException("User does not exist!");
+            
+            return await GetFollowedUsers(user.UserId, numberOfRows);
+        }
+
         public async Task<IEnumerable<Follower>> GetFollowedUsers(int id)
         {
             var followersList = _persistence.GetFollowers(entry => entry.WhoId.Equals(id));
 
             return await followersList;
+        }
+
+        public async Task<IEnumerable<Follower>> GetFollowedUsers(int id, int? numberOfRows)
+        {
+            var number = numberOfRows ?? 100;
+            var followersList = (await _persistence.GetFollowers(entry => entry.WhoId.Equals(id))).Take(number);
+
+            return followersList;
         }
 
         public async Task Follow(Follower follower)

@@ -27,6 +27,20 @@ namespace Minitwit_BE.DomainService
                 return user;
             }
         }
+
+        public async Task<User> GetUserByName(string username)
+        {
+            var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).SingleOrDefault();
+
+            if (user == null)
+            {
+                throw new ArgumentException("User does not exist");
+            }
+            else
+            {
+                return user;
+            }
+        }
         
         public async Task RegisterUser(User user)
         {

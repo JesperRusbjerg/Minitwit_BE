@@ -40,7 +40,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
                 PwHash = input.Password
             });
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpGet("msgs")]
@@ -48,7 +48,6 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         {
             _logger.LogInformation("Get messages in the simulator");
 
-            // we have to map id of a user into concrete username
             var msgs = await _messageService.GetTwits(no);
 
             var messageDtoTasks = MapMessagesToGetMessageDtos(msgs.ToList());
@@ -63,7 +62,6 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         {
             _logger.LogInformation("Get personal messages in the simulator");
 
-            // we have to map id of a user into concrete username
             var msgs = await _messageService.GetPersonalTwits(username);
 
              var messageDtos = msgs.Select(m => new GetMessageDto
@@ -94,13 +92,24 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         }
 
         [HttpGet("fllws/{username}")]
-        public async Task<ActionResult<List<Follower>>> GetFollowedUsers([FromRoute] string username)
+        public async Task<ActionResult<List<FollowedUserDto>>> GetFollowedUsers([FromRoute] string username, [FromQuery] int? no)
         {
             _logger.LogInformation($"Follow endpoint was called with username: {username}");
 
-            var followedUsers = await _followerService.GetFollowedUsers(username);
+            var followedUsers = await _followerService.GetFollowedUsers(username, no);
 
-            return Ok(followedUsers.ToList());
+            var followedUserDtoTask = MapFollowersToFollowedUserDto(followedUsers.ToList());
+
+            await Task.WhenAll(followedUserDtoTask);
+
+            var followedUserDtos = followedUserDtoTask.Select(f => (f.Result).UserName);
+
+            var follows = new FollowsResponseDto
+            {
+                Follows = followedUserDtos.ToList()
+            };
+
+            return Ok(follows);
         }
 
         [HttpPost("fllws/{username}")]
@@ -116,7 +125,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
                 await _followerService.UnFollow(username, input.Unfollow);
             }
 
-            return Ok();
+            return NoContent();
         }
 
         #region PrivateMethods
@@ -143,6 +152,17 @@ namespace Minitwit_BE.Api.Controllers.Simulator
                 {
                     Text = m.Text,
                     PublishDate = m.PublishDate.ToString(),
+                    UserName = user.UserName
+                };
+            }).ToList();
+        }
+
+        private List<Task<FollowedUserDto>> MapFollowersToFollowedUserDto(List<Follower> followers)
+        {
+            return followers.Select(async f => { 
+                var user = (await _userService.GetUserById(f.WhomId));
+                return new FollowedUserDto
+                {
                     UserName = user.UserName
                 };
             }).ToList();

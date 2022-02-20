@@ -97,10 +97,10 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         {
             _logger.LogInformation($"Follow endpoint was called with username: {username}");
 
-            if (input.Follow != null)
+            if (input.Follow != null || !input.Follow.Equals(""))
             {
                 await _followerService.Follow(username, input.Follow);
-            } else if (input.Unfollow != null)
+            } else if (input.Unfollow != null || !input.Unfollow.Equals(""))
             {
                 await _followerService.UnFollow(username, input.Unfollow);
             }

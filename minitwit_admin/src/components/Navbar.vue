@@ -35,11 +35,10 @@ export default {
   components: {},
   setup() {
       const { getSidebarMinimized, toggleSidebar } = useSidebar()
-      const isSidebarMinimized = computed(() => getSidebarMinimized.value)
 
       const handleSidebarClick = () =>  toggleSidebar()
       return {
-          isSidebarMinimized,
+          isSidebarMinimized: getSidebarMinimized(),
           handleSidebarClick
       }
   }

@@ -41,13 +41,11 @@ export default {
     const { getColors } = useColors();
     const colors = computed(() => getColors());
 
-    const loggedInUser = computed(() => getLoggedInUser.value);
+    const loggedInUser = getLoggedInUser()
     const loggedUser = computed(() => (loggedInUser.value != 0 ? true : false));
     const loggedOutUser = computed(() =>
       loggedInUser.value == 0 ? true : false
     );
-
-    const isSidebarMinimized = computed(() => getSidebarMinimized.value);
     
     const useSidebarItems = () => {
       return [
@@ -94,7 +92,7 @@ export default {
 
     return {
       colors,
-      isSidebarMinimized,
+      isSidebarMinimized: getSidebarMinimized(),
       sidebarItems: getSidebarItems.value,
       handleSidebarItemClick,
     };

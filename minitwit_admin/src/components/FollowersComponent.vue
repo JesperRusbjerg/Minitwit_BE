@@ -1,24 +1,18 @@
 <template>
   <div id="FollowersComponent">
     <va-list>
-      <va-list-item v-for="(item, index) in followers" :key="index">
+      <va-list-item class="follower-card" v-for="(item, index) in followers" :key="index">
         <va-list-item-section>
           <va-list-item-label>
-            {{ item.whomId }}
+            User ID: {{ item.whomId }}
           </va-list-item-label>
         </va-list-item-section>
         <va-list-item-section icon>
-          <va-icon
-            class="icon"
-            name="remove_red_eye"
-            color="red"
-            @click="handleItemClick(item)"
-          />
+          <div class="submit-btn">
+                <input type="submit" value="Unfollow" @click="handleItemClick(item)">
+            </div>
         </va-list-item-section>
       </va-list-item>
-      <div></div>
-      <div></div>
-      <div></div>
     </va-list>
   </div>
 </template>
@@ -53,10 +47,6 @@ export default {
 
 <style lang="scss" scoped>
 #FollowersComponent {
-
-    .icon:hover {
-        cursor: pointer;
-    }
 
 }
 </style>

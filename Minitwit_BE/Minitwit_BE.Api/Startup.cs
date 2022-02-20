@@ -15,29 +15,32 @@ namespace Minitwit_BE.Api
             this.configuration = configuration;
         }
 
-        // to add services to the application container. For instance healthcheck, etc.
+        // to add services to the application container. For instance healthcheck,
+        // etc.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson();
             services.AddScoped<IFollowerDomainService, FollowerDomainService>();
             services.AddScoped<IMessageDomainService, MessageDomainService>();
             services.AddScoped<IUserDomainService, UserDomainService>();
+            services.AddScoped<ISimulationService, SimulatorService>();
             services.AddScoped<IPersistenceService, PersistenceService>();
             services.AddDbContext<TwitContext>(opt =>
             {
                 var folder = Environment.SpecialFolder.LocalApplicationData;
                 var path = Environment.GetFolderPath(folder);
-                var dbPath = Path.Join(path, "twit.db");                        // for me it's C:\Users\<USER>\AppData\Local
+                var dbPath = Path.Join(
+                    path, "twit.db"); // for me it's C:\Users\<USER>\AppData\Local
 
                 opt.UseSqlite($"Data Source={dbPath}");
             });
             services.AddCors(options =>
             {
-                options.AddPolicy(name: "_miniTwitAllowSpecificOrigins", builder => 
+                options.AddPolicy(name: "_miniTwitAllowSpecificOrigins", builder =>
                 {
                     builder.WithOrigins("http://localhost:8080")
-                                                .AllowAnyHeader()
-                                                .AllowAnyMethod();
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
             });
         }
@@ -49,7 +52,8 @@ namespace Minitwit_BE.Api
             if (!env.IsDevelopment())
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                // The default HSTS value is 30 days. You may want to change this for
+                // production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -60,14 +64,13 @@ namespace Minitwit_BE.Api
             app.UseRouting();
             app.UseMiddleware<ExceptionMiddleware>();
 
-            //app.UseAuthorization();
+            // app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 // Required to have operational REST endpoints
                 endpoints.MapControllers();
             });
-
 
             // to create a database if it's not there
             using (var scope = app.ApplicationServices.CreateScope())

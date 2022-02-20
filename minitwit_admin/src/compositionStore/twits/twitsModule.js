@@ -3,11 +3,16 @@ import twitsApi from '@/api/twits/twits.js'
 
 const state = reactive({
     twitList: [],
+    usersTwitList: [],
 })
 
 const mutations = {
     setTwitList: (twitList) => {
         state.twitList = twitList
+    },
+
+    setUsersTwitList: (twitList) => {
+        state.usersTwitList = twitList
     },
 
     updateTwit: (messageId, flagged) => {
@@ -40,7 +45,7 @@ const actions = {
     getUsersTwitList: async (userId) => {
         try {
             const result = await twitsApi.fetchPersonalTwits(userId)
-            mutations.setTwitList(result)
+            mutations.setUsersTwitList(result)
         } catch (e) {
             console.error(e)
         }

@@ -82,8 +82,8 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             return Ok();
         }
 
-        [HttpGet("/fllws/{username}")]
-        public async Task<ActionResult<List<Follower>>> GetFollowedUsers([FromBody] FollowerDtoSimulation input, [FromRoute] string username)
+        [HttpGet("fllws/{username}")]
+        public async Task<ActionResult<List<Follower>>> GetFollowedUsers([FromRoute] string username)
         {
             _logger.LogInformation($"Follow endpoint was called with username: {username}");
 
@@ -92,8 +92,8 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             return Ok(followedUsers.ToList());
         }
 
-        [HttpPost("/fllws/{username}")]
-        public async Task<ActionResult> FollowOrUnfollowUser([FromBody] FollowerDtoSimulation input, [FromRoute] string username)
+        [HttpPost("fllws/{username}")]
+        public async Task<ActionResult> FollowOrUnfollowUser([FromBody] FollowerDtoSimulation input, [FromRoute] string username, [FromQuery] int latest)
         {
             _logger.LogInformation($"Follow endpoint was called with username: {username}");
 

@@ -2,11 +2,12 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import vuexStore from './store'
+import compositionStore from './compositionStore/index'
 import { VuesticPlugin } from 'vuestic-ui'
 import 'vuestic-ui/dist/vuestic-ui.css'
 import  colors from './utils/colors';
 
-createApp(App)
+const app = createApp(App)
     .use(vuexStore)
     .use(router)
     .use(VuesticPlugin, {
@@ -14,4 +15,6 @@ createApp(App)
             ...colors.darkTheme
         }
     })
-    .mount('#app')
+
+app.provide("store", compositionStore)
+app.mount('#app')

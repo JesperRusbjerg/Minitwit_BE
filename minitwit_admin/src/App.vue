@@ -1,16 +1,17 @@
 <template>
   <div id="app">
-      <navbar :navbarColor="colors.black" :iconColor="colors.primaryColor" />
-      <div class="app-content">
-        <sidebar
-          class="sidebar"
-          :items="sidebarItems"
-          :minimized="isSidebarMinimized"
-          :color="colors.darkGrey"
-          :iconColor="colors.primaryColor"
-        />
-        <router-view class="router-content" />
-      </div>
+    <navbar :navbarColor="colors.black" :iconColor="colors.primaryColor" />
+    <div class="app-content">
+      <sidebar
+        class="sidebar"
+        :items="sidebarItems"
+        :minimized="isSidebarMinimized"
+        :color="colors.darkGrey"
+        :iconColor="colors.primaryColor"
+        @onItemClick="handleSidebarItemClick"
+      />
+      <router-view class="router-content" />
+    </div>
   </div>
 </template>
 
@@ -18,8 +19,16 @@
 import Navbar from "@/components/Navbar.vue";
 import Sidebar from "@/components/Sidebar.vue";
 import { useColors } from "vuestic-ui";
-import { ref, computed, provide } from "vue";
-import store from '@/compositionStore/index'
+import { computed } from "vue";
+import { initStore } from "@/compositionStore/index";
+import {
+  getSidebarMinimized,
+  selectSidebar,
+} from "@/compositionStore/sidebar/sidebarModule";
+import {
+  getLoggedInUser,
+  logoutUser,
+} from "@/compositionStore/users/usersModule";
 
 export default {
   name: "App",
@@ -28,36 +37,72 @@ export default {
     Sidebar,
   },
   setup() {
-    provide('store', store)
+    initStore();
+    const { getColors } = useColors();
+    const colors = computed(() => getColors());
 
+    const loggedInUser = getLoggedInUser()
+    const loggedUser = computed(() => (loggedInUser.value != 0 ? true : false));
+    const loggedOutUser = computed(() =>
+      loggedInUser.value == 0 ? true : false
+    );
+    
     const useSidebarItems = () => {
       return [
-        { title: "Dashboard", icon: "house", to: "/", active: true, visible: "always" },
-        { title: "Login or register", icon: "house", to: "user-entrance", active: false, visible: loggedOutUser },
-        { title: "User profile/create twit", icon: "house", to: "/user-profile", active: false, visible: loggedUser },
-        { title: "Logout", icon: "house", to: "/", active: false, visible: loggedUser, function: logoutUser }
-        ];
+        {
+          title: "Dashboard",
+          icon: "house",
+          to: "/",
+          visible: "always",
+          function: (title) => selectSidebar(title),
+        },
+        {
+          title: "Login or register",
+          icon: "house",
+          to: "user-entrance",
+          visible: loggedOutUser,
+          function: (title) => selectSidebar(title),
+        },
+        {
+          title: "User profile/create twit",
+          icon: "house",
+          to: "/user-profile",
+          visible: loggedUser,
+          function: (title) => selectSidebar(title),
+        },
+        {
+          title: "Logout",
+          icon: "house",
+          to: "/",
+          visible: loggedUser,
+          function: (title) => handleLogoutUser(title),
+        },
+      ];
     };
-    const { getColors } = useColors();
-    const logoutUser = () => store.users.mutations.logoutUser();
-
-    const colors = computed(() => getColors());
     const getSidebarItems = computed(() => useSidebarItems());
-    const isSidebarMinimized = computed(() => store.state.isSidebarMinimized)
-    const loggedUser = computed(() => store.users.state.loggedUser != 0 ? true : false);
-    const loggedOutUser = computed(() => store.users.state.loggedUser == 0 ? true : false);
+
+    const handleSidebarItemClick = (item) => {
+      item.function(item.title);
+    };
+
+    const handleLogoutUser = () => {
+      selectSidebar("Dashboard");
+      logoutUser();
+    };
 
     return {
       colors,
-      isSidebarMinimized,
+      isSidebarMinimized: getSidebarMinimized(),
       sidebarItems: getSidebarItems.value,
-      loggedUser,
+      handleSidebarItemClick,
     };
   },
 };
 </script>
 
 <style lang="scss">
+@import "./genericStyles.scss"; 
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -90,5 +135,4 @@ export default {
   height: 100%;
   overflow: scroll;
 }
-
 </style>

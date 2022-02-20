@@ -20,9 +20,8 @@ export default {
     const { getColors } = useColors();
     const colors = computed(() => getColors());
     const twitList = computed(() => store.twits.state.twitList);
-    const loggedUser = computed(() => store.users.state.loggedUser);
     
-    const getTwitList = () => loggedUser.value != 0 ? store.twits.actions.getUsersTwitList(loggedUser.value) : store.twits.actions.getTwitList();
+    const getTwitList = () => store.twits.actions.getTwitList();
     const flagTwit = (messageId, flagged) => {
       store.twits.actions.toggleFlag(messageId, flagged)
     }

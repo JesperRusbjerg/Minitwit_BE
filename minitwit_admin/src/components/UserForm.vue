@@ -1,6 +1,6 @@
 <template>
     <div :class="[ifRegistrationForm ? 'registration-form' : 'login-form']">
-        <form>
+        <div class="form">
             <div v-show="ifRegistrationForm" class="username-input">
                 <label for="username">Enter your name: </label>
                 <input type="text" name="username" :id="ifRegistrationForm ? 'register-username' : 'login-username'" required>
@@ -16,11 +16,13 @@
             <div class="submit-btn">
                 <input type="submit" value="Submit" @click="sendRequest(ifRegistrationForm)">
             </div>
-        </form>
+        </div>
     </div>
 </template>
 <script>
 import { computed, inject } from "vue";
+import { useRouter } from 'vue-router'
+import { useSidebar, useUsers } from "@/compositionStore/index"
 
 export default {
     name: "UserForm",
@@ -34,20 +36,25 @@ export default {
     components: { },
     setup(props) {
         const store = inject("store");
+        const router = useRouter()
+        const { selectSidebar } = useSidebar()
+        const { getLoggedInUser } = useUsers()
 
         // computed
         const formDefinition = computed(() => props.ifRegistrationForm ? 'register' : 'login');
-        const loggedUser = computed(() => store.users.state.loggedUser);
+        const loggedUser = getLoggedInUser()
 
         // functions
         const loginUser = (userData) => store.users.actions.loginUser(userData);
         const registerUser = (userData) => store.users.actions.registerUser(userData);
 
         return { 
+            router,
             formDefinition,
             loggedUser,
             loginUser,
             registerUser,
+            selectSidebar
         }
         
     },
@@ -68,10 +75,11 @@ export default {
                 await this.loginUser(userData);
             }
             if (this.loggedUser.value != 0) {
-                this.$router.push({path: '/'});
+                this.selectSidebar("User profile/create twit")
+                this.router.push({path: '/user-profile'});
             }
         }
-    }
+    },
 }
 </script>
 <style lang="scss">
@@ -80,19 +88,7 @@ export default {
     height: max-content;
     text-align: left;
 
-    form {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        margin-bottom: 200px;
-        padding: 20px;
-        width: 25vw;
-        height: 40vh;
-        background: #f5f5fa;
-        border: 0;
-        border-radius: 8px;
-        box-shadow: -10px -10px 30px 0 #fff,10px 10px 30px 0 #1d0dca17;
-
+    .form {
         
         > * {
             padding: 1em;
@@ -109,20 +105,6 @@ export default {
                 border: 0;
                 border-radius: 10px;
                 box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
-            }
-
-            &.submit-btn {
-                align-self: center;
-
-                input { 
-                    border: 1px;
-                    background-color: #fcd997;
-                    transition: transform .2s;
-                }
-
-                input:hover {
-                    transform: scale(1.1);
-                }
             }
         }
     }

@@ -7,10 +7,18 @@
     >
       <template v-for="(item, index) in items" :key="index">
         <div v-show="item.visible == 'always' ? true : item.visible.value">
-          <va-sidebar-item :to="item.to" :active="item.active" :active-color="color" @click="item.function">
+          <va-sidebar-item
+            :to="item.to"
+            :active="isSelectedSidebarItem(item.title)"
+            :active-color="color"
+            @click="handleItemClick(item)"
+          >
             <va-sidebar-item-content>
               <va-icon :name="item.icon" :color="iconColor" />
-              <va-sidebar-item-title v-if="!minimized" :style="`height: ${itemTitleHeight}`">
+              <va-sidebar-item-title
+                v-if="!minimized"
+                :style="`height: ${itemTitleHeight}`"
+              >
                 {{ item.title }}
               </va-sidebar-item-title>
             </va-sidebar-item-content>
@@ -22,52 +30,68 @@
 </template>
 
 <script>
+import { computed } from "vue"
+import { useSidebar } from "@/compositionStore/index"
+
 export default {
   name: "Sidebar",
   props: {
-      items: {
-          type: Array,
-          required: true,
-          default: []
-      },
-      color: {
-            type: String,
-            required: false,
-            default: '#AAAAAA'
-        },
-        iconColor: {
-            type: String,
-            required: false,
-            default: '#FFF'
-        },
-      width: {
-          type: String,
-          default: '16rem'
-      },
-      minimized: {
-          type: Boolean,
-          required: true
-      },
-      minimizedWidth: {
-          type: String,
-          required: false,
-          default: '4.5rem'
-      },
-      itemTitleHeight: {
-          type: String,
-          required: false,
-          default: undefined
-      }
+    items: {
+      type: Array,
+      required: true,
+      default: [],
+    },
+    color: {
+      type: String,
+      required: false,
+      default: "#AAAAAA",
+    },
+    iconColor: {
+      type: String,
+      required: false,
+      default: "#FFF",
+    },
+    width: {
+      type: String,
+      default: "16rem",
+    },
+    minimized: {
+      type: Boolean,
+      required: true,
+    },
+    minimizedWidth: {
+      type: String,
+      required: false,
+      default: "4.5rem",
+    },
+    itemTitleHeight: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
   components: {},
-  setup() {
-    return {};
+  emits: ["onItemClick"],
+  setup(props, context) {
+    const { getSelectedSidebarItem } = useSidebar()
+    const selectedSidebarItem = getSelectedSidebarItem()
+
+    const isSelectedSidebarItem = (sidebarItem) =>
+      sidebarItem == selectedSidebarItem.value;
+
+    const handleItemClick = (item) => {
+      context.emit("onItemClick", item);
+    };
+    return {
+      handleItemClick,
+      isSelectedSidebarItem
+    };
   },
 };
 </script>
 
 <style lang="scss" scoped>
 #Sidebar {
-    
+  
 }
 </style>

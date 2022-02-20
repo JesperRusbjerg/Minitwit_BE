@@ -1,4 +1,4 @@
-import { readonly, reactive } from 'vue'
+import { readonly, reactive, computed } from 'vue'
 import usersApi from '@/api/users/users.js'
 
 const state = reactive({
@@ -29,7 +29,7 @@ const actions = {
         try {
             const id = await usersApi.loginUser(userData)
             if (id == 0) {
-                throw Error("Encountered errors while registering the user.")
+                throw Error("Encountered errors while logging the user.")
             } else {
                 mutations.loginUser(id)
             }
@@ -39,8 +39,18 @@ const actions = {
     }
 }
 
+const getLoggedInUser = () => computed(() => state.loggedUser)
+const logoutUser = () => mutations.logoutUser()
+
+export {
+    getLoggedInUser,
+    logoutUser
+}
+
 export default {
     state: readonly(state),
     mutations: readonly(mutations),
-    actions: readonly(actions)
+    actions: readonly(actions),
+    getLoggedInUser,
+    logoutUser
 }

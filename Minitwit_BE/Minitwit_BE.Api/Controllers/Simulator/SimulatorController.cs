@@ -36,8 +36,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult> Register([FromBody] RegisterDto input,
-                                                 int latest)
+        public async Task<ActionResult> Register([FromBody] RegisterDto input, [FromQuery] int? latest)
         {
             await _simulatorService.UpdateLatest(latest);
             ValidateRegisterDto(input);
@@ -55,7 +54,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         }
 
         [HttpGet("msgs")]
-        public async Task<ActionResult<List<Message>>> GetPublicMessages([FromQuery] int latest, [FromQuery] int no)
+        public async Task<ActionResult<List<Message>>> GetPublicMessages([FromQuery] int? latest, [FromQuery] int? no)
         {
             _logger.LogInformation("Get messages in the simulator");
             await _simulatorService.UpdateLatest(latest);
@@ -70,13 +69,12 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         }
 
         [HttpGet("msgs/{username}")]
-        public async Task<ActionResult<List<Message>>>
-        GetPersonalMessages([FromRoute] string username, int latest)
+        public async Task<ActionResult<List<Message>>> GetPersonalMessages([FromRoute] string username, [FromQuery] int? latest, [FromQuery] int? no)
         {
             _logger.LogInformation("Get personal messages in the simulator");
             await _simulatorService.UpdateLatest(latest);
 
-            var msgs = await _messageService.GetPersonalTwits(username);
+            var msgs = await _messageService.GetPersonalTwits(username, no);
 
              var messageDtos = msgs.Select(m => new GetMessageDto
             {
@@ -85,12 +83,17 @@ namespace Minitwit_BE.Api.Controllers.Simulator
                 UserName = username
             });
 
-            return Ok(messageDtos.ToList());
+            if (!messageDtos.ToList().Any())
+            {
+                return NoContent();
+            } else
+            {
+                return Ok(messageDtos.ToList());
+            }
         }
 
         [HttpPost("msgs/{username}")]
-        public async Task<ActionResult> AddTwit([FromBody] AddMessageDto input,
-                                                [FromRoute] string username, int latest)
+        public async Task<ActionResult> AddTwit([FromBody] AddMessageDto input, [FromRoute] string username, [FromQuery] int? latest)
         {
             _logger.LogInformation("Inserting a new twit.");
             await _simulatorService.UpdateLatest(latest);
@@ -104,11 +107,11 @@ namespace Minitwit_BE.Api.Controllers.Simulator
 
             await _messageService.AddTwit(msg, username);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpGet("fllws/{username}")]
-        public async Task<ActionResult<List<FollowedUserDto>>> GetFollowedUsers([FromRoute] string username, [FromQuery] int? no, [FromQuery] int latest)
+        public async Task<ActionResult<List<FollowedUserDto>>> GetFollowedUsers([FromRoute] string username, [FromQuery] int? no, [FromQuery] int? latest)
         {
             _logger.LogInformation(
                 $"Follow endpoint was called with username: {username}");
@@ -131,9 +134,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         }
 
         [HttpPost("fllws/{username}")]
-        public async Task<ActionResult>
-        FollowOrUnfollowUser([FromBody] FollowerDtoSimulation input,
-                             [FromRoute] string username, int latest)
+        public async Task<ActionResult> FollowOrUnfollowUser([FromBody] FollowerDtoSimulation input, [FromRoute] string username, int? latest)
         {
             _logger.LogInformation(
                 $"Follow endpoint was called with username: {username}");

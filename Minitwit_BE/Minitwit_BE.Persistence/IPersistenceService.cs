@@ -17,7 +17,7 @@ namespace Minitwit_BE.Persistence
         Task AddUser(User user);
         Task DeleteUser(Message user);
 
-        Task UpdateLatest(int latest);
+        Task UpdateLatest(int? latest);
         Task<int> GetLatest();
     }
 }

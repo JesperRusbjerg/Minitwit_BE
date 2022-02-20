@@ -15,6 +15,6 @@ namespace Minitwit_BE.DomainService
 
         public Task<int> GetLatest() { return _persistenceService.GetLatest(); }
 
-        public Task UpdateLatest(int latest) { return _persistenceService.UpdateLatest(latest); }
+        public Task UpdateLatest(int? latest) { return _persistenceService.UpdateLatest(latest); }
     }
 }

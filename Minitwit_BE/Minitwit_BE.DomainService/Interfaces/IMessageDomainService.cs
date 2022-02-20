@@ -10,6 +10,7 @@ namespace Minitwit_BE.DomainService.Interfaces
         Task<IEnumerable<Message>> GetTwits(int? numberOfRows);
         Task<IEnumerable<Message>> GetPersonalTwits(int id);
         Task<IEnumerable<Message>> GetPersonalTwits(string username);
+        Task<IEnumerable<Message>> GetPersonalTwits(string username, int? numberOfRows);
         Task MarkMessage(int msgId, bool flag);
     }
 }

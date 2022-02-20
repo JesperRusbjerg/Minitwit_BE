@@ -107,9 +107,10 @@ namespace Minitwit_BE.Persistence
 
         #region Simulator
         private static int _latest = 0; // TODO: This should be stored in DB
-        public async Task UpdateLatest(int latest)
+        public async Task UpdateLatest(int? latest)
         {
-            await Task.Run(() => _latest = latest);
+            var latestValue = latest ?? -1;
+            await Task.Run(() => _latest = latestValue);
         }
 
         public Task<int> GetLatest()

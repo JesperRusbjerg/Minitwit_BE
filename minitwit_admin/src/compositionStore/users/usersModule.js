@@ -19,7 +19,7 @@ const actions = {
     registerUser: async (userData) => {
         try {
             const res = await usersApi.registerUser(userData);
-            mutations.loginUser(res.userId);
+            mutations.loginUser(res);
         } catch (e) {
             console.error(e)
         }

@@ -22,7 +22,7 @@
 <script>
 import { computed, inject } from "vue";
 import { useRouter } from 'vue-router'
-import { useSidebar } from "@/compositionStore/index"
+import { useSidebar, useUsers } from "@/compositionStore/index"
 
 export default {
     name: "UserForm",
@@ -38,10 +38,11 @@ export default {
         const store = inject("store");
         const router = useRouter()
         const { selectSidebar } = useSidebar()
+        const { getLoggedInUser } = useUsers()
 
         // computed
         const formDefinition = computed(() => props.ifRegistrationForm ? 'register' : 'login');
-        const loggedUser = computed(() => store.users.state.loggedUser);
+        const loggedUser = getLoggedInUser()
 
         // functions
         const loginUser = (userData) => store.users.actions.loginUser(userData);

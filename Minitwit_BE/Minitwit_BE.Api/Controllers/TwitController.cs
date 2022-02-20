@@ -24,7 +24,6 @@ namespace Minitwit_BE.Api.Controllers
             ValidateMessageDto(input);
 
             _logger.LogInformation("Inserting a new twit.");
-            
 
             var msg = new Message                                       // Primary keys should be auto incremented when you add entity to the table and dont explicitely specify specify the ID
             { 
@@ -34,7 +33,6 @@ namespace Minitwit_BE.Api.Controllers
                 Text = input.Text
             };
 
-            
             await _messageService.AddTwit(msg);
 
             return Ok();

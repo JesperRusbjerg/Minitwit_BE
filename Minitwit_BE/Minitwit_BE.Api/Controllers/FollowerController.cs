@@ -25,9 +25,9 @@ namespace Minitwit_BE.Api.Controllers
 
             _logger.LogInformation($"GetFollowedUsers endpoint was called for id: {id}");
 
-            await _followerService.GetFollowedUsers(id);
+            var followers = await _followerService.GetFollowedUsers(id);
 
-            return Ok();
+            return Ok(followers);
         }
 
 

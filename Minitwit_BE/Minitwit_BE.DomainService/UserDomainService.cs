@@ -13,6 +13,34 @@ namespace Minitwit_BE.DomainService
         {
             _persistenceService = persistenceService;
         }
+
+        public async Task<User> GetUserById(int id)
+        {
+            var user = (await _persistenceService.GetUsers(u => u.UserId.Equals(id))).SingleOrDefault();
+
+            if (user == null)
+            {
+                throw new ArgumentException("User does not exist");
+            }
+            else
+            {
+                return user;
+            }
+        }
+
+        public async Task<User> GetUserByName(string username)
+        {
+            var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).SingleOrDefault();
+
+            if (user == null)
+            {
+                throw new ArgumentException("User does not exist");
+            }
+            else
+            {
+                return user;
+            }
+        }
         
         public async Task RegisterUser(User user)
         {
@@ -21,7 +49,7 @@ namespace Minitwit_BE.DomainService
 
             if (existingUser != null)
             {
-                throw new UserAlreadyExistsException("User with that nickname or email already exists!");
+                throw new UserAlreadyExistsException("The username is already taken");
             }
             else
             {

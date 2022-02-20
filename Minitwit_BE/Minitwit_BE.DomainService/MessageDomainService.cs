@@ -36,6 +36,12 @@ namespace Minitwit_BE.DomainService
             return await _persistenceService.GetMessages(e => e.Flagged != true);
         }
 
+        public async Task<IEnumerable<Message>> GetTwits(int? numberOfRows)
+        {
+            var number = numberOfRows ?? 100;
+            return (await _persistenceService.GetMessages(e => e.Flagged != true)).Take(number);
+        }
+
         public async Task<IEnumerable<Message>> GetPersonalTwits(int id)
         {
             return await _persistenceService.GetMessages(msg => msg.AuthorId.Equals(id) && msg.Flagged != true);

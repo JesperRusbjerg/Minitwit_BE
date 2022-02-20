@@ -44,12 +44,12 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         }
 
         [HttpGet("msgs")]
-        public async Task<ActionResult<List<Message>>> GetPublicMessages()
+        public async Task<ActionResult<List<Message>>> GetPublicMessages([FromQuery] int no)
         {
             _logger.LogInformation("Get messages in the simulator");
 
             // we have to map id of a user into concrete username
-            var msgs = await _messageService.GetTwits();
+            var msgs = await _messageService.GetTwits(no);
 
             return Ok(msgs.ToList());
         }

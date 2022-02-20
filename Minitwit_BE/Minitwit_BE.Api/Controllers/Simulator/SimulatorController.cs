@@ -51,7 +51,11 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             // we have to map id of a user into concrete username
             var msgs = await _messageService.GetTwits(no);
 
-            return Ok(msgs.ToList());
+            var messageDtoTasks = MapMessagesToGetMessageDtos(msgs.ToList());
+
+            await Task.WhenAll(messageDtoTasks);
+
+            return Ok(messageDtoTasks.Select(mTask => mTask.Result));
         }
 
         [HttpGet("msgs/{username}")]
@@ -62,7 +66,14 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             // we have to map id of a user into concrete username
             var msgs = await _messageService.GetPersonalTwits(username);
 
-            return Ok(msgs.ToList());
+             var messageDtos = msgs.Select(m => new GetMessageDto
+            {
+                Text = m.Text,
+                PublishDate = m.PublishDate.ToString(),
+                UserName = username
+            });
+
+            return Ok(messageDtos.ToList());
         }
 
         [HttpPost("msgs/{username}")]
@@ -122,6 +133,19 @@ namespace Minitwit_BE.Api.Controllers.Simulator
 
 
 
+        }
+
+        private List<Task<GetMessageDto>> MapMessagesToGetMessageDtos(List<Message> messages)
+        {
+            return messages.Select(async m => { 
+                var user = (await _userService.GetUserById(m.AuthorId));
+                return new GetMessageDto
+                {
+                    Text = m.Text,
+                    PublishDate = m.PublishDate.ToString(),
+                    UserName = user.UserName
+                };
+            }).ToList();
         }
         #endregion
     }

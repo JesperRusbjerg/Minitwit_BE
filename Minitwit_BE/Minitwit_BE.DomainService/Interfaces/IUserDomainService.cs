@@ -4,6 +4,7 @@ namespace Minitwit_BE.DomainService.Interfaces
 {
     public interface IUserDomainService
     {
+        Task<User> GetUserById(int id);
         Task RegisterUser(User user);
         Task<int> Login(User input);
     }

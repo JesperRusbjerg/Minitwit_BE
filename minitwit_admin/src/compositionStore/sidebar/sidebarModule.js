@@ -15,8 +15,8 @@ const mutations = {
   }
 };
 
-const getSidebarMinimized = computed(() => state.isSidebarMinimized)
-const getSelectedSidebarItem = computed(() => state.selectedSidebarItem)
+const getSidebarMinimized = () => computed(() => state.isSidebarMinimized)
+const getSelectedSidebarItem = () => computed(() => state.selectedSidebarItem)
 const toggleSidebar = () => mutations.toggleSidebar()
 const selectSidebar = (sidebarItem) => mutations.setSelectedSidebarItem(sidebarItem)
 

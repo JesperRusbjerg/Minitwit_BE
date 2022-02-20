@@ -20,7 +20,6 @@ export default {
     const { getColors } = useColors();
     const colors = computed(() => getColors());
     const twitList = computed(() => store.twits.state.twitList);
-    const loggedUser = computed(() => store.users.state.loggedUser);
     
     const getTwitList = () => store.twits.actions.getTwitList();
     const flagTwit = (messageId, flagged) => {

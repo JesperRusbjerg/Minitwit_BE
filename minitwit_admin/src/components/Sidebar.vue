@@ -74,7 +74,7 @@ export default {
   emits: ["onItemClick"],
   setup(props, context) {
     const { getSelectedSidebarItem } = useSidebar()
-    const selectedSidebarItem = computed(() => getSelectedSidebarItem.value);
+    const selectedSidebarItem = getSelectedSidebarItem()
 
     const isSelectedSidebarItem = (sidebarItem) =>
       sidebarItem == selectedSidebarItem.value;

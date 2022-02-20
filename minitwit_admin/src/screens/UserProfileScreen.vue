@@ -11,7 +11,7 @@
 import AddTwitComponent from '@/components/AddTwitComponent.vue';
 import FollowersComponent from '@/components/FollowersComponent.vue';
 import TwitListComponent from "@/components/TwitListComponent.vue";
-import { computed, inject } from "vue";
+import { useFollowers, useTwits, useUsers } from "@/compositionStore/index"
 
 export default {
     name: "UserProfileScreen",
@@ -22,52 +22,41 @@ export default {
         TwitListComponent
     },
     setup() {
-        const store = inject("store")
-        const loggedInUserId = computed(() => store.users.state.loggedUser)
-        const followers = computed(() => store.followers.state.followers)
-        const twitList = computed(() => store.twits.state.usersTwitList);
-
-        const unfollowUser = (userId) => {
-            store.followers.actions.unfollowUser(userId)
-        }
-        const getFollowers = () => {
-            store.followers.actions.getFollowers(loggedInUserId.value)
-        }
+        const { getFollowers, fetchFollowers, unfollowUser } = useFollowers()
+        const { getPrivateTwitList, fetchPrivateTwitList, flagTwit } = useTwits()
+        const { getLoggedInUser } = useUsers()
+        const loggedInUserId = getLoggedInUser()
 
         const handleOnUnfollowClick = (item) => {
-            unfollowUser(item.whomId)
-        }
-
-        const getTwitList = () => store.twits.actions.getUsersTwitList(loggedInUserId.value);
-
-        const flagTwit = (messageId, flagged) => {
-            store.twits.actions.toggleFlag(messageId, flagged)
+            unfollowUser(item.whoId)
         }
 
         const handleOnTwitClick = (twit) => {
             flagTwit(twit.messageId, twit.flagged)
         }
-        getTwitList()
-        getFollowers()
+
+        fetchPrivateTwitList(loggedInUserId.value)
+        fetchFollowers(loggedInUserId.value)
         return {
-            followers,
+            followers: getFollowers(),
             handleOnUnfollowClick,
             handleOnTwitClick,
-            twitList
+            twitList: getPrivateTwitList()
         };
     }
 }
 </script>
 <style lang="scss">
-.user-entrance-page {
+.user-profile-page {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     height: 100%;
     width: 100%;
 
     [class$="-form"] {
+        
     }
 }
 </style>

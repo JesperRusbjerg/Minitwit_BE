@@ -39,7 +39,7 @@ const actions = {
     }
 }
 
-const getLoggedInUser = computed(() => state.loggedUser)
+const getLoggedInUser = () => computed(() => state.loggedUser)
 const logoutUser = () => mutations.logoutUser()
 
 export {
@@ -50,5 +50,7 @@ export {
 export default {
     state: readonly(state),
     mutations: readonly(mutations),
-    actions: readonly(actions)
+    actions: readonly(actions),
+    getLoggedInUser,
+    logoutUser
 }

@@ -1,4 +1,4 @@
-import { readonly, reactive } from "vue";
+import { reactive, computed } from "vue";
 import followersApi from "@/api/followers/follower.js";
 
 const state = reactive({
@@ -18,7 +18,7 @@ const mutations = {
 };
 
 const actions = {
-  getFollowers: async (userId) => {
+  fetchFollowers: async (userId) => {
     try {
       const result = await followersApi.followedUsers(userId);
       mutations.setFollowers(result);
@@ -37,7 +37,18 @@ const actions = {
   },
 };
 
+const getFollowers = () => computed(() => state.followers)
+const fetchFollowers = (userId) => actions.fetchFollowers(userId)
+const unfollowUser = (userId) => actions.unfollowUser(userId)
+
+export {
+  getFollowers,
+  fetchFollowers,
+  unfollowUser
+}
+
 export default {
-  state: readonly(state),
-  actions: readonly(actions),
+  getFollowers,
+  fetchFollowers,
+  unfollowUser
 };

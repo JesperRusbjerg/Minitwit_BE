@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import { ref, computed, inject } from 'vue'
+import { computed } from "vue"
+import { useSidebar } from "@/compositionStore/index"
 
 export default {
   name: "Navbar",
@@ -33,14 +34,11 @@ export default {
   },
   components: {},
   setup() {
-      const store = inject('store')
-      const isSidebarMinimized = computed(() => store.state.isSidebarMinimized)
+      const { getSidebarMinimized, toggleSidebar } = useSidebar()
 
-      const handleSidebarClick = () => store.actions.toggleSidebar()
-
+      const handleSidebarClick = () =>  toggleSidebar()
       return {
-          store,
-          isSidebarMinimized,
+          isSidebarMinimized: getSidebarMinimized(),
           handleSidebarClick
       }
   }

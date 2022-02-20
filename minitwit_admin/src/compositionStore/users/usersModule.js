@@ -1,4 +1,4 @@
-import { readonly, reactive } from 'vue'
+import { readonly, reactive, computed } from 'vue'
 import usersApi from '@/api/users/users.js'
 
 const state = reactive({
@@ -39,8 +39,18 @@ const actions = {
     }
 }
 
+const getLoggedInUser = () => computed(() => state.loggedUser)
+const logoutUser = () => mutations.logoutUser()
+
+export {
+    getLoggedInUser,
+    logoutUser
+}
+
 export default {
     state: readonly(state),
     mutations: readonly(mutations),
-    actions: readonly(actions)
+    actions: readonly(actions),
+    getLoggedInUser,
+    logoutUser
 }

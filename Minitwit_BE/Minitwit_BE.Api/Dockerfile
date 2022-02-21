@@ -22,4 +22,4 @@ RUN dotnet publish "Minitwit_BE.Api.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Minitwit_BE.Api.dll"]
+ENTRYPOINT ["dotnet", "Minitwit_BE.Api.dll", "--urls", "http://*:5000;http://*:5001"]

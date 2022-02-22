@@ -5,3 +5,7 @@ solution: Minitwit_BE/Minitwit_BE.sln
 #   - nuget install NUnit.Console -Version 3.9.0 -OutputDirectory testrunner
 script:
   - echo test
+
+branches:
+  only:
+    - feature/travis-ci

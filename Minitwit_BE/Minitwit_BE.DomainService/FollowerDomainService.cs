@@ -75,12 +75,12 @@ namespace Minitwit_BE.DomainService
             }
         }
 
-        public async Task Follow(string userNameWho, string userNameWhom)
+        public async Task<int> Follow(string userNameWho, string userNameWhom)
         {
             var userWhom = (await _persistence.GetUsers(u => u.UserName.Equals(userNameWhom))).SingleOrDefault();
             if (userWhom == null)
             {
-                throw new ArgumentException("Users might not exist");
+                return 1;
             } else 
             {
                 var followings = (await GetFollowedUsers(userNameWho)).ToList();
@@ -88,7 +88,7 @@ namespace Minitwit_BE.DomainService
 
                 if (isAlreadyFollowing)
                 {
-                    throw new ArgumentException("User is already followed");
+                    return 1;
                 } else
                 {
                     var userWho = (await _persistence.GetUsers(u => u.UserName.Equals(userNameWho))).SingleOrDefault();
@@ -101,6 +101,8 @@ namespace Minitwit_BE.DomainService
                         WhoId = userWho.UserId,
                         WhomId = userWhom.UserId,
                     });
+
+                    return 0;
                 }
             }
         }
@@ -119,7 +121,7 @@ namespace Minitwit_BE.DomainService
             }
         }
 
-        public async Task UnFollow(string userNameWho, string userNameWhom)
+        public async Task<int> UnFollow(string userNameWho, string userNameWhom)
         {
             var userWhoTask = _persistence.GetUsers(u => u.UserName.Equals(userNameWho));
             var userWhomTask = _persistence.GetUsers(u => u.UserName.Equals(userNameWhom));
@@ -129,7 +131,7 @@ namespace Minitwit_BE.DomainService
 
             if (userWhoTask.Result.SingleOrDefault() == null || userWhomTask.Result.SingleOrDefault() == null)
             {
-                throw new ArgumentException("Users do not exist");
+                return 1;
             }
             else
             {
@@ -145,10 +147,11 @@ namespace Minitwit_BE.DomainService
                 if (deletedFollow != null)
                 {
                     await _persistence.DeleteFollower(deletedFollow);
+                    return 0;
                 }
                 else
                 {
-                    throw new UserUnfollowException("Cannot unfollow this user, as it is not currently followed!");
+                    return 1;
                 }
             }
         }

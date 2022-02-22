@@ -9,8 +9,8 @@ namespace Minitwit_BE.DomainService.Interfaces
         Task<IEnumerable<Follower>> GetFollowedUsers(string username);
         Task<IEnumerable<Follower>> GetFollowedUsers(string username, int? numberOfRows);
         Task Follow(Follower follower);
-        Task Follow(string userNameWho, string userNameWhom);
+        Task<int> Follow(string userNameWho, string userNameWhom);
         Task UnFollow(int id);
-        Task UnFollow(string userNameWho, string userNameWhom);
+        Task<int> UnFollow(string userNameWho, string userNameWhom);
     }
 }

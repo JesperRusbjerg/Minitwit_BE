@@ -113,8 +113,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpGet("fllws/{username}")]
         public async Task<ActionResult<List<FollowedUserDto>>> GetFollowedUsers([FromRoute] string username, [FromQuery] int? no, [FromQuery] int? latest)
         {
-            _logger.LogInformation(
-                $"Follow endpoint was called with username: {username}");
+            _logger.LogInformation($"Follow endpoint was called with username: {username}");
             await _simulatorService.UpdateLatest(latest);
 
             var followedUsers = await _followerService.GetFollowedUsers(username, no);
@@ -142,11 +141,19 @@ namespace Minitwit_BE.Api.Controllers.Simulator
 
             if (input.Follow != null)
             {
-                await _followerService.Follow(username, input.Follow);
+                var followResult = await _followerService.Follow(username, input.Follow);
+                if (followResult == 1)
+                {
+                    return StatusCode(404);
+                }
             }
             else if (input.Unfollow != null)
             {
-                await _followerService.UnFollow(username, input.Unfollow);
+                var unfollowResult = await _followerService.UnFollow(username, input.Unfollow);
+                if (unfollowResult == 1)
+                {
+                   return StatusCode(404);
+                }
             }
 
             return NoContent();

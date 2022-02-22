@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ feature/travis ]
+    branches: [ feature/travis-ci ]
   pull_request:
-    branches: [ feature/travis ]
+    branches: [ feature/travis-ci ]
 
 jobs:
 

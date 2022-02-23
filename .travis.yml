@@ -4,7 +4,8 @@ before_install:
   -in travis_rsa.enc -out travis_rsa -d
 - echo test
 
-script:
-  echo 'test123'
-  ssh -o "StrictHostKeyChecking no" root@138.68.69.204
+script: |
+  ssh -o "StrictHostKeyChecking no" root@138.68.69.204 \
+  "touch test.txt && \
+  echo "lalaland" > test.txt"
 

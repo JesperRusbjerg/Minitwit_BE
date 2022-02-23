@@ -1,11 +1,22 @@
+os: linux
+dist: bionic
+
 language: minimal
+
 before_install:
 - openssl aes-256-cbc -K $encrypted_0ddd2445e49f_key -iv $encrypted_0ddd2445e49f_iv
   -in travis_rsa.enc -out travis_rsa -d
 - echo test
 
-script: |
-  ssh -o "StrictHostKeyChecking no" root@138.68.69.204 \
-  "touch test.txt && \
-  echo "lalaland" > test.txt"
+stages:
+  - deploy
+
+job: 
+  include:
+    - stage: deploy
+      name: "deploy new version"
+      install: skip
+      script: |
+        ssh -o "StrictHostKeyChecking no" root@$138.68.69.204 \
+        "echo "Some line" > file1.txt"
 

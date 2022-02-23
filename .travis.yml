@@ -17,6 +17,5 @@ job:
       name: "deploy new version"
       install: skip
       script: |
-        ssh -o "StrictHostKeyChecking no" root@$138.68.69.204 \
-        "echo "Some line" > file1.txt"
+        ssh -o "StrictHostKeyChecking no" root@138.68.69.204 ls
 

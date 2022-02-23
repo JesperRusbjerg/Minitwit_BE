@@ -44,15 +44,17 @@ const actions = {
   followUser: async (userId) => {
     const isAlreadyFollowed = state.followers.some(entity => entity.whomId === userId)
     if (isAlreadyFollowed) return;
-    try {
-      const userData = {
-        "WhoId": getLoggedInUser().value,
-        "WhomId": userId
+    if (!!getLoggedInUser().value) {
+      try {
+        const userData = {
+          "WhoId": getLoggedInUser().value,
+          "WhomId": userId
+        }
+        const res = await followersApi.followUser(userData);
+        mutations.addFollower(res)
+      } catch (e) {
+        console.error(e);
       }
-      const res = await followersApi.followUser(userData);
-      mutations.addFollower(res)
-    } catch (e) {
-      console.error(e);
     }
   },
 };

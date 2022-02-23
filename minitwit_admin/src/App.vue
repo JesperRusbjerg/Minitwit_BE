@@ -19,7 +19,7 @@
 import Navbar from "@/components/Navbar.vue";
 import Sidebar from "@/components/Sidebar.vue";
 import { useColors } from "vuestic-ui";
-import { computed, inject } from "vue";
+import { computed } from "vue";
 import { initStore } from "@/compositionStore/index";
 import {
   getSidebarMinimized,

@@ -36,7 +36,7 @@
           <img class="followBtn"
             v-if="!isAlreadyFollowed(item.authorId) && item.authorId != loggedInUser && loggedInUser != 0"
             :src="require('../assets/svgs/follow.svg')"
-            @click="isAlreadyFollowed(item.authorId) ? null : followUser(item.authorId)"
+            @click="followUser(item.authorId)"
           />
         </va-list-item-section>
       </va-list-item>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { computed, inject } from "vue";
+import { inject } from "vue";
 import { useFollowers, useUsers } from "@/compositionStore/index"
 
 export default {
@@ -105,7 +105,6 @@ export default {
     const { getLoggedInUser } = useUsers();
     const followers = getFollowers();
     const loggedInUser = getLoggedInUser();
-    console.log(loggedInUser.value)
 
     const isAlreadyFollowed = (authorId) => {
       return followers.value.some(entry => entry.whomId === authorId)

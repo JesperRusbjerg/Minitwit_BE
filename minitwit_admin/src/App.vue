@@ -18,7 +18,6 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Sidebar from "@/components/Sidebar.vue";
-import { useRouter } from 'vue-router'
 import { useColors } from "vuestic-ui";
 import { computed } from "vue";
 import { initStore } from "@/compositionStore/index";
@@ -41,7 +40,6 @@ export default {
     initStore();
     const { getColors } = useColors();
     const colors = computed(() => getColors());
-    const router = useRouter();
     const loggedInUser = getLoggedInUser()
     const loggedUser = computed(() => (loggedInUser.value != 0 ? true : false));
     const loggedOutUser = computed(() => loggedInUser.value == 0 ? true : false);

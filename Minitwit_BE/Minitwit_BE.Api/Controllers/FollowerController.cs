@@ -46,7 +46,7 @@ namespace Minitwit_BE.Api.Controllers
 
             await _followerService.Follow(newFollower);
 
-            return Ok();
+            return Ok(newFollower);
         }
 
         [HttpDelete("unfollow/{id}")]

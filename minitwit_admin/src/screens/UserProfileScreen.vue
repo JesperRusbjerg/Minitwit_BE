@@ -63,7 +63,7 @@ export default {
     height: 100%;
     width: 100%;
     overflow: hidden;
-    padding: 2rem 0;
+    padding-top: 2rem;
     min-height: 750px;
     box-sizing: border-box;
 

@@ -19,7 +19,7 @@
 import Navbar from "@/components/Navbar.vue";
 import Sidebar from "@/components/Sidebar.vue";
 import { useColors } from "vuestic-ui";
-import { computed } from "vue";
+import { computed, inject } from "vue";
 import { initStore } from "@/compositionStore/index";
 import {
   getSidebarMinimized,
@@ -27,6 +27,7 @@ import {
 } from "@/compositionStore/sidebar/sidebarModule";
 import {
   getLoggedInUser,
+  enforceLoggedUser,
   logoutUser,
 } from "@/compositionStore/users/usersModule";
 
@@ -43,6 +44,10 @@ export default {
     const loggedInUser = getLoggedInUser()
     const loggedUser = computed(() => (loggedInUser.value != 0 ? true : false));
     const loggedOutUser = computed(() => loggedInUser.value == 0 ? true : false);
+
+    if (localStorage.getItem('loggedUser') !== 0) {
+       enforceLoggedUser(localStorage.getItem('loggedUser'));
+    }
     
     const useSidebarItems = () => {
       return [

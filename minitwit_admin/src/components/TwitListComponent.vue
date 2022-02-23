@@ -34,7 +34,7 @@
             @click="handleItemClick(item)"
           />
           <img class="followBtn"
-            v-if="isAlreadyFollowed(item.authorId) || item.authorId === loggedInUser"
+            v-if="!isAlreadyFollowed(item.authorId) && item.authorId != loggedInUser && loggedInUser != 0"
             :src="require('../assets/svgs/follow.svg')"
             @click="isAlreadyFollowed(item.authorId) ? null : followUser(item.authorId)"
           />
@@ -104,7 +104,8 @@ export default {
     const { getFollowers } = useFollowers();
     const { getLoggedInUser } = useUsers();
     const followers = getFollowers();
-    const loggedInUser = getLoggedInUser()
+    const loggedInUser = getLoggedInUser();
+    console.log(loggedInUser.value)
 
     const isAlreadyFollowed = (authorId) => {
       return followers.value.some(entry => entry.whomId === authorId)
@@ -112,11 +113,10 @@ export default {
 
     const handleItemClick = (item) => context.emit("onClick", item);
     const followUser = (userId) => store.followers.actions.followUser(userId);
-    const unfollowUser = (userId) => store.followers.actions.unfollowUser(userId);
 
     return {
       handleItemClick,
-      unfollowUser,
+      loggedInUser,
       followUser,
       isAlreadyFollowed
     };
@@ -132,7 +132,7 @@ export default {
   margin: 2rem auto;
 
   .va-list {
-    padding: 0 !important;
+    padding: 0 0 2rem 0 !important;
     
     .va-list-item {
       background-color: $twit-background !important;

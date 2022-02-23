@@ -1,6 +1,5 @@
 import { readonly, reactive, computed } from 'vue'
 import usersApi from '@/api/users/users.js'
-import vuexStore from '@/store'
 
 const state = reactive({
     loggedUser: 0,
@@ -43,12 +42,14 @@ const actions = {
     }
 }
 
+const enforceLoggedUser = (id) => mutations.loginUser(id)
 const getLoggedInUser = () => computed(() => state.loggedUser)
 const logoutUser = () => mutations.logoutUser()
 
 export {
     getLoggedInUser,
-    logoutUser
+    logoutUser,
+    enforceLoggedUser
 }
 
 export default {
@@ -56,5 +57,6 @@ export default {
     mutations: readonly(mutations),
     actions: readonly(actions),
     getLoggedInUser,
-    logoutUser
+    logoutUser,
+    enforceLoggedUser
 }

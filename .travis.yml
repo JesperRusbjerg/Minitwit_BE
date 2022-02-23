@@ -5,6 +5,6 @@ before_install:
 - echo test
 
 script:
-  ssh -o "StrictHostKeyChecking no" root@138.68.69.204 \
-  "touch foo.txt \
-  echo 'the great test > foo.txt"
+  echo 'test123'
+  ssh -o "StrictHostKeyChecking no" root@138.68.69.204
+

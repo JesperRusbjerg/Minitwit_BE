@@ -1,12 +1,4 @@
-os: linux
-dist: bionic
-
-language: python
-python:
-  - 3.7
-
-services:
-  - docker  # required, but travis uses older version of docker :(
+language: minimal
 
 before_install:
   # Decrypt the git_deploy_key.enc key into /tmp/git_deploy_key

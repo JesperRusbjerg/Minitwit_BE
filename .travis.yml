@@ -38,7 +38,6 @@ jobs:
       # -o flag to get around "add ip to known hosts prompt"
       script: |
         ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} \
-        "sudo docker stop $(docker ps -a -q) && \
-        ls && \
-        sudo docker rm $(docker ps -a -q) && \
-        sudo docker-compose up -d " 
+        "docker-compose down && \
+        docker-compose pull && \
+        docker-compose up -d " 

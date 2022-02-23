@@ -28,7 +28,7 @@ jobs:
         - echo "LOGIN"
         - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
         - echo "BUILD"
-        - docker build -t jrusbjerg/twitbackend -f Minitwit_BE.Api/Dockerfile .
+        - docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile .
         - echo "PUSH"
         - docker push jrusbjerg/twitbackend:latest
         

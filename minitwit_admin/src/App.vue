@@ -18,6 +18,7 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Sidebar from "@/components/Sidebar.vue";
+import { useRouter } from 'vue-router'
 import { useColors } from "vuestic-ui";
 import { computed } from "vue";
 import { initStore } from "@/compositionStore/index";
@@ -40,39 +41,33 @@ export default {
     initStore();
     const { getColors } = useColors();
     const colors = computed(() => getColors());
-
+    const router = useRouter();
     const loggedInUser = getLoggedInUser()
     const loggedUser = computed(() => (loggedInUser.value != 0 ? true : false));
-    const loggedOutUser = computed(() =>
-      loggedInUser.value == 0 ? true : false
-    );
+    const loggedOutUser = computed(() => loggedInUser.value == 0 ? true : false);
     
     const useSidebarItems = () => {
       return [
         {
           title: "Dashboard",
-          icon: "house",
           to: "/",
           visible: "always",
           function: (title) => selectSidebar(title),
         },
         {
           title: "Login or register",
-          icon: "house",
           to: "user-entrance",
           visible: loggedOutUser,
           function: (title) => selectSidebar(title),
         },
         {
           title: "User profile/create twit",
-          icon: "house",
           to: "/user-profile",
           visible: loggedUser,
           function: (title) => selectSidebar(title),
         },
         {
           title: "Logout",
-          icon: "house",
           to: "/",
           visible: loggedUser,
           function: (title) => handleLogoutUser(title),
@@ -109,6 +104,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100vh;
+  width: 100vw;
 }
 
 #nav {
@@ -127,12 +124,13 @@ export default {
 .app-content {
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+  background-image: url('./assets/svgs/background.svg');
+  background-size: cover;
 }
 
 .router-content {
-  width: 100%;
-  height: 100%;
   overflow: scroll;
 }
 </style>

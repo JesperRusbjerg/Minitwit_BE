@@ -1,5 +1,5 @@
 <template>
-  <div id="DashboardScreen" :style="{ backgroundColor: colors.darkGrey }">
+  <div id="DashboardScreen">
     <twit-list-component :items="twitList" :height="'100%'" @onClick="handleOnTwitClick"/>
   </div>
 </template>
@@ -43,5 +43,6 @@ export default {
 #DashboardScreen {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 </style>

@@ -17,10 +17,10 @@
         <va-list-item-section class="content">
           <div class="header">
             <va-list-item-label>
-              Author ID: {{ item.authorId }}
+              Author ID: {{ item.authorId }} 👾
             </va-list-item-label>
             <va-list-item-label>
-              Message ID: {{ item.messageId }}
+              Message ID: {{ item.messageId }} 💬 
             </va-list-item-label>
           </div>
           <va-list-item-label :color="textColor">
@@ -28,12 +28,15 @@
           </va-list-item-label>
         </va-list-item-section>
 
-        <va-list-item-section icon>
-          <va-icon
-            class="icon"
-            :name="item.flagged ? 'house' : 'house'"
-            :color="item.flagged ? 'green' : 'red'"
+        <va-list-item-section class="actionButtonsWrapper">
+          <img class="flagBtn"
+            :src="item.flagged ? require('../assets/svgs/red_flagged.svg') : require('../assets/svgs/flagged.svg')"
             @click="handleItemClick(item)"
+          />
+          <img class="followBtn"
+            v-if="isAlreadyFollowed(item.authorId) || item.authorId === loggedInUser"
+            :src="require('../assets/svgs/follow.svg')"
+            @click="isAlreadyFollowed(item.authorId) ? null : followUser(item.authorId)"
           />
         </va-list-item-section>
       </va-list-item>
@@ -42,6 +45,9 @@
 </template>
 
 <script>
+import { computed, inject } from "vue";
+import { useFollowers, useUsers } from "@/compositionStore/index"
+
 export default {
   name: "TwitListComponent",
   props: {
@@ -94,21 +100,82 @@ export default {
   components: {},
   emits: ["onClick"],
   setup(props, context) {
-    const handleItemClick = (item) => {
-      context.emit("onClick", item);
-    };
+    const store = inject("store");
+    const { getFollowers } = useFollowers();
+    const { getLoggedInUser } = useUsers();
+    const followers = getFollowers();
+    const loggedInUser = getLoggedInUser()
+
+    const isAlreadyFollowed = (authorId) => {
+      return followers.value.some(entry => entry.whomId === authorId)
+    }
+
+    const handleItemClick = (item) => context.emit("onClick", item);
+    const followUser = (userId) => store.followers.actions.followUser(userId);
+    const unfollowUser = (userId) => store.followers.actions.unfollowUser(userId);
+
     return {
       handleItemClick,
+      unfollowUser,
+      followUser,
+      isAlreadyFollowed
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@import "../genericStyles.scss"; 
+@import "../_variables.scss"; 
+
 #TwitListComponent {
-  .icon {
-    &:hover {
-      cursor: pointer;
+  margin: 2rem auto;
+
+  .va-list {
+    padding: 0 !important;
+    
+    .va-list-item {
+      background-color: $twit-background !important;
+
+      @include roundedBorders;
+      @include shadow;
+      box-shadow: unset;
+      > * {
+        display: block !important;
+
+        .va-list-item-section {
+          &.content {
+            flex-basis: 90%;
+            text-align: left;
+          }
+
+          &.actionButtonsWrapper {
+            @include roundedBorders;
+            @include shadow;
+            display: flex;
+            flex-direction: row;
+            margin: auto 0.5rem;
+            background-color: $twit-btn-background;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+            flex-basis: 100px;
+            justify-content: space-evenly;
+            column-gap: 0.5rem;
+
+            > * {
+              width: 2rem;
+              margin: auto 5px;
+            }
+
+          }
+            .header { 
+            margin-bottom: 20px;
+          }
+
+          .va-list-item-label {
+              -webkit-line-clamp: unset !important;
+            }
+        }
+      }
     }
   }
 }

@@ -90,8 +90,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #Sidebar {
-  
+  .va-sidebar-item {
+    padding: 0.5rem;
+  }
 }
 </style>

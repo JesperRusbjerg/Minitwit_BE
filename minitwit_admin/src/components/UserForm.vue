@@ -60,23 +60,28 @@ export default {
     },
     methods: {
         async sendRequest(ifRegistrationForm) {
-            let logged;
+            let res;
             const email = document.getElementById(`${this.formDefinition}-email`).value;
             const password = document.getElementById(`${this.formDefinition}-password`).value;
             const userData = {
                 "Email": email,
                 "PwHash": password
             };
+
             if (ifRegistrationForm) {
                 const username = document.getElementById(`${this.formDefinition}-username`).value;
                 userData.UserName = username;
-                await this.registerUser(userData);
+                res = await this.registerUser(userData);
             } else {
-                await this.loginUser(userData);
+                res = await this.loginUser(userData);
             }
-            if (this.loggedUser.value != 0) {
+
+            if (this.loggedUser && this.loggedUser != 0) {
                 this.selectSidebar("User profile/create twit")
                 this.router.push({path: '/user-profile'});
+            } 
+            else if (res.status !== 200) {
+                //Handle error
             }
         }
     },
@@ -91,12 +96,12 @@ export default {
     .form {
         
         > * {
-            padding: 1em;
+            padding: 1rem;
             display: block;
 
             label { 
                 text-align: center;
-                margin: 0 0 1em 1em;
+                margin: 0 0 1em 1rem;
             }
 
             input { 

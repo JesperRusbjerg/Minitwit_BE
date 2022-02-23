@@ -23,7 +23,7 @@ namespace Minitwit_BE.Api.Controllers
         {
             _logger.LogInformation("Test endpoint was called!");
 
-            return await Task.FromResult("test3");
+            return await Task.FromResult("test4");
         }
 
 

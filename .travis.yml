@@ -1,9 +1,4 @@
-os: linux
-dist: bionic
-
-language: python
-python:
-  - "3.7"
+language: minimal
 
 
 before_install:

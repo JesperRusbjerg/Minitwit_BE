@@ -135,8 +135,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpPost("fllws/{username}")]
         public async Task<ActionResult> FollowOrUnfollowUser([FromBody] FollowerDtoSimulation input, [FromRoute] string username, int? latest)
         {
-            _logger.LogInformation(
-                $"Follow endpoint was called with username: {username}");
+            _logger.LogInformation($"Follow endpoint was called with username: {username}");
             await _simulatorService.UpdateLatest(latest);
 
             if (input.Follow != null)

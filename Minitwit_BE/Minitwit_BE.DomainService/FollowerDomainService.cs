@@ -75,35 +75,21 @@ namespace Minitwit_BE.DomainService
             }
         }
 
-        public async Task<int> Follow(string userNameWho, string userNameWhom)
+        public async Task Follow(string userNameWho, string userNameWhom)
         {
-            var userWhom = (await _persistence.GetUsers(u => u.UserName.Equals(userNameWhom))).SingleOrDefault();
-            if (userWhom == null)
+            var userWho = await _persistence.GetUsers(u => u.UserName.Equals(userNameWho));
+            var userWhom = await _persistence.GetUsers(u => u.UserName.Equals(userNameWhom));
+
+            if (userWho.SingleOrDefault() == null || userWhom.SingleOrDefault() == null)
             {
-                return 1;
+                throw new ArgumentException("Users do not exist");
             } else 
             {
-                var followings = (await GetFollowedUsers(userNameWho)).ToList();
-                var isAlreadyFollowing = followings.Any(item => item.WhomId.Equals(userWhom.UserId));
-
-                if (isAlreadyFollowing)
-                {
-                    return 1;
-                } else
-                {
-                    var userWho = (await _persistence.GetUsers(u => u.UserName.Equals(userNameWho))).SingleOrDefault();
-
-                    if (userWho == null)
-                        throw new ArgumentException("Users might not exist");
-
-                    await _persistence.AddFollower(new Follower
+                await _persistence.AddFollower(new Follower
                     {
-                        WhoId = userWho.UserId,
-                        WhomId = userWhom.UserId,
+                        WhoId = userWho.SingleOrDefault().UserId,
+                        WhomId = userWhom.SingleOrDefault().UserId,
                     });
-
-                    return 0;
-                }
             }
         }
 
@@ -121,7 +107,7 @@ namespace Minitwit_BE.DomainService
             }
         }
 
-        public async Task<int> UnFollow(string userNameWho, string userNameWhom)
+        public async Task UnFollow(string userNameWho, string userNameWhom)
         {
             var userWhoTask = _persistence.GetUsers(u => u.UserName.Equals(userNameWho));
             var userWhomTask = _persistence.GetUsers(u => u.UserName.Equals(userNameWhom));
@@ -131,7 +117,7 @@ namespace Minitwit_BE.DomainService
 
             if (userWhoTask.Result.SingleOrDefault() == null || userWhomTask.Result.SingleOrDefault() == null)
             {
-                return 1;
+                throw new ArgumentException("Users do not exist");
             }
             else
             {
@@ -147,11 +133,6 @@ namespace Minitwit_BE.DomainService
                 if (deletedFollow != null)
                 {
                     await _persistence.DeleteFollower(deletedFollow);
-                    return 0;
-                }
-                else
-                {
-                    return 1;
                 }
             }
         }

@@ -140,19 +140,11 @@ namespace Minitwit_BE.Api.Controllers.Simulator
 
             if (input.Follow != null)
             {
-                var followResult = await _followerService.Follow(username, input.Follow);
-                if (followResult == 1)
-                {
-                    return StatusCode(404);
-                }
+                await _followerService.Follow(username, input.Follow);
             }
             else if (input.Unfollow != null)
             {
-                var unfollowResult = await _followerService.UnFollow(username, input.Unfollow);
-                if (unfollowResult == 1)
-                {
-                   return StatusCode(404);
-                }
+                await _followerService.UnFollow(username, input.Unfollow);
             }
 
             return NoContent();

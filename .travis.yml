@@ -1,0 +1,4 @@
+language: csharp
+before_install:
+  - echo test
+

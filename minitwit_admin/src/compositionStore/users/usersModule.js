@@ -1,4 +1,5 @@
 import { readonly, reactive, computed } from 'vue'
+import store from '@/compositionStore/index'
 import usersApi from '@/api/users/users.js'
 
 const state = reactive({
@@ -31,7 +32,7 @@ const actions = {
         try {
             const id = await usersApi.loginUser(userData)
             if (!id || id == 0) {
-                throw Error("Encountered errors while logging the user.")
+                store.async.actions.setError("Encountered errors while logging the user.")
             } else {
                 mutations.loginUser(id)
             }

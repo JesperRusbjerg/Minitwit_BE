@@ -60,7 +60,6 @@ export default {
     },
     methods: {
         async sendRequest(ifRegistrationForm) {
-            let res;
             const email = document.getElementById(`${this.formDefinition}-email`).value;
             const password = document.getElementById(`${this.formDefinition}-password`).value;
             const userData = {
@@ -71,18 +70,15 @@ export default {
             if (ifRegistrationForm) {
                 const username = document.getElementById(`${this.formDefinition}-username`).value;
                 userData.UserName = username;
-                res = await this.registerUser(userData);
+                await this.registerUser(userData);
             } else {
-                res = await this.loginUser(userData);
+                await this.loginUser(userData);
             }
 
             if (this.loggedUser && this.loggedUser != 0) {
                 this.selectSidebar("User profile/create twit")
                 this.router.push({path: '/user-profile'});
             } 
-            else if (res.status !== 200) {
-                //Handle error
-            }
         }
     },
 }

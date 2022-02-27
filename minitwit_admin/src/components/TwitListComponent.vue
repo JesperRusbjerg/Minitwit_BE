@@ -9,7 +9,6 @@
         v-for="(item, index) in items"
         :key="index"
         :style="{
-          backgroundColor: itemBackgroundColor,
           padding: itemPadding,
           margin: itemMargin,
         }"
@@ -111,7 +110,7 @@ export default {
     }
 
     const handleItemClick = (item) => context.emit("onClick", item);
-    const followUser = (userId) => store.followers.actions.followUser(userId);
+    const followUser = (userId) => context.emit("onFollowClick", userId);
 
     return {
       handleItemClick,
@@ -134,7 +133,7 @@ export default {
     padding: 0 0 2rem 0 !important;
     
     .va-list-item {
-      background-color: $twit-background !important;
+      background-color: $twit-background;
 
       @include roundedBorders;
       @include shadow;
@@ -155,7 +154,6 @@ export default {
             flex-direction: row;
             margin: auto 0.5rem;
             background-color: $twit-btn-background;
-            box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
             flex-basis: 100px;
             justify-content: space-evenly;
             column-gap: 0.5rem;

@@ -44,9 +44,10 @@ export default {
     const loggedInUser = getLoggedInUser()
     const loggedUser = computed(() => (loggedInUser.value != 0 ? true : false));
     const loggedOutUser = computed(() => loggedInUser.value == 0 ? true : false);
+    const storedUser = localStorage.getItem('loggedUser')
 
-    if (localStorage.getItem('loggedUser') !== 0) {
-       enforceLoggedUser(localStorage.getItem('loggedUser'));
+    if (!!storedUser && storedUser != 0) {
+       enforceLoggedUser(storedUser);
     }
     
     const useSidebarItems = () => {

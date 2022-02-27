@@ -1,6 +1,6 @@
 <template>
   <div id="DashboardScreen">
-    <twit-list-component :items="twitList" :height="'100%'" @onClick="handleOnTwitClick"/>
+    <twit-list-component :items="twitList" :height="'100%'" @onClick="handleOnTwitClick" @onFollowClick="handleOnFollowClick"/>
   </div>
 </template>
 
@@ -28,12 +28,17 @@ export default {
     const handleOnTwitClick = (twit) => {
       flagTwit(twit.messageId, twit.flagged)
     }
+    
+    const handleOnFollowClick = (userId) => {
+      flagTwit(twit.messageId, twit.flagged)
+    }
 
     getTwitList();
     return {
       colors,
       twitList,
-      handleOnTwitClick
+      handleOnTwitClick,
+      handleOnFollowClick
     };
   },
 };

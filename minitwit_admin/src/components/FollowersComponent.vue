@@ -46,7 +46,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#FollowersComponent {
+@import '../_variables.scss';
 
+#FollowersComponent {
+  width: fit-content;
+
+  .va-list {
+    padding: 0 !important;
+    border-top: 1px solid $border-background;
+
+  }
 }
 </style>

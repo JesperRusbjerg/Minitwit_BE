@@ -1,9 +1,9 @@
 <template>
     <div class="form">
-        <div>
+        <div class="form-wrapper">
             <div class="twit-input">
-                <label for="twit-text">Enter twit text: </label>
-                <textarea name="twit-text" id="twit-text"/>
+                <p>Create new twit:</p>
+                <textarea name="twit-text" placeholder="Twit some more 🦜" id="twit-text"/>
             </div>
             <div class="submit-btn">
                 <input type="submit" value="Submit" @click="sendRequest()">
@@ -45,7 +45,24 @@ export default {
 }
 </script>
 <style lang="scss">
-[class$="-form"] {
-    height: max-content;
+@import "../genericStyles.scss"; 
+
+.form {
+    width: 70%;
+    height: fit-content;
+    margin: auto 15%;
+
+    .form-wrapper {
+        > * {
+            padding: 10px 0;
+        }
+
+        textarea { 
+            @include roundedBorders;
+            max-height: 5rem;
+            max-width: 80%;
+        }
+    }
+
 }
 </style>

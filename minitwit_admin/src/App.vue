@@ -26,7 +26,7 @@ import {
   selectSidebar,
 } from "@/compositionStore/sidebar/sidebarModule";
 import {
-  getLoggedInUser,
+  enforceLoggedUser,
   logoutUser,
 } from "@/compositionStore/users/usersModule";
 
@@ -40,41 +40,36 @@ export default {
     initStore();
     const { getColors } = useColors();
     const colors = computed(() => getColors());
+    const storedUser = localStorage.getItem('loggedUser')
 
-    const loggedInUser = getLoggedInUser()
-    const loggedUser = computed(() => (loggedInUser.value != 0 ? true : false));
-    const loggedOutUser = computed(() =>
-      loggedInUser.value == 0 ? true : false
-    );
+    if (!!storedUser && storedUser != 0) {
+       enforceLoggedUser(storedUser);
+    }
     
     const useSidebarItems = () => {
       return [
         {
           title: "Dashboard",
-          icon: "house",
           to: "/",
-          visible: "always",
+          visibleToLoggedUser: "always",
           function: (title) => selectSidebar(title),
         },
         {
           title: "Login or register",
-          icon: "house",
           to: "user-entrance",
-          visible: loggedOutUser,
+          visibleToLoggedUser: false,
           function: (title) => selectSidebar(title),
         },
         {
           title: "User profile/create twit",
-          icon: "house",
           to: "/user-profile",
-          visible: loggedUser,
+          visibleToLoggedUser: true,
           function: (title) => selectSidebar(title),
         },
         {
           title: "Logout",
-          icon: "house",
           to: "/",
-          visible: loggedUser,
+          visibleToLoggedUser: true,
           function: (title) => handleLogoutUser(title),
         },
       ];
@@ -109,6 +104,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100vh;
+  width: 100vw;
 }
 
 #nav {
@@ -127,12 +124,13 @@ export default {
 .app-content {
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+  background-image: url('./assets/svgs/background.svg');
+  background-size: cover;
 }
 
 .router-content {
-  width: 100%;
-  height: 100%;
   overflow: scroll;
 }
 </style>

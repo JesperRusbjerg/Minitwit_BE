@@ -1,26 +1,42 @@
+@import './variables';
+
+@mixin roundedBorders {
+    border: 0;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+@mixin shadow {
+    box-shadow: -10px -10px 30px 0 rgba(255, 255, 255, 0.418),10px 10px 30px 0 #00000017;
+    
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
 .form {
+    @include roundedBorders;
+    @include shadow;
+    background: $card-background;
+    
+    [class$="-card"] {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
         margin-bottom: 200px;
-        padding: 20px;
         width: 25vw;
         height: 40vh;
-        background: #f5f5fa;
-        border: 0;
-        border-radius: 8px;
-        box-shadow: -10px -10px 30px 0 #fff,10px 10px 30px 0 #1d0dca17;
+    }
 }
 
 [class$="-card"] {
+        @include roundedBorders;
+        @include shadow;
         height: max-content;
         width: 25vw;
         margin: 20px;
-        padding: 20px;
-        background: #f5f5fa;
-        border: 0;
-        border-radius: 8px;
-        box-shadow: -10px -10px 30px 0 #fff,10px 10px 30px 0 #1d0dca17;
+        background: $card-background;
 }
 
 [class$="-btn"] {
@@ -28,12 +44,12 @@
 
     input { 
         border: 1px;
-        background-color: #fcd997;
+        background-color: $btn-background;
         width: 100%;
         padding:10px;
         border: 0;
         border-radius: 10px;
-        box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+        box-shadow:0 0 10px 2px rgba(0, 0, 0, 0.027);
         transition: transform .2s;
     }
 

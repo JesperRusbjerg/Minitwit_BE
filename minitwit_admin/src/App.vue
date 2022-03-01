@@ -26,7 +26,6 @@ import {
   selectSidebar,
 } from "@/compositionStore/sidebar/sidebarModule";
 import {
-  getLoggedInUser,
   enforceLoggedUser,
   logoutUser,
 } from "@/compositionStore/users/usersModule";
@@ -41,9 +40,6 @@ export default {
     initStore();
     const { getColors } = useColors();
     const colors = computed(() => getColors());
-    const loggedInUser = getLoggedInUser()
-    const loggedUser = computed(() => (loggedInUser.value != 0 ? true : false));
-    const loggedOutUser = computed(() => loggedInUser.value == 0 ? true : false);
     const storedUser = localStorage.getItem('loggedUser')
 
     if (!!storedUser && storedUser != 0) {
@@ -55,25 +51,25 @@ export default {
         {
           title: "Dashboard",
           to: "/",
-          visible: "always",
+          visibleToLoggedUser: "always",
           function: (title) => selectSidebar(title),
         },
         {
           title: "Login or register",
           to: "user-entrance",
-          visible: loggedOutUser,
+          visibleToLoggedUser: false,
           function: (title) => selectSidebar(title),
         },
         {
           title: "User profile/create twit",
           to: "/user-profile",
-          visible: loggedUser,
+          visibleToLoggedUser: true,
           function: (title) => selectSidebar(title),
         },
         {
           title: "Logout",
           to: "/",
-          visible: loggedUser,
+          visibleToLoggedUser: true,
           function: (title) => handleLogoutUser(title),
         },
       ];

@@ -6,7 +6,7 @@
       :minimizedWidth="minimizedWidth"
     >
       <template v-for="(item, index) in items" :key="index">
-        <div v-show="item.visible == 'always' ? true : item.visible.value">
+        <div v-show="isVisible(item.visibleToLoggedUser)">
           <va-sidebar-item
             :to="item.to"
             :active="isSelectedSidebarItem(item.title)"
@@ -32,6 +32,7 @@
 <script>
 import { computed } from "vue"
 import { useSidebar } from "@/compositionStore/index"
+import { getLoggedInUser } from "@/compositionStore/users/usersModule";
 
 export default {
   name: "Sidebar",
@@ -75,6 +76,14 @@ export default {
   setup(props, context) {
     const { getSelectedSidebarItem } = useSidebar()
     const selectedSidebarItem = getSelectedSidebarItem()
+    const loggedInUser = getLoggedInUser();
+    const loggedUser = computed(() => loggedInUser.value != 0 ? true : false);
+
+    //functions
+    const isVisible = (val) => {
+      if (val == 'always') return true;
+      else return loggedUser.value === val;
+    };
 
     const isSelectedSidebarItem = (sidebarItem) =>
       sidebarItem == selectedSidebarItem.value;
@@ -84,7 +93,8 @@ export default {
     };
     return {
       handleItemClick,
-      isSelectedSidebarItem
+      isSelectedSidebarItem,
+      isVisible
     };
   },
 };

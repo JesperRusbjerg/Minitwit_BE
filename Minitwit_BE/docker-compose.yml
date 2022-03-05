@@ -1,5 +1,13 @@
 version: '3.4'
 
+configs:
+  prometheus_config:
+    file: ./prometheus.yml
+
+networks:
+  inner_net:
+
+
 services:
   minitwit_be.api:
     image: jrusbjerg/twitbackend
@@ -13,3 +21,31 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Minitwit_BE.Api.pfx
     volumes:
       - ~/.aspnet/https:/https:ro
+    networks:
+      - inner_net
+
+  prometheus:
+    image: quay.io/prometheus/prometheus:latest
+    ports:
+      - "9090:9090"
+    configs:
+      - source: prometheus_config
+        target: /etc/prometheus/prometheus.yml
+    depends_on:
+      - web
+    networks:
+      - inner_net
+
+  grafana:
+      image : grafana/grafana
+      depends_on: 
+        - prometheus
+      ports:
+        - "9091:3000"
+      volumes:
+        - ./grafana/data/:/var/lib/grafana
+        - ./grafana/provisioning/:/etc/grafana/provisioning/
+      env_file:
+        - ./config.monitoring
+      networks:
+        - inner_net

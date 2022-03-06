@@ -51,15 +51,15 @@ namespace Minitwit_BE.Api
             });
         }
 
-        // to configure HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // Configure the HTTP request pipeline.
-            app.UseCors("_miniTwitAllowSpecificOrigins");
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            ConfigurePrometheus(app);
+            ConfigureHttpPipeline(app);
+            ConfigureDatabase(app);
+        }
 
-            //Prometheus setup start
+        private static void ConfigurePrometheus(IApplicationBuilder app)
+        {
             app.UseMetricServer();
             // Middleware Definition
             app.Use((context, next) =>
@@ -76,19 +76,22 @@ namespace Minitwit_BE.Api
                 counter.WithLabels(context.Request.Method, context.Request.Path).Inc();
                 return next();
             });
-            //Prometheus setup end
+        }
 
+        private static void ConfigureHttpPipeline(IApplicationBuilder app)
+        {
+            // Configure the HTTP request pipeline.
+            // app.UseAuthorization();
+            app.UseCors("_miniTwitAllowSpecificOrigins");
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseMiddleware<ExceptionMiddleware>();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
+        }
 
-            // app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                // Required to have operational REST endpoints
-                endpoints.MapControllers();
-            });
-
+        private static void ConfigureDatabase(IApplicationBuilder app)
+        {
             // to create a database if it's not there
             using (var scope = app.ApplicationServices.CreateScope())
             {

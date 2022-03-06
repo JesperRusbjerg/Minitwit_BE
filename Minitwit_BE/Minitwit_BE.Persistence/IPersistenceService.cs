@@ -1,4 +1,7 @@
 ﻿using Minitwit_BE.Domain;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Minitwit_BE.Persistence
 {

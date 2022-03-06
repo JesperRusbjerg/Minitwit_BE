@@ -2,8 +2,11 @@
 using Minitwit_BE.Domain.Exceptions;
 using Minitwit_BE.DomainService.Interfaces;
 using Minitwit_BE.Persistence;
+using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Minitwit_BE.DomainService
 {

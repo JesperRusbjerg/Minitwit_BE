@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Minitwit_BE.Api.Middleware;
 using Minitwit_BE.DomainService;
 using Minitwit_BE.DomainService.Interfaces;
@@ -8,11 +12,11 @@ namespace Minitwit_BE.Api
 {
     public class Startup
     {
-        public IConfiguration configuration { get; }
+        public IConfiguration _configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
         }
 
         // to add services to the application container. For instance healthcheck,
@@ -27,12 +31,13 @@ namespace Minitwit_BE.Api
             services.AddScoped<IPersistenceService, PersistenceService>();
             services.AddDbContext<TwitContext>(opt =>
             {
-                var folder = Environment.SpecialFolder.LocalApplicationData;
-                var path = Environment.GetFolderPath(folder);
-                var dbPath = Path.Join(
-                    path, "twit.db"); // for me it's C:\Users\<USER>\AppData\Local
+                //var folder = Environment.SpecialFolder.LocalApplicationData;
+                //var path = Environment.GetFolderPath(folder);
+                //var dbPath = Path.Join(path, "twit.db"); // for me it's C:\Users\<USER>\AppData\Local
 
-                opt.UseSqlite($"Data Source={dbPath}");
+                //opt.UseSqlite($"Data Source={dbPath}");
+
+                opt.UseMySQL(_configuration["ConnectionStrings:TwitsDB"]);
             });
             services.AddCors(options =>
             {
@@ -49,14 +54,6 @@ namespace Minitwit_BE.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // Configure the HTTP request pipeline.
-            if (!env.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for
-                // production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
             app.UseCors("_miniTwitAllowSpecificOrigins");
             app.UseHttpsRedirection();
             app.UseStaticFiles();

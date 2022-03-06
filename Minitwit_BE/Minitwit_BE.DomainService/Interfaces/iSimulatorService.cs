@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace Minitwit_BE.DomainService.Interfaces
 {
     public interface ISimulationService

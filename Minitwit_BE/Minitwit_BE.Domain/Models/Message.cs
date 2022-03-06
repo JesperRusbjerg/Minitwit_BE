@@ -1,4 +1,6 @@
-﻿namespace Minitwit_BE.Domain
+﻿using System;
+
+namespace Minitwit_BE.Domain
 {
     public class Message
     {

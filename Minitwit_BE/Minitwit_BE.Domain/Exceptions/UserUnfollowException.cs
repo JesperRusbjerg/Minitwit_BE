@@ -1,4 +1,6 @@
-﻿namespace Minitwit_BE.Domain.Exceptions
+﻿using System;
+
+namespace Minitwit_BE.Domain.Exceptions
 {
     public class UserUnfollowException : Exception
     {

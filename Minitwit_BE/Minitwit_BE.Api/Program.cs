@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+
 namespace Minitwit_BE.Api
 {
     public class Program
@@ -11,9 +14,6 @@ namespace Minitwit_BE.Api
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => {
                     webBuilder.UseStartup<Startup>();
-
-
-                  
-                    });
+                });
     }
 }

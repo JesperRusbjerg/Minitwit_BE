@@ -3,6 +3,7 @@ using Minitwit_BE.Api.Middleware;
 using Minitwit_BE.DomainService;
 using Minitwit_BE.DomainService.Interfaces;
 using Minitwit_BE.Persistence;
+using Prometheus;
 
 namespace Minitwit_BE.Api
 {
@@ -53,6 +54,24 @@ namespace Minitwit_BE.Api
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            //Prometheus setup start
+            app.UseMetricServer();
+            // Middleware Definition
+            app.Use((context, next) =>
+            {
+                // Http Context
+                var counter = Metrics.CreateCounter
+                ("PathCounter", "Count request",
+                new CounterConfiguration
+                {
+                    LabelNames = new[] { "method", "endpoint" }
+                });
+                // method: GET, POST etc.
+                // endpoint: Requested path
+                counter.WithLabels(context.Request.Method, context.Request.Path).Inc();
+                return next();
+            });
+            //Prometheus setup end
 
             app.UseRouting();
             app.UseMiddleware<ExceptionMiddleware>();

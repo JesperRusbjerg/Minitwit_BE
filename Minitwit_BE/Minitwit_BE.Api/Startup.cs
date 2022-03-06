@@ -35,7 +35,6 @@ namespace Minitwit_BE.Api
                 //var folder = Environment.SpecialFolder.LocalApplicationData;
                 //var path = Environment.GetFolderPath(folder);
                 //var dbPath = Path.Join(path, "twit.db"); // for me it's C:\Users\<USER>\AppData\Local
-
                 //opt.UseSqlite($"Data Source={dbPath}");
 
                 opt.UseMySQL(_configuration["ConnectionStrings:TwitsDB"]);

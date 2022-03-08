@@ -40,6 +40,7 @@ jobs:
         
   - stage: deploy
     name: "deploy new version"
+    if: branch = "master"
     install: skip
     # -o flag to get around "add ip to known hosts prompt"
     script: |

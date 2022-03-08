@@ -20,12 +20,6 @@ before_install:
 install:
   - docker --version  # document the version travis is using
 
-
-stages:
-  - docker_build
-  - deploytodo
-  - deploy
-
 before_deploy:
   # Set up git user name and tag this commit
   - git config --local user.name "jrusbjerg"
@@ -33,6 +27,10 @@ before_deploy:
   - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
   - git tag $TRAVIS_TAG
 
+stages:
+  - docker_build
+  - deploytodo
+  - deploy
 
 jobs:
   include:
@@ -60,8 +58,11 @@ jobs:
     
   - stage: deploy
     provider: releases
-    api_key: ${git_token}
+    api_key:
+      secure: YOUR_API_KEY_ENCRYPTED
     file: "FILE TO UPLOAD"
     skip_cleanup: true
+    on:
+      tags: true
 
 

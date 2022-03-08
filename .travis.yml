@@ -28,8 +28,8 @@ stages:
 jobs:
   include:
   - stage: docker_build
-    if: branch = "master"
     name: "build and push docker"
+    if: branch = "master"
     script:
       - echo "LOGIN"
       - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
@@ -39,7 +39,6 @@ jobs:
       - docker push jrusbjerg/twitbackend:latest
         
   - stage: deploy
-    if: branch = "master"
     name: "deploy new version"
     install: skip
     # -o flag to get around "add ip to known hosts prompt"

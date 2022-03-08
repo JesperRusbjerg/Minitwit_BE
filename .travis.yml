@@ -23,13 +23,14 @@ install:
 stages:
   - docker_build
   - deploy
+  - deploygit
 
 
 jobs:
   include:
   - stage: docker_build
     name: "build and push docker"
-    if: branch = "main"
+    if: branch = "mainx"
     script:
       - echo "LOGIN"
       - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
@@ -40,7 +41,7 @@ jobs:
         
   - stage: deploy
     name: "deploy new version"
-    if: branch = "main"
+    if: branch = "mainx"
     install: skip
     # -o flag to get around "add ip to known hosts prompt"
     script: |
@@ -50,3 +51,13 @@ jobs:
       docker-compose up -d " 
     on:
     tags: true
+
+  - stage: deploygit:
+    name: gitrelease
+    provider: releases
+    api_key: "${git_token}"
+    file: "FILE TO UPLOAD"
+    skip_cleanup: true
+    on:
+      tags: true
+      rvm: 2.0.0

@@ -23,7 +23,7 @@ stages:
 
 jobs:
   include:
-    if: branch = main
+    #if: branch = main
       - stage: docker_build
         name: "build and push docker"
         script:
@@ -43,5 +43,5 @@ jobs:
           "docker-compose down && \
           docker-compose pull && \
           docker-compose up -d " 
-    else: 
-      echo 'not main branch'
+    #else: 
+      #echo 'not main branch'

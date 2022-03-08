@@ -53,12 +53,14 @@ jobs:
     on:
     tags: true
 
-  - stage: deploygit
-    name: gitrelease
-    provider: releases
-    api_key: "${git_token}"
-    file: "FILE TO UPLOAD"
-    skip_cleanup: true
-    on:
-      tags: true
-      rvm: 2.0.0
+deploy:
+  provider: releases
+  tag_name: $TRAVIS_TAG
+  target_commitish: $TRAVIS_COMMIT
+  name: $TRAVIS_TAG
+  api_key: $git_token
+  file: './minitwit_BE'
+  draft: true
+  skip_cleanup: true
+  on:
+    branch: main

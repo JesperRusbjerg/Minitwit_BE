@@ -23,25 +23,25 @@ stages:
 
 jobs:
   include:
-    if: branch = main
-    - stage: docker_build
-      name: "build and push docker"
-      script:
-        - echo "LOGIN"
-        - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
-        - echo "BUILD"
-        - docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile Minitwit_BE/.
-        - echo "PUSH"
-        - docker push jrusbjerg/twitbackend:latest
-        
-    - stage: deploy
-      name: "deploy new version"
-      install: skip
-      # -o flag to get around "add ip to known hosts prompt"
-      script: |
-        ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} \
-        "docker-compose down && \
-        docker-compose pull && \
-        docker-compose up -d " 
-    else: 
-    echo 'not main branch'
+      if: branch = main
+      - stage: docker_build
+        name: "build and push docker"
+        script:
+          - echo "LOGIN"
+          - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
+          - echo "BUILD"
+          - docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile Minitwit_BE/.
+          - echo "PUSH"
+          - docker push jrusbjerg/twitbackend:latest
+          
+      - stage: deploy
+        name: "deploy new version"
+        install: skip
+        # -o flag to get around "add ip to known hosts prompt"
+        script: |
+          ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} \
+          "docker-compose down && \
+          docker-compose pull && \
+          docker-compose up -d " 
+      else: 
+      echo 'not main branch'

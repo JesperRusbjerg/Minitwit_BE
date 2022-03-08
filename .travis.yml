@@ -20,12 +20,6 @@ before_install:
 install:
   - docker --version  # document the version travis is using
 
-before_deploy:
-  # Set up git user name and tag this commit
-  - git config --local user.name "jrusbjerg"
-  - git config --local user.email "jkrusbjerg@gmail.com"
-  - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
-  - git tag $TRAVIS_TAG
 
 stages:
   - docker_build
@@ -56,11 +50,10 @@ jobs:
       docker-compose pull && \
       docker-compose up -d " 
     
-  - stage: deploy
+  - stage: deploy:
     provider: releases
-    api_key:
-      secure: ${git_token}
-    file: "FILE TO UPLOAD"
+    api_key: ${git_token}
+    file: "./minitwit_BE"
     skip_cleanup: true
     on:
       tags: true

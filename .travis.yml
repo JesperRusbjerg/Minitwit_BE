@@ -1,9 +1,5 @@
 language: minimal
 
-branches:
-  only:
-  - main
-
 
 before_install:
   # Decrypt the git_deploy_key.enc key into /tmp/git_deploy_key

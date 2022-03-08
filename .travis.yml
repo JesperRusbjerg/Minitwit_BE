@@ -26,6 +26,12 @@ stages:
   - deploy
   - deploygit
 
+before_deploygit:
+  # Set up git user name and tag this commit
+  - git config --local user.name "DeadlyDevops"
+  - git config --local user.email "jkrusbjerg@gmail.com"
+  - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
+  - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
 
 jobs:
   include:

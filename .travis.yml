@@ -49,7 +49,7 @@ jobs:
       docker-compose pull && \
       docker-compose up -d " 
     
-  - stage: deploy:
+  - stage: deploy
     provider: releases
     api_key: ${git_token}
     file: "Minitwit_BE"

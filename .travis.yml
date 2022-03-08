@@ -52,7 +52,7 @@ jobs:
   - stage: deploy:
     provider: releases
     api_key: ${git_token}
-    file: "./minitwit_BE"
+    file: "Minitwit_BE"
     skip_cleanup: true
     on:
       tags: true

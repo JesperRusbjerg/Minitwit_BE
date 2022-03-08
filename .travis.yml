@@ -17,56 +17,13 @@ before_install:
   # Add the key to the authentication agent
   - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
 
-install:
-  - docker --version  # document the version travis is using
 
 
-stages:
-  - docker_build
-  - deploy
-  - deploygit
-
-before_deploygit:
-  # Set up git user name and tag this commit
-  - git config --local user.name "DeadlyDevops"
-  - git config --local user.email "jkrusbjerg@gmail.com"
-  - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
-  - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
-
-jobs:
-  include:
-  - stage: docker_build
-    name: "build and push docker"
-    if: branch = "mainx"
-    script:
-      - echo "LOGIN"
-      - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
-      - echo "BUILD"
-      - docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile Minitwit_BE/.
-      - echo "PUSH"
-      - docker push jrusbjerg/twitbackend:latest
-        
-  - stage: deploy
-    name: "deploy new version"
-    if: branch = "mainx"
-    install: skip
-    # -o flag to get around "add ip to known hosts prompt"
-    script: |
-      ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} \
-      "docker-compose down && \
-      docker-compose pull && \
-      docker-compose up -d " 
-    on:
+deploy:
+  provider: releases
+  api_key: ${git_token}
+  file: "./minitwit_BE"
+  skip_cleanup: true
+  on:
     tags: true
-
-  - stage: deploygit
-    provider: releases
-    tag_name: $TRAVIS_TAG
-    target_commitish: $TRAVIS_COMMIT
-    name: $TRAVIS_TAG
-    api_key: $git_token
-    file: './minitwit_BE'
-    draft: true
-    skip_cleanup: true
-    on:
-      branch: main
+    all_branches: true

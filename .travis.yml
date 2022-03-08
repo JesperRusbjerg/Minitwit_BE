@@ -2,7 +2,7 @@ language: minimal
 
 branches:
   only:
-  - main
+    - main
 
 
 before_install:
@@ -28,7 +28,7 @@ stages:
 jobs:
   include:
     - stage: docker_build
-      #if: branch = master
+      if: branch = "master"
       name: "build and push docker"
       script:
         - echo "LOGIN"
@@ -39,7 +39,7 @@ jobs:
         - docker push jrusbjerg/twitbackend:latest
         
     - stage: deploy
-      #if: branch = master
+      if: branch = "master"
       name: "deploy new version"
       install: skip
       # -o flag to get around "add ip to known hosts prompt"

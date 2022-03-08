@@ -52,7 +52,7 @@ jobs:
     on:
     tags: true
 
-  - stage: deploygit:
+  - stage: deploygit
     name: gitrelease
     provider: releases
     api_key: "${git_token}"

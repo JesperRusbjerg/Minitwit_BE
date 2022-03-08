@@ -20,7 +20,6 @@ before_install:
 install:
   - docker --version  # document the version travis is using
 
-
 stages:
   - docker_build
   - deploytodo

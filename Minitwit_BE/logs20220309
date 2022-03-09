@@ -1,0 +1,19 @@
+2022-03-09 23:25:54.340 +01:00 [INF] Starting host
+2022-03-09 23:25:55.257 +01:00 [INF] Entity Framework Core 6.0.2 initialized 'TwitContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite:6.0.2' with options: None
+2022-03-09 23:25:55.331 +01:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "type" = 'table' AND "rootpage" IS NOT NULL;
+2022-03-09 23:25:55.412 +01:00 [INF] Now listening on: https://localhost:7249
+2022-03-09 23:25:55.414 +01:00 [INF] Now listening on: http://localhost:5298
+2022-03-09 23:25:55.416 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-03-09 23:25:55.417 +01:00 [INF] Hosting environment: Development
+2022-03-09 23:25:55.418 +01:00 [INF] Content root path: C:\Users\Jesper\Documents\code\test\minitwitRepo\minitwit_BE\Minitwit_BE\Minitwit_BE.Api
+2022-03-09 23:25:55.937 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7249/ - -
+2022-03-09 23:25:55.992 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7249/ - - - 404 0 - 57.5064ms
+2022-03-09 23:25:58.977 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7249/api/twit/test - -
+2022-03-09 23:25:58.982 +01:00 [INF] Executing endpoint 'Minitwit_BE.Api.Controllers.TwitController.TestEndpoint (Minitwit_BE.Api)'
+2022-03-09 23:25:58.995 +01:00 [INF] Route matched with {action = "TestEndpoint", controller = "Twit"}. Executing controller action with signature System.Threading.Tasks.Task`1[System.String] TestEndpoint() on controller Minitwit_BE.Api.Controllers.TwitController (Minitwit_BE.Api).
+2022-03-09 23:25:59.002 +01:00 [INF] Test endpoint was called!
+2022-03-09 23:25:59.008 +01:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2022-03-09 23:25:59.015 +01:00 [INF] Executed action Minitwit_BE.Api.Controllers.TwitController.TestEndpoint (Minitwit_BE.Api) in 15.1811ms
+2022-03-09 23:25:59.016 +01:00 [INF] Executed endpoint 'Minitwit_BE.Api.Controllers.TwitController.TestEndpoint (Minitwit_BE.Api)'
+2022-03-09 23:25:59.018 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7249/api/twit/test - - - 200 - text/plain;+charset=utf-8 40.8992ms

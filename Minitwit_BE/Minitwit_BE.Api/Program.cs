@@ -12,7 +12,7 @@ namespace Minitwit_BE.Api
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .Enrich.FromLogContext()
             .WriteTo.Console()
-            .WriteTo.File("./../logs/log.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 10)
+            .WriteTo.File("/home/logs", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 10)
             .CreateLogger();
 
             try

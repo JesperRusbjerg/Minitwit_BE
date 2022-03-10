@@ -18,7 +18,7 @@ namespace Minitwit_BE.DomainService
 
         public async Task<User> GetUserById(int id)
         {
-            var user = (await _persistenceService.GetUsers(u => u.UserId.Equals(id))).SingleOrDefault();
+            var user = (await _persistenceService.GetUsers(u => u.UserId.Equals(id))).FirstOrDefault();
 
             if (user == null)
             {

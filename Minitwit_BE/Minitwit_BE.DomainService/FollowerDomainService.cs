@@ -54,7 +54,7 @@ namespace Minitwit_BE.DomainService
 
         public async Task Follow(Follower follower)
         {
-            var userWhom = (await _persistence.GetUsers(u => u.UserId.Equals(follower.WhomId))).SingleOrDefault();
+            var userWhom = (await _persistence.GetUsers(u => u.UserId.Equals(follower.WhomId))).FirstOrDefault();
 
             if (userWhom == null)
             {
@@ -128,7 +128,7 @@ namespace Minitwit_BE.DomainService
                 };
 
                 var deletedFollow = (await _persistence.GetFollowers(
-                    entry => entry.WhoId.Equals(follower.WhoId) && entry.WhomId.Equals(follower.WhomId))).SingleOrDefault();
+                    entry => entry.WhoId.Equals(follower.WhoId) && entry.WhomId.Equals(follower.WhomId))).FirstOrDefault();
 
                 if (deletedFollow != null)
                 {

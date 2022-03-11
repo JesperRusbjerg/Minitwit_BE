@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Minitwit_BE.Api.Dtos;
 using Minitwit_BE.Domain;
 using Minitwit_BE.DomainService.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Minitwit_BE.Api.Controllers
 {

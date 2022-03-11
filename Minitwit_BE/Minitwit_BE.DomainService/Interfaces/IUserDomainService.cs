@@ -1,4 +1,5 @@
 ﻿using Minitwit_BE.Domain;
+using System.Threading.Tasks;
 
 namespace Minitwit_BE.DomainService.Interfaces
 {

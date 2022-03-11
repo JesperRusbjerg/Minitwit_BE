@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Minitwit_BE.Api.Middleware;
 using Minitwit_BE.DomainService;
 using Minitwit_BE.DomainService.Interfaces;
@@ -9,6 +13,13 @@ namespace Minitwit_BE.Api
 {
     public class Startup
     {
+        public IConfiguration _configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         // to add services to the application container. For instance healthcheck,
         // etc.
         public void ConfigureServices(IServiceCollection services)
@@ -21,11 +32,12 @@ namespace Minitwit_BE.Api
             services.AddScoped<IPersistenceService, PersistenceService>();
             services.AddDbContext<TwitContext>(opt =>
             {
-                var folder = Environment.SpecialFolder.LocalApplicationData;
-                var path = Environment.GetFolderPath(folder);
-                var dbPath = Path.Join(path, "twit.db"); // for me it's C:\Users\<USER>\AppData\Local
+                //var folder = Environment.SpecialFolder.LocalApplicationData;
+                //var path = Environment.GetFolderPath(folder);
+                //var dbPath = Path.Join(path, "twit.db"); // for me it's C:\Users\<USER>\AppData\Local
+                //opt.UseSqlite($"Data Source={dbPath}");
 
-                opt.UseSqlite($"Data Source={dbPath}");
+                opt.UseMySQL(_configuration["ConnectionStrings:TwitsDB"]);
             });
             services.AddCors(options =>
             {
@@ -38,23 +50,15 @@ namespace Minitwit_BE.Api
             });
         }
 
-        // to configure HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // Configure the HTTP request pipeline.
-            if (!env.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for
-                // production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            ConfigurePrometheus(app);
+            ConfigureHttpPipeline(app);
+            ConfigureDatabase(app);
+        }
 
-            app.UseCors("_miniTwitAllowSpecificOrigins");
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            //Prometheus setup start
+        private static void ConfigurePrometheus(IApplicationBuilder app)
+        {
             app.UseMetricServer();
             // Middleware Definition
             app.Use((context, next) =>
@@ -71,19 +75,21 @@ namespace Minitwit_BE.Api
                 counter.WithLabels(context.Request.Method, context.Request.Path).Inc();
                 return next();
             });
-            //Prometheus setup end
+        }
 
+        private static void ConfigureHttpPipeline(IApplicationBuilder app)
+        {
+            // Configure the HTTP request pipeline.
+            // app.UseAuthorization();
+            app.UseCors("_miniTwitAllowSpecificOrigins");
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseMiddleware<ExceptionMiddleware>();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
+        }
 
-            // app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                // Required to have operational REST endpoints
-                endpoints.MapControllers();
-            });
-
+        private static void ConfigureDatabase(IApplicationBuilder app)
+        {
             // to create a database if it's not there
             using (var scope = app.ApplicationServices.CreateScope())
             {

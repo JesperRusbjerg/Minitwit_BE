@@ -1,12 +1,13 @@
-version: '3.4'
+version: "3.4"
 
 networks:
   inner_net:
 
-
 services:
   minitwit_be.api:
     image: jrusbjerg/twitbackend
+    depends_on:
+      - mariadb
     ports:
       - "8080:5000"
       - "8081:5001"
@@ -17,9 +18,9 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Minitwit_BE.Api.pfx
     volumes:
       - ~/.aspnet/https:/https:ro
+      - ~/logs:/home/logs
     networks:
       - inner_net
-
 
   prometheus:
     image: quay.io/prometheus/prometheus:latest
@@ -33,13 +34,27 @@ services:
       - inner_net
 
   grafana:
-      image : grafana/grafana
-      depends_on:
-        - prometheus
-      user: "$UID:$GID"
-      volumes:
-        - ./gfdata:/var/lib/grafana
-      ports:
-        - "9091:3000"
-      networks:
-        - inner_net
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+    user: "$UID:$GID"
+    volumes:
+      - ./gfdata:/var/lib/grafana
+    ports:
+      - "9091:3000"
+    networks:
+      - inner_net
+
+  mariadb:
+    image: mariadb
+    restart: always
+    networks:
+      - inner_net
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: SuperSecretPassword
+      MYSQL_DATABASE: WaystoneInn
+    command: --init-file /data/application/init.sql
+    volumes:
+      - ./mariadb_init.sql:/data/application/init.sql

@@ -43,7 +43,7 @@ namespace Minitwit_BE.Api
             {
                 options.AddPolicy(name: "_miniTwitAllowSpecificOrigins", builder =>
                 {
-                    builder.WithOrigins("http://localhost:8080", "http://104.248.43.94:8080")
+                    builder.WithOrigins("http://localhost:8080", "http://159.89.13.60:8080")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });

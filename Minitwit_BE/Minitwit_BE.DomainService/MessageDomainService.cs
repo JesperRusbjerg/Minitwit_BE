@@ -25,7 +25,7 @@ namespace Minitwit_BE.DomainService
 
         public async Task AddTwit(Message msg, string username)
         {
-            var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).SingleOrDefault();
+            var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
 
             if (user == null)
                 throw new ArgumentException("No user of that username exists");
@@ -62,7 +62,7 @@ namespace Minitwit_BE.DomainService
 
         public async Task<IEnumerable<Message>> GetPersonalTwits(string username)
         {
-            var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).SingleOrDefault();
+            var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
 
             if (user == null)
                 throw new ArgumentException("No user of that username exists");
@@ -72,7 +72,7 @@ namespace Minitwit_BE.DomainService
 
         public async Task<IEnumerable<Message>> GetPersonalTwits(string username, int? numberOfRows)
         {
-            var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).SingleOrDefault();
+            var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
 
             if (user == null)
                 throw new ArgumentException("No user of that username exists");
@@ -82,7 +82,7 @@ namespace Minitwit_BE.DomainService
 
         public async Task MarkMessage(int msgId, bool flag)
         {
-            var flaggedMessage = (await _persistenceService.GetMessages(msg => msg.MessageId.Equals(msgId))).SingleOrDefault();
+            var flaggedMessage = (await _persistenceService.GetMessages(msg => msg.MessageId.Equals(msgId))).FirstOrDefault();
 
             if (flaggedMessage != null)
             {

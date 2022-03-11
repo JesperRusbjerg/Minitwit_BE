@@ -21,7 +21,7 @@ namespace Minitwit_BE.DomainService
 
         public async Task<User> GetUserById(int id)
         {
-            var user = (await _persistenceService.GetUsers(u => u.UserId.Equals(id))).SingleOrDefault();
+            var user = (await _persistenceService.GetUsers(u => u.UserId.Equals(id))).FirstOrDefault();
 
             if (user == null)
             {
@@ -35,7 +35,7 @@ namespace Minitwit_BE.DomainService
 
         public async Task<User> GetUserByName(string username)
         {
-            var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).SingleOrDefault();
+            var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
 
             if (user == null)
             {

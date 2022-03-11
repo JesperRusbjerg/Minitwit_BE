@@ -82,7 +82,6 @@ namespace Minitwit_BE.Api
             // Configure the HTTP request pipeline.
             // app.UseAuthorization();
             app.UseCors("_miniTwitAllowSpecificOrigins");
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseMiddleware<ExceptionMiddleware>();

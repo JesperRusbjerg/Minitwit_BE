@@ -6,8 +6,7 @@ networks:
 services:
   minitwit_be.api:
     image: jrusbjerg/twitbackend
-    depends_on:
-      - mariadb
+    restart: always
     ports:
       - "8080:5000"
       - "8081:5001"
@@ -53,8 +52,5 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MARIADB_ROOT_PASSWORD: SuperSecretPassword
+      MYSQL_ROOT_PASSWORD: SuperSecretPassword
       MYSQL_DATABASE: WaystoneInn
-    command: --init-file /data/application/init.sql
-    volumes:
-      - ./mariadb_init.sql:/data/application/init.sql

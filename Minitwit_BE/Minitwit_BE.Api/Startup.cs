@@ -19,19 +19,18 @@ namespace Minitwit_BE.Api
             services.AddScoped<IUserDomainService, UserDomainService>();
             services.AddScoped<ISimulationService, SimulatorService>();
             services.AddScoped<IPersistenceService, PersistenceService>();
-            services.AddDbContext<TwitContext>(opt =>
-            {
-                var folder = Environment.SpecialFolder.LocalApplicationData;
-                var path = Environment.GetFolderPath(folder);
-                var dbPath = Path.Join(path, "twit.db"); // for me it's C:\Users\<USER>\AppData\Local
 
-                opt.UseSqlite($"Data Source={dbPath}");
-            });
+            string connectionString = "Server=mariadb;Database=WaystoneInn;Uid=root;Pwd=SuperSecretPassword;";
+            services.AddDbContext<TwitContext>(
+                options => options.UseMySql(
+                    connectionString, ServerVersion.AutoDetect(connectionString)));
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "_miniTwitAllowSpecificOrigins", builder =>
                 {
-                    builder.WithOrigins("http://localhost:8080", "http://159.89.13.60:8080")
+                    builder
+                        .WithOrigins("http://localhost:8080", "http://159.89.13.60:8080")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -54,27 +53,26 @@ namespace Minitwit_BE.Api
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            //Prometheus setup start
+            // Prometheus setup start
             app.UseMetricServer();
             // Middleware Definition
             app.Use((context, next) =>
             {
                 // Http Context
-                var counter = Metrics.CreateCounter
-                ("PathCounter", "Count request",
-                new CounterConfiguration
-                {
-                    LabelNames = new[] { "method", "endpoint" }
-                });
+                var counter = Metrics.CreateCounter(
+                    "PathCounter", "Count request",
+                    new CounterConfiguration
+                    {
+                        LabelNames = new[] { "method", "endpoint" }
+                    });
                 // method: GET, POST etc.
                 // endpoint: Requested path
                 counter.WithLabels(context.Request.Method, context.Request.Path).Inc();
                 return next();
             });
-            //Prometheus setup end
+            // Prometheus setup end
 
-            app.UseRouting();
-            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseRouting(); app.UseMiddleware<ExceptionMiddleware>();
 
             // app.UseAuthorization();
 

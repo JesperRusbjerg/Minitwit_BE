@@ -54,3 +54,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: SuperSecretPassword
       MYSQL_DATABASE: WaystoneInn
+    volumes:
+      - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:

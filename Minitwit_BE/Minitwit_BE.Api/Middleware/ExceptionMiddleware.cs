@@ -21,31 +21,44 @@ namespace Minitwit_BE.Api.Middleware
             }
             catch (MessageNotFoundException ex)
             {
-                _logger.LogError($"Something went wrong: {ex.Message}.", ex);
+                _logger.LogError($"Something went wrong: {ex.Message}. + ERROR CODE:{400}", ex);
 
                 await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
             }
+            catch(UserNotFoundException ex)
+            {
+                _logger.LogError($"Something went wrong: {ex.Message}. + ERROR CODE:{404}", ex);
+
+                await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.NotFound);
+
+            }
             catch (UserAlreadyExistsException ex)
             {
-                _logger.LogError($"Something went wrong: {ex.Message}.", ex);
+                _logger.LogError($"Something went wrong: {ex.Message}. +  ERROR CODE:{400}", ex);
 
                 await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
             }
             catch (UnauthorizedAccessException ex)
             {
-                _logger.LogError($"Something went wrong: {ex.Message}.", ex);
+                _logger.LogError($"Something went wrong: {ex.Message}. +  ERROR CODE:{401}", ex);
 
                 await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.Unauthorized);
             }
+            catch (ArgumentException ex)
+            {
+                _logger.LogError($"Something went wrong: {ex.Message}. +  ERROR CODE:{400}", ex);
+
+                await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
+            }
             catch (UserUnfollowException ex)
             {
-                _logger.LogError($"Something went wrong: {ex.Message}.", ex);
+                _logger.LogError($"Something went wrong: {ex.Message}.+  ERROR CODE:{400}", ex);
 
                 await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong: {ex.Message}.", ex);
+                _logger.LogError($"Something went wrong: {ex.Message}. +  ERROR CODE:{500}", ex);
 
                 await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.InternalServerError);
             }

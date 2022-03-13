@@ -24,7 +24,7 @@ namespace Minitwit_BE.DomainService
             var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
 
             if (user == null)
-                throw new ArgumentException("No user of that username exists");
+                throw new UserNotFoundException("No user of that username exists");
 
             msg.AuthorId = user.UserId;
 
@@ -61,7 +61,7 @@ namespace Minitwit_BE.DomainService
             var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
 
             if (user == null)
-                throw new ArgumentException("No user of that username exists");
+                throw new UserNotFoundException("No user of that username exists");
             
             return await GetPersonalTwits(user.UserId);
         }
@@ -71,7 +71,7 @@ namespace Minitwit_BE.DomainService
             var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
 
             if (user == null)
-                throw new ArgumentException("No user of that username exists");
+                throw new UserNotFoundException("No user of that username exists");
             
             return await GetPersonalTwits(user.UserId, numberOfRows);
         }

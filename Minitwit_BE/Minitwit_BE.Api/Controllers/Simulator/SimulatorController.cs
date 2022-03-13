@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Minitwit_BE.Api.Dtos.Simulation;
 using Minitwit_BE.Domain;
+using Minitwit_BE.Domain.Exceptions;
 using Minitwit_BE.DomainService.Interfaces;
+using System.Net.Http.Headers;
 
 namespace Minitwit_BE.Api.Controllers.Simulator
 {
@@ -28,16 +30,33 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             _simulatorService = simulatorService;
         }
 
+        private bool checkAuthorization(IEnumerable<string> headers)
+        {
+            return false;
+        }
+
         [HttpGet("latest")]
         public async Task<ActionResult<LatestResponse>> Latest()
         {
+            var headers = Request.Headers["Authorization"];
+            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
+            {
+                throw new UnauthorizedException("Unauthorized request");
+            }
+
             int latest = await _simulatorService.GetLatest();
+
             return new LatestResponse { Latest = latest };
         }
 
         [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody] RegisterDto input, [FromQuery] int? latest)
         {
+            var headers = Request.Headers["Authorization"];
+            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
+            {
+                throw new UnauthorizedException("Unauthorized request");
+            }
             await _simulatorService.UpdateLatest(latest);
             ValidateRegisterDto(input);
 
@@ -56,6 +75,11 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpGet("msgs")]
         public async Task<ActionResult<List<Message>>> GetPublicMessages([FromQuery] int? latest, [FromQuery] int? no)
         {
+            var headers = Request.Headers["Authorization"];
+            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
+            {
+                throw new UnauthorizedException("Unauthorized request");
+            }
             _logger.LogInformation("Get messages in the simulator");
             await _simulatorService.UpdateLatest(latest);
 
@@ -71,6 +95,11 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpGet("msgs/{username}")]
         public async Task<ActionResult<List<Message>>> GetPersonalMessages([FromRoute] string username, [FromQuery] int? latest, [FromQuery] int? no)
         {
+            var headers = Request.Headers["Authorization"];
+            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
+            {
+                throw new UnauthorizedException("Unauthorized request");
+            }
             _logger.LogInformation("Get personal messages in the simulator");
             await _simulatorService.UpdateLatest(latest);
 
@@ -95,6 +124,11 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpPost("msgs/{username}")]
         public async Task<ActionResult> AddTwit([FromBody] AddMessageDto input, [FromRoute] string username, [FromQuery] int? latest)
         {
+            var headers = Request.Headers["Authorization"];
+            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
+            {
+                throw new UnauthorizedException("Unauthorized request");
+            }
             _logger.LogInformation("Inserting a new twit.");
             await _simulatorService.UpdateLatest(latest);
 
@@ -113,6 +147,11 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpGet("fllws/{username}")]
         public async Task<ActionResult<List<FollowedUserDto>>> GetFollowedUsers([FromRoute] string username, [FromQuery] int? no, [FromQuery] int? latest)
         {
+            var headers = Request.Headers["Authorization"];
+            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
+            {
+                throw new UnauthorizedException("Unauthorized request");
+            }
             _logger.LogInformation($"Follow endpoint was called with username: {username}");
             await _simulatorService.UpdateLatest(latest);
 
@@ -135,6 +174,11 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpPost("fllws/{username}")]
         public async Task<ActionResult> FollowOrUnfollowUser([FromBody] FollowerDtoSimulation input, [FromRoute] string username, int? latest)
         {
+            var headers = Request.Headers["Authorization"];
+            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
+            {
+                throw new UnauthorizedException("Unauthorized request");
+            }
             _logger.LogInformation($"Follow endpoint was called with username: {username}");
             await _simulatorService.UpdateLatest(latest);
 

@@ -25,7 +25,13 @@ namespace Minitwit_BE.Api.Middleware
 
                 await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
             }
-            catch(UserNotFoundException ex)
+            catch (UnauthorizedException ex)
+            {
+                _logger.LogError($"UNAUTHORIZED: {ex.Message}. + ERROR CODE:{403}", ex);
+
+                await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.Forbidden);
+            }
+            catch (UserNotFoundException ex)
             {
                 _logger.LogError($"Something went wrong: {ex.Message}. + ERROR CODE:{404}", ex);
 

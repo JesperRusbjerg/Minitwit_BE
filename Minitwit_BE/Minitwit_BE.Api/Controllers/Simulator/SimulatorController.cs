@@ -38,11 +38,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpGet("latest")]
         public async Task<ActionResult<LatestResponse>> Latest()
         {
-            var headers = Request.Headers["Authorization"];
-            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
-            {
-                throw new UnauthorizedException("Unauthorized request");
-            }
+         
 
             int latest = await _simulatorService.GetLatest();
 
@@ -52,11 +48,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody] RegisterDto input, [FromQuery] int? latest)
         {
-            var headers = Request.Headers["Authorization"];
-            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
-            {
-                throw new UnauthorizedException("Unauthorized request");
-            }
+          
             await _simulatorService.UpdateLatest(latest);
             ValidateRegisterDto(input);
 

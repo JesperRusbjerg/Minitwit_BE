@@ -47,6 +47,8 @@ jobs:
       ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} \
       "docker-compose down && \
       docker-compose pull && \
-      docker-compose up -d " 
+      docker-compose rm -f && \
+      docker-compose up -d && \
+      exit " 
 
 

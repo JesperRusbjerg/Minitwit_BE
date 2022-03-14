@@ -50,11 +50,6 @@ namespace Minitwit_BE.DomainService
         public async Task<IEnumerable<Message>> GetPersonalTwits(int id, int? numberOfRows)
         {
 
-            var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
-
-            if (user == null)
-                throw new UserNotFoundException("No user of that username exists");
-
             var number = numberOfRows ?? 100;
             
             var personalTwits = (await _persistenceService.GetMessages(msg => msg.AuthorId.Equals(id) && msg.Flagged != true)).Take(number);

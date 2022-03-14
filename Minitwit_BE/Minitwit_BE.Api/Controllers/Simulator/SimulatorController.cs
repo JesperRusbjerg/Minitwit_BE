@@ -38,22 +38,21 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpGet("latest")]
         public async Task<ActionResult<LatestResponse>> Latest()
         {
-         
-
             int latest = await _simulatorService.GetLatest();
-
             return new LatestResponse { Latest = latest };
         }
 
         [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody] RegisterDto input, [FromQuery] int? latest)
         {
-          
             await _simulatorService.UpdateLatest(latest);
+            
+            //400 if not valid
             ValidateRegisterDto(input);
 
             _logger.LogInformation("Register new user in the simulator");
 
+            //404 if user already exists
             await _userService.RegisterUser(new User
             {
                 UserName = input.UserName,
@@ -67,11 +66,8 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpGet("msgs")]
         public async Task<ActionResult<List<Message>>> GetPublicMessages([FromQuery] int? latest, [FromQuery] int? no)
         {
-            var headers = Request.Headers["Authorization"];
-            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
-            {
-                throw new UnauthorizedException("Unauthorized request");
-            }
+            HeaderChecker(Request);
+
             _logger.LogInformation("Get messages in the simulator");
             await _simulatorService.UpdateLatest(latest);
 
@@ -87,14 +83,12 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpGet("msgs/{username}")]
         public async Task<ActionResult<List<Message>>> GetPersonalMessages([FromRoute] string username, [FromQuery] int? latest, [FromQuery] int? no)
         {
-            var headers = Request.Headers["Authorization"];
-            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
-            {
-                throw new UnauthorizedException("Unauthorized request");
-            }
+            HeaderChecker(Request);
+
             _logger.LogInformation("Get personal messages in the simulator");
             await _simulatorService.UpdateLatest(latest);
 
+            //404 if user dosent exist
             var msgs = await _messageService.GetPersonalTwits(username, no);
 
              var messageDtos = msgs.Select(m => new GetMessageDto
@@ -116,12 +110,9 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpPost("msgs/{username}")]
         public async Task<ActionResult> AddTwit([FromBody] AddMessageDto input, [FromRoute] string username, [FromQuery] int? latest)
         {
-            var headers = Request.Headers["Authorization"];
-            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
-            {
-                throw new UnauthorizedException("Unauthorized request");
-            }
+            HeaderChecker(Request);
 
+            //400 if wrong input
             ValidateAddMsgDto(input);
 
             _logger.LogInformation("Inserting a new twit.");
@@ -142,14 +133,12 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpGet("fllws/{username}")]
         public async Task<ActionResult<List<FollowedUserDto>>> GetFollowedUsers([FromRoute] string username, [FromQuery] int? no, [FromQuery] int? latest)
         {
-            var headers = Request.Headers["Authorization"];
-            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
-            {
-                throw new UnauthorizedException("Unauthorized request");
-            }
+            HeaderChecker(Request);
+
             _logger.LogInformation($"Follow endpoint was called with username: {username}");
             await _simulatorService.UpdateLatest(latest);
 
+            //404 if user dosent exist
             var followedUsers = await _followerService.GetFollowedUsers(username, no);
 
             var followedUserDtoTask = MapFollowersToFollowedUserDto(followedUsers.ToList());
@@ -169,12 +158,9 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpPost("fllws/{username}")]
         public async Task<ActionResult> FollowOrUnfollowUser([FromBody] FollowerDtoSimulation input, [FromRoute] string username, int? latest)
         {
-            var headers = Request.Headers["Authorization"];
-            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
-            {
-                throw new UnauthorizedException("Unauthorized request");
-            }
+            HeaderChecker(Request);
 
+            //400 if input isnt valid
             ValidatefllwDto(input);
 
             _logger.LogInformation($"Follow endpoint was called with username: {username}");
@@ -182,16 +168,28 @@ namespace Minitwit_BE.Api.Controllers.Simulator
 
             if (input.Follow != null)
             {
+                //throws 404 if either user dosent exist
                 await _followerService.Follow(username, input.Follow);
                 return NoContent();
             }
             else if (input.Unfollow != null)
             {
+                //throws 404 if either user dosent exist
                 await _followerService.UnFollow(username, input.Unfollow);
                 return NoContent();
             }
 
             throw new ArgumentException("Bad request");
+        }
+
+
+        private void HeaderChecker(HttpRequest request)
+        {
+            var headers = Request.Headers["Authorization"];
+            if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
+            {
+                throw new UnauthorizedException("Unauthorized request");
+            }
         }
 
         #region PrivateMethods

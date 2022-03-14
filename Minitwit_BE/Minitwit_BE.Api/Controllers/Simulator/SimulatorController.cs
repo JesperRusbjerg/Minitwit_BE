@@ -121,6 +121,9 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             {
                 throw new UnauthorizedException("Unauthorized request");
             }
+
+            ValidateAddMsgDto(input);
+
             _logger.LogInformation("Inserting a new twit.");
             await _simulatorService.UpdateLatest(latest);
 
@@ -128,7 +131,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             {
                 Flagged = false,
                 PublishDate = DateTime.Now,
-                Text = input.Text
+                Text = input.Content
             };
 
             await _messageService.AddTwit(msg, username);
@@ -171,19 +174,24 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             {
                 throw new UnauthorizedException("Unauthorized request");
             }
+
+            ValidatefllwDto(input);
+
             _logger.LogInformation($"Follow endpoint was called with username: {username}");
             await _simulatorService.UpdateLatest(latest);
 
             if (input.Follow != null)
             {
                 await _followerService.Follow(username, input.Follow);
+                return NoContent();
             }
             else if (input.Unfollow != null)
             {
                 await _followerService.UnFollow(username, input.Unfollow);
+                return NoContent();
             }
 
-            return NoContent();
+            throw new ArgumentException("Bad request");
         }
 
         #region PrivateMethods
@@ -197,6 +205,18 @@ namespace Minitwit_BE.Api.Controllers.Simulator
 
             if (string.IsNullOrWhiteSpace(obj.Password))
                 throw new ArgumentException("You have to enter a password");
+        }
+
+        private void ValidateAddMsgDto(AddMessageDto obj)
+        {
+            if (string.IsNullOrWhiteSpace(obj.Content))
+                throw new ArgumentException("You must add a message");
+
+        }
+        private void ValidatefllwDto(FollowerDtoSimulation obj)
+        {
+            if (string.IsNullOrWhiteSpace(obj.Unfollow) && string.IsNullOrWhiteSpace(obj.Follow))
+                throw new ArgumentException("You must specify unfollow or follow");
         }
 
         private List<Task<GetMessageDto>> MapMessagesToGetMessageDtos(List<Message> messages)

@@ -4,6 +4,12 @@ branches:
   only:
     - main
 
+addons:
+  sonarcloud:
+    organization: "jesperrusbjerg"
+    token:
+      secure: "EHb1Z/0TP7we/AAK4HlaNQ6WxSqM2jcM91qfyRzc6cufNJuf3gO6zmYqSMP0GhxqtT7EZrhgUGrZKxk8bG+GhyQQOnMFB8Qh2zSsuHKuYaRQxzYEk2Kx/dS2S1s3xZ9xvrLV4oIVIgfm8adOPmVKogvY8Ht9j67Cj119vsVM9c4CaXredyjEMgtOuYhRnX2iwsEX1STZL5gcWVzhcPKSGscudXCYJ1iyDn1xLxhnkrWgKI6dAMsqNDa0v2F3BffQ13S0ZxaIllXmfzu8ItugL8GcdtWR/H0CMVwzAXkiYvMbeMQuGqBo4OVEp5xg+y1GlzCFwqSnNgJBYfMzDUTgUajUNI2RW7G8msmAol48nEdEEnOez038yHLaaGZBqxTLEvW8xn8SGLpd3H1/5uU3KHzCtJcRtkhRq5F1dEuw1Ux0rTp5Dn5siPFZ9tt2aYXOC1SA+1ECeaijMGDisk8znELLkQewsid37GtFBAqts65NhYYtBpyu9LflU2qMFmPrhEnWW3f88TCSE1pl9Rq/p6OGy7JG+qSXXldPxwY602QXUGRFC+CUYjP7f5fJi2GBumxmbcZ1/DrZmGormLKJ3F1Qlq8/G2RIGfPE7bZ0mn+z5ht8XPuVvlydgizFMTswH8z+eP43yIfEdiZKV4p9O8aKUoMxGw9Y23SVretiYMA="
+
 
 before_install:
   # Decrypt the git_deploy_key.enc key into /tmp/git_deploy_key

@@ -12,7 +12,8 @@ before_script:
 
 script:
 - dotnet build ".\Minitwit_BE\Minitwit_BE.sln" -c Release 
-#- dotnet test ".\CalculatorCLI\CalculatorCLI.sln" -c Release -v n
+- sonar-scanner
+#- dotnet test ".\Minitwit_BE\Minitwit_BE.sln" -c Release -v n
 
 branches:
   only:

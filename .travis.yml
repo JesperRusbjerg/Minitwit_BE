@@ -1,60 +1,51 @@
 language: minimal
 
-branches:
-  only:
-    - main
-
 addons:
   sonarcloud:
     organization: "jesperrusbjerg"
     token:
-      secure: "EHb1Z/0TP7we/AAK4HlaNQ6WxSqM2jcM91qfyRzc6cufNJuf3gO6zmYqSMP0GhxqtT7EZrhgUGrZKxk8bG+GhyQQOnMFB8Qh2zSsuHKuYaRQxzYEk2Kx/dS2S1s3xZ9xvrLV4oIVIgfm8adOPmVKogvY8Ht9j67Cj119vsVM9c4CaXredyjEMgtOuYhRnX2iwsEX1STZL5gcWVzhcPKSGscudXCYJ1iyDn1xLxhnkrWgKI6dAMsqNDa0v2F3BffQ13S0ZxaIllXmfzu8ItugL8GcdtWR/H0CMVwzAXkiYvMbeMQuGqBo4OVEp5xg+y1GlzCFwqSnNgJBYfMzDUTgUajUNI2RW7G8msmAol48nEdEEnOez038yHLaaGZBqxTLEvW8xn8SGLpd3H1/5uU3KHzCtJcRtkhRq5F1dEuw1Ux0rTp5Dn5siPFZ9tt2aYXOC1SA+1ECeaijMGDisk8znELLkQewsid37GtFBAqts65NhYYtBpyu9LflU2qMFmPrhEnWW3f88TCSE1pl9Rq/p6OGy7JG+qSXXldPxwY602QXUGRFC+CUYjP7f5fJi2GBumxmbcZ1/DrZmGormLKJ3F1Qlq8/G2RIGfPE7bZ0mn+z5ht8XPuVvlydgizFMTswH8z+eP43yIfEdiZKV4p9O8aKUoMxGw9Y23SVretiYMA="
+      secure: iBtLvXuy6mCpm4I4O10mWa9FTupCUQY3+Xt97ojkwb/nrpc9jwSCuNnHuwHHonnilJXkB5TGs8ubOo+XUlY6JCAM6gSwz8AQDazG5gioSxN79yeWLaUV5aCs2ybhDn65fFiF8ytWPp9M1uelNP+MOvwgkcUHmh0hjS0MWzItO0vH6fRAqhAHFTgQX60E5qTg1MV8zLyMEnVrow6LOW1On68/eHYJl++APhm4Z5Et9Wa8GQDd6VjxbonBxQongrLQmsTuFUH0RAdIruEu5qxJjpkk/Yk10/WbJqf0Rk2y9Qd196rCyb2drtKwcwCVwxaHSDIe4TQ2QJRPnxpZoKQRJSy2rksqvSUN8I2ZO7akC6TyhFL46MQot2dvtoVszCVL1TuKXhIT7pH6EmtfcSSWPV2+JZKNjqp6+5t8DSeuInsLI5Py/BVU1wbUPRldhKdAZzQ4J8XgwPSH19w3vwERUpKjN2khXo3GbR/hdWE9AprK10iEO5+8WBlrMAo0R5F9mhuMYH3aIk57cjWcabAisWhh15UiQhMJgoYSObLtEvOR6dGWjJ0QzzbmObc74XT82oW9DzPzL4mMsMXtYKRCWqoWary5JsG8qPYOFARNf4Ma01WZuWH6MVV7bKFpS9o/ZhfrvC6C6WAX0Iq+lIz7752WAzwBuQW2U3cepXqLn+c= # encrypted value of your token
 
+script:
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - sonar-scanner
+
+branches:
+  only:
+  - main
 
 before_install:
-  # Decrypt the git_deploy_key.enc key into /tmp/git_deploy_key
-  - openssl aes-256-cbc -K $encrypted_db2095f63ba3_key -iv $encrypted_db2095f63ba3_iv -in deploy_rsa.enc -out /tmp/git_deploy_key -d
-  # Make sure only the current user can read the private key
-  - chmod 600 /tmp/git_deploy_key
-  # Create a script to return the passphrase environment variable to ssh-add
-  - echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
-  # Start the authentication agent
-  - eval "$(ssh-agent -s)"
-  # Add the key to the authentication agent
-  - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
+- openssl aes-256-cbc -K $encrypted_db2095f63ba3_key -iv $encrypted_db2095f63ba3_iv
+  -in deploy_rsa.enc -out /tmp/git_deploy_key -d
+- chmod 600 /tmp/git_deploy_key
+- echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
+- eval "$(ssh-agent -s)"
+- DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
 
 install:
-  - docker --version  # document the version travis is using
+- docker --version
 
 stages:
-  - docker_build
-  - deploy
-
+- docker_build
+- deploy
 
 jobs:
   include:
   - stage: docker_build
-    name: "build and push docker"
+    name: build and push docker
     if: branch = "main"
     script:
-      - echo "LOGIN"
-      - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
-      - echo "BUILD"
-      - docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile Minitwit_BE/.
-      - echo "PUSH"
-      - docker push jrusbjerg/twitbackend:latest
-        
+    - echo "LOGIN"
+    - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
+    - echo "BUILD"
+    - docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile
+      Minitwit_BE/.
+    - echo "PUSH"
+    - docker push jrusbjerg/twitbackend:latest
   - stage: deploy
-    name: "deploy new version"
+    name: deploy new version
     if: branch = "main"
     install: skip
-    # -o flag to get around "add ip to known hosts prompt"
-    script: |
-      ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} \
-      "docker-compose down && \
-      docker-compose pull && \
-      docker-compose rm -f && \
-      docker-compose up -d && \
-      exit " 
-
-
+    script: "ssh -o \"StrictHostKeyChecking no\" ${MT_USER}@${MT_SERVER} \\\n\"docker-compose
+      down && \\\ndocker-compose pull && \\\ndocker-compose rm -f && \\\ndocker-compose
+      up -d && \\\nexit \" \n"

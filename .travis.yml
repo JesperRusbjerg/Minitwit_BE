@@ -3,6 +3,7 @@ mono: none
 dotnet: 6.0
 
 addons:
+  #software maintainability sonarcloud
   sonarcloud:
     organization: "jesperrusbjerg"
     token:
@@ -12,12 +13,12 @@ script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
   - sonar-scanner
      
-before_script:
-- dotnet restore ".\Minitwit_BE\Minitwit_BE.sln"
+#before_script:
+#- dotnet restore ".\Minitwit_BE\Minitwit_BE.sln"
 
-script:
-- dotnet build ".\Minitwit_BE\Minitwit_BE.sln" -c Release 
-- sonar-scanner
+#script:
+#- dotnet build ".\Minitwit_BE\Minitwit_BE.sln" -c Release 
+#- sonar-scanner
 #- dotnet test ".\Minitwit_BE\Minitwit_BE.sln" -c Release -v n
 
 branches:
@@ -36,11 +37,19 @@ install:
 - docker --version
 
 stages:
+- build_and_sonarscan
 - docker_build
 - deploy
 
 jobs:
   include:
+  - stage: build_and_sonarscan
+    name: build project
+    if: branch = "main"
+    script:
+    - dotnet restore ".\Minitwit_BE\Minitwit_BE.sln"
+    - dotnet build ".\Minitwit_BE\Minitwit_BE.sln" -c Release 
+    - sonar-scanner 
   - stage: docker_build
     name: build and push docker
     if: branch = "main"
@@ -53,10 +62,15 @@ jobs:
     - echo "PUSH"
     - docker push jrusbjerg/twitbackend:latest
   - stage: deploy
-    name: deploy new version
+    name: "deploy new version"
     if: branch = "main"
     install: skip
-    script: "ssh -o \"StrictHostKeyChecking no\" ${MT_USER}@${MT_SERVER} \\\n\"docker-compose
-      down && \\\ndocker-compose pull && \\\ndocker-compose rm -f && \\\ndocker-compose
-      up -d && \\\nexit \" \n"
+    # -o flag to get around "add ip to known hosts prompt"
+    script: |
+      ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} \
+      "docker-compose down && \
+      docker-compose pull && \
+      docker-compose rm -f && \
+      docker-compose up -d && \
+      exit " 
 

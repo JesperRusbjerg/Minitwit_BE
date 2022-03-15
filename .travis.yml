@@ -6,8 +6,8 @@ addons:
   sonarcloud:
     organization: "jesperrusbjerg"
     token:
-      secure: iBtLvXuy6mCpm4I4O10mWa9FTupCUQY3+Xt97ojkwb/nrpc9jwSCuNnHuwHHonnilJXkB5TGs8ubOo+XUlY6JCAM6gSwz8AQDazG5gioSxN79yeWLaUV5aCs2ybhDn65fFiF8ytWPp9M1uelNP+MOvwgkcUHmh0hjS0MWzItO0vH6fRAqhAHFTgQX60E5qTg1MV8zLyMEnVrow6LOW1On68/eHYJl++APhm4Z5Et9Wa8GQDd6VjxbonBxQongrLQmsTuFUH0RAdIruEu5qxJjpkk/Yk10/WbJqf0Rk2y9Qd196rCyb2drtKwcwCVwxaHSDIe4TQ2QJRPnxpZoKQRJSy2rksqvSUN8I2ZO7akC6TyhFL46MQot2dvtoVszCVL1TuKXhIT7pH6EmtfcSSWPV2+JZKNjqp6+5t8DSeuInsLI5Py/BVU1wbUPRldhKdAZzQ4J8XgwPSH19w3vwERUpKjN2khXo3GbR/hdWE9AprK10iEO5+8WBlrMAo0R5F9mhuMYH3aIk57cjWcabAisWhh15UiQhMJgoYSObLtEvOR6dGWjJ0QzzbmObc74XT82oW9DzPzL4mMsMXtYKRCWqoWary5JsG8qPYOFARNf4Ma01WZuWH6MVV7bKFpS9o/ZhfrvC6C6WAX0Iq+lIz7752WAzwBuQW2U3cepXqLn+c= # encrypted value of your token
-
+     secure: $SONAR_TOKEN
+     
 before_script:
 - dotnet restore ".\Minitwit_BE\Minitwit_BE.sln"
 

@@ -7,6 +7,7 @@ addons:
     organization: "jesperrusbjerg"
     token:
      secure: $SONAR_TOKEN
+     
 before_script:
 - dotnet restore ".\Minitwit_BE\Minitwit_BE.sln"
 

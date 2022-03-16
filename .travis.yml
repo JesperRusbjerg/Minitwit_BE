@@ -1,11 +1,10 @@
 language: csharp
 mono: none
 dotnet: 6.0
-solution: .\Minitwit_BE\Minitwit_BE.sln
 
-#branches:
-#  only:
-#    - main
+branches:
+  only:
+    - main
 
 
 before_install:
@@ -32,11 +31,9 @@ jobs:
   include:
   - stage: run_tests
     name: "run unit tests"
-    #if: branch = "main"
+    if: branch = "main"
     script:
       - dotnet test ".\Minitwit_BE\Minitwit_BE.sln" -c Release
-      - dotnet restore
-      - dotnet test
   
   - stage: docker_build
     name: "build and push docker"

@@ -1,7 +1,7 @@
 language: csharp
 mono: none
 dotnet: 6.0
-solution: Minitwit_BE/Minitwit_BE.sln
+solution: ./Minitwit_BE/Minitwit_BE.sln
 
 #branches:
 #  only:

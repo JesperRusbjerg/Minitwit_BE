@@ -1,7 +1,7 @@
 language: csharp
 mono: none
 dotnet: 6.0
-solution: ./Minitwit_BE/Minitwit_BE.sln
+solution: ./Minitwit_BE/.
 
 #branches:
 #  only:
@@ -34,6 +34,9 @@ jobs:
     name: "run unit tests"
     #if: branch = "main"
     script:
+      - ls
+      - cd ./Minitwit_BE
+      - ls
       - dotnet restore
       - dotnet test
   

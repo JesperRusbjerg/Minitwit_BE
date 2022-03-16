@@ -1,14 +1,9 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Minitwit_BE.Test
 {
-    public class Tests
+    public class PersistenceServiceTest
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
         public void Test1()
         {

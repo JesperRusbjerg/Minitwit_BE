@@ -1,8 +1,11 @@
-language: minimal
+language: csharp
+mono: none
+dotnet: 6.0
+solution: Minitwit_BE/Minitwit_BE.sln
 
-branches:
-  only:
-    - main
+#branches:
+#  only:
+#    - main
 
 
 before_install:
@@ -21,12 +24,19 @@ install:
   - docker --version  # document the version travis is using
 
 stages:
+  - run_tests
   - docker_build
   - deploy
 
-
 jobs:
   include:
+  - stage: run_tests
+    name: "run unit tests"
+    #if: branch = "main"
+    script:
+      - dotnet restore
+      - dotnet test
+  
   - stage: docker_build
     name: "build and push docker"
     if: branch = "main"

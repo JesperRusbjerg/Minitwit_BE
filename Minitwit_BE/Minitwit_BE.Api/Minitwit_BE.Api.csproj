@@ -9,6 +9,7 @@
     <UserSecretsId>21e0b195-5044-4b98-a3a5-0b3ad81405da</UserSecretsId>
     <StartupObject>Minitwit_BE.Api.Program</StartupObject>
 	<GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
+	<LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,7 +26,6 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" /> 
     <PackageReference Include="prometheus-net" Version="6.0.0" />
     <PackageReference Include="prometheus-net.AspNetCore" Version="6.0.0" />
-    <PackageReference Include="prometheus-net.NetFramework.AspNet" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

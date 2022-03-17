@@ -26,25 +26,28 @@ before_install:
 install:
 - docker --version
 
+mkdir -p ~/.docker/cli-plugins && \
+curl https://github.com/docker/scan-cli-plugin/releases/latest/download/docker-scan_linux_amd64 -L -s -S -o ~/.docker/cli-plugins/docker-scan &&\
+chmod +x ~/.docker/cli-plugins/docker-scan
+#- build_and_sonarscan
 stages:
-- build_and_sonarscan
 - docker_build
 - deploy
 
 jobs:
   include:
-  - stage: build_and_sonarscan
-    name: build project
-    if: branch = "main"
-    script:
-
-    - dotnet restore ".\Minitwit_BE\Minitwit_BE.sln"
-    - dotnet build ".\Minitwit_BE\Minitwit_BE.sln" -c Release 
-    - sonar-scanner 
+  #- stage: build_and_sonarscan
+   # name: build project
+    #if: branch = "main"
+    #script:
+    #- dotnet restore ".\Minitwit_BE\Minitwit_BE.sln"
+    #- dotnet build ".\Minitwit_BE\Minitwit_BE.sln" -c Release 
+    #- sonar-scanner 
   - stage: docker_build
     name: build and push docker
     if: branch = "main"
     script:
+    - mkdir -p ~/.docker/cli-plugins && curl https://github.com/docker/scan-cli-plugin/releases/latest/download/docker-scan_linux_amd64 -L -s -S -o ~/.docker/cli-plugins/docker-scan && chmod +x ~/.docker/cli-plugins/docker-scan
     - echo "LOGIN"
     - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
     - docker pull snyklabs/tomas-goof

@@ -26,10 +26,6 @@ before_install:
 install:
 - docker --version
 
-mkdir -p ~/.docker/cli-plugins && \
-curl https://github.com/docker/scan-cli-plugin/releases/latest/download/docker-scan_linux_amd64 -L -s -S -o ~/.docker/cli-plugins/docker-scan &&\
-chmod +x ~/.docker/cli-plugins/docker-scan
-
 stages:
 - build_and_sonarscan
 - docker_build
@@ -48,9 +44,6 @@ jobs:
     name: build and push docker
     if: branch = "main"
     script:
-    - mkdir -p ~/.docker/cli-plugins
-    - curl https://github.com/docker/scan-cli-plugin/releases/latest/download/docker-scan_linux_amd64 -L -s -S -o ~/.docker/cli-plugins/docker-scan
-    - chmod +x ~/.docker/cli-plugins/docker-scan
     - echo "LOGIN"
     - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
     - docker pull snyklabs/tomas-goof

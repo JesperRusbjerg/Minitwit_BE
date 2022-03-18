@@ -4,6 +4,7 @@ using Minitwit_BE.Domain;
 using Minitwit_BE.Domain.Exceptions;
 using Minitwit_BE.DomainService.Interfaces;
 using System.Net.Http.Headers;
+using Prometheus;
 
 namespace Minitwit_BE.Api.Controllers.Simulator
 {
@@ -11,6 +12,8 @@ namespace Minitwit_BE.Api.Controllers.Simulator
     [Route("simulator")]
     public class SimulatorController : ControllerBase
     {
+        private readonly Counter latestCounter;
+
         private readonly ILogger<SimulatorController> _logger;
         private readonly IMessageDomainService _messageService;
         private readonly IFollowerDomainService _followerService;
@@ -28,6 +31,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             _followerService = followerService;
             _userService = userService;
             _simulatorService = simulatorService;
+            latestCounter = Metrics.CreateCounter("LatestAMount", "counts stuff");
         }
 
         private bool checkAuthorization(IEnumerable<string> headers)
@@ -38,6 +42,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         [HttpGet("latest")]
         public async Task<ActionResult<LatestResponse>> Latest()
         {
+            latestCounter.Inc();
             int latest = await _simulatorService.GetLatest();
             return new LatestResponse { Latest = latest };
         }

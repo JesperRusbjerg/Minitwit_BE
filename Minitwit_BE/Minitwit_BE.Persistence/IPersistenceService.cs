@@ -15,7 +15,7 @@ namespace Minitwit_BE.Persistence
 
         Task<IEnumerable<User>> GetUsers(Func<User, bool> func);
         Task AddUser(User user);
-        Task DeleteUser(Message user);
+        Task DeleteUser(User user);
 
         Task UpdateLatest(int? latest);
         Task<int> GetLatest();

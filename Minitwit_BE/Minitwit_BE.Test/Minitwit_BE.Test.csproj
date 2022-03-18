@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Minitwit_BE.Api\Minitwit_BE.Api.csproj" />
     <ProjectReference Include="..\Minitwit_BE.DomainService\Minitwit_BE.DomainService.csproj" />
     <ProjectReference Include="..\Minitwit_BE.Domain\Minitwit_BE.Domain.csproj" />
     <ProjectReference Include="..\Minitwit_BE.Persistence\Minitwit_BE.Persistence.csproj" />

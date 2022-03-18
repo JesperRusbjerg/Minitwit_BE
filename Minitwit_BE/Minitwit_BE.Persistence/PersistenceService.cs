@@ -95,7 +95,7 @@ namespace Minitwit_BE.Persistence
            });
         }
 
-        public async Task DeleteUser(Message user)
+        public async Task DeleteUser(User user)
         {
             await Task.Run(() =>
             {

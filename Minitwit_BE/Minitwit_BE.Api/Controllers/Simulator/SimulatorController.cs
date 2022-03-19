@@ -17,11 +17,12 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         private readonly IUserDomainService _userService;
         private readonly ISimulationService _simulatorService;
 
-        public SimulatorController(ILogger<SimulatorController> logger,
-                                   IMessageDomainService messageService,
-                                   IFollowerDomainService followerService,
-                                   IUserDomainService userService,
-                                   ISimulationService simulatorService)
+        public SimulatorController(
+            ILogger<SimulatorController> logger,
+            IMessageDomainService messageService,
+            IFollowerDomainService followerService,
+            IUserDomainService userService,
+            ISimulationService simulatorService)
         {
             _logger = logger;
             _messageService = messageService;

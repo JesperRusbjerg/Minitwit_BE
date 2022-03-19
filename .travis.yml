@@ -2,9 +2,9 @@ language: csharp
 mono: none
 dotnet: 6.0
 
-branches:
-  only:
-    - main
+# branches:
+#   only:
+#     - main
 
 
 before_install:
@@ -58,5 +58,11 @@ jobs:
       docker-compose rm -f && \
       docker-compose up -d && \
       exit " 
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_API_KEY
+  file: Minitwit_BE/*
+  skip_cleanup: true
 
 

@@ -63,6 +63,7 @@ deploy:
   provider: releases
   api_key: $GITHUB_API_KEY
   file: Minitwit_BE/*
+  name: Build $(date +'%d.%m.%Y %R')
   skip_cleanup: true
   on:
     all_branches: true

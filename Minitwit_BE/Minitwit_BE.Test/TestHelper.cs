@@ -47,6 +47,67 @@ namespace Minitwit_BE.Test
             };
         }
 
+        internal static IEnumerable<Message> GetMessagesWithUserId(int id)
+        {
+            return new List<Message>
+            {
+                new Message
+                {
+                    AuthorId = id,
+                    Flagged = false,
+                    MessageId = 1,
+                    PublishDate = DateTime.Now,
+                    Text = "text"
+                },
+                new Message
+                {
+                    AuthorId = id,
+                    Flagged = false,
+                    MessageId = 2,
+                    PublishDate = DateTime.Now,
+                    Text = "text"
+                },
+                new Message
+                {
+                    AuthorId = id,
+                    Flagged = false,
+                    MessageId = 3,
+                    PublishDate = DateTime.Now,
+                    Text = "text"
+                },
+                new Message
+                {
+                    AuthorId = id,
+                    Flagged = false,
+                    MessageId = 4,
+                    PublishDate = DateTime.Now,
+                    Text = "text"
+                }
+            };
+        }
+
+        internal static IEnumerable<Follower> GetFollowersWithWhoUserId(int id)
+        {
+            return new List<Follower>
+            {
+                new Follower
+                {
+                    WhoId = id,
+                    WhomId = id+1,
+                },
+                new Follower
+                {
+                    WhoId = id,
+                    WhomId = id+2,
+                },
+                new Follower
+                {
+                    WhoId = id,
+                    WhomId = id+3,
+                }
+            };
+        }
+
         internal static ControllerContext CreateHttpContext()
         {
             var httpcontext = new ControllerContext

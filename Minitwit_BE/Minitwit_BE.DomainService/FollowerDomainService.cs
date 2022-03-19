@@ -124,7 +124,8 @@ namespace Minitwit_BE.DomainService
             if (userWhoTask.Result.FirstOrDefault() == null )
             {
                 throw new UserNotFoundException("Users do not exist");
-            }else if(userWhomTask.Result.FirstOrDefault() == null)
+            }
+            else if(userWhomTask.Result.FirstOrDefault() == null)
             {
                 throw new UserNotFoundException("User you are trying to unfollow does not exist");
             }

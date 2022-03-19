@@ -191,7 +191,7 @@ namespace Minitwit_BE.Test
             var result = await service.GetUsers(func);
 
             //Assert
-            result.Should().BeEquivalentTo(_users);
+            result.Should().BeEquivalentTo(_users, opt => opt.Excluding(u => u.UserId));
         }
     }
 }

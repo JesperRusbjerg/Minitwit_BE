@@ -50,10 +50,7 @@ jobs:
     - echo "BUILD"
     - docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile
       Minitwit_BE/.
-    - docker pull jrusbjerg/twitbackend
-    - docker scan --login --token adde4aa8-3a7a-44e0-8ab1-09b3a1237083
-    - docker scan jrusbjerg/twitbackend -y
-    - echo "PUSH"
+    - echo "PUSHING DOCKER IMAGE TO BE TESTED"
     - docker push jrusbjerg/twitbackend:latest
   - stage: docker_scan_container
     name: scan container security

@@ -54,7 +54,7 @@ jobs:
     #- docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile
     #  Minitwit_BE/.
     - docker pull jrusbjerg/twitbackend
-    - echo yes | docker scan jrusbjerg/twitbackend
+    - yes | docker scan jrusbjerg/twitbackend
     - echo "PUSH"
     - docker push jrusbjerg/twitbackend:latest
   - stage: deploy

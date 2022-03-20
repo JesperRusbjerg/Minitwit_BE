@@ -73,7 +73,7 @@ jobs:
       exit " 
   - stage: deploy
     name: "deploy new version"
-    if: branch = "deploy"
+    if: branch = "release"
     install: skip
     script: |
       ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} \

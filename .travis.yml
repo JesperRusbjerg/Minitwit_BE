@@ -51,10 +51,11 @@ jobs:
     - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
     - docker pull snyklabs/tomas-goof
     - echo "BUILD"
-    - docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile
-      Minitwit_BE/.
+    #- docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile
+    #  Minitwit_BE/.
+    - docker pull jrusbjerg/twitbackend
     - docker scan jrusbjerg/twitbackend
-    - y
+    - echo "y"
     - echo "PUSH"
     - docker push jrusbjerg/twitbackend:latest
   - stage: deploy

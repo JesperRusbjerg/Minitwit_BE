@@ -55,7 +55,9 @@ jobs:
     #  Minitwit_BE/.
     - docker pull jrusbjerg/twitbackend
     - docker scan --login --token adde4aa8-3a7a-44e0-8ab1-09b3a1237083
-    - yes | docker scan jrusbjerg/twitbackend
+    - docker scan jrusbjerg/twitbackend -y
+    #- yes | docker scan jrusbjerg/twitbackend
+    #- echo "y"
     - echo "PUSH"
     - docker push jrusbjerg/twitbackend:latest
   - stage: deploy

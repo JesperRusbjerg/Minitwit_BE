@@ -4,6 +4,7 @@ using Minitwit_BE.DomainService;
 using Minitwit_BE.DomainService.Interfaces;
 using Minitwit_BE.Persistence;
 using Prometheus;
+using Prometheus.SystemMetrics;
 
 namespace Minitwit_BE.Api
 {
@@ -20,7 +21,7 @@ namespace Minitwit_BE.Api
             services.AddScoped<ISimulationService, SimulatorService>();
             services.AddScoped<IPersistenceService, PersistenceService>();
 
-            string connectionString = "Server=localhost;Database=WaystoneInn;Uid=root;Pwd=SuperSecretPassword;";
+            string connectionString = "Server=mariadb;Database=WaystoneInn;Uid=root;Pwd=SuperSecretPassword;";
             services.AddDbContext<TwitContext>(
                 options => options.UseMySql(
                     connectionString, ServerVersion.AutoDetect(connectionString)));
@@ -35,6 +36,8 @@ namespace Minitwit_BE.Api
                         .AllowAnyMethod();
                 });
             });
+            /* https://github.com/prometheus-net/prometheus-net#histogram */
+            services.AddSystemMetrics();
         }
 
         // to configure HTTP request pipeline.
@@ -55,10 +58,10 @@ namespace Minitwit_BE.Api
 
             // Prometheus setup start
             app.UseMetricServer();
+            app.UseHttpMetrics();
             // Middleware Definition
             app.Use((context, next) =>
             {
-                Console.WriteLine("dsadasdasdasasdas");
                 // Http Context
                 var counter = Metrics.CreateCounter(
                         "PathCounter", "Count request",

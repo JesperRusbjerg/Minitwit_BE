@@ -4,16 +4,24 @@ using Minitwit_BE.DomainService.Interfaces;
 using Minitwit_BE.Persistence;
 using System.Security.Cryptography;
 using System.Text;
+using Prometheus;
 
 namespace Minitwit_BE.DomainService
 {
     public class UserDomainService : IUserDomainService
     {
+        // Prometheus 
+        private readonly Counter _totalUsersCounter;
+        private readonly Gauge _newUserInProgress;
+
+
         private readonly IPersistenceService _persistenceService;
 
         public UserDomainService(IPersistenceService persistenceService)
         {
             _persistenceService = persistenceService;
+            _totalUsersCounter = Metrics.CreateCounter("TotalUsers", "The amount of total users");
+            _newUserInProgress = Metrics.CreateGauge("NewUserInProgress", "Show the hour if which new user register");
         }
 
         public async Task<User> GetUserById(int id)
@@ -43,20 +51,25 @@ namespace Minitwit_BE.DomainService
                 return user;
             }
         }
-        
+
         public async Task RegisterUser(User user)
         {
-            var existingUser = (await _persistenceService.GetUsers(
-                u => u.UserName.Equals(user.UserName) || u.Email.Equals(user.Email))).FirstOrDefault();
+            using (_newUserInProgress.TrackInProgress())
+            {
+                var existingUser = (await _persistenceService.GetUsers(
+                    u => u.UserName.Equals(user.UserName) || u.Email.Equals(user.Email))).FirstOrDefault();
 
-            if (existingUser != null)
-            {
-                throw new UserAlreadyExistsException("The username is already taken");
-            }
-            else
-            {
-                user.PwHash = GetHash(user.PwHash);
-                await _persistenceService.AddUser(user);
+                if (existingUser != null)
+                {
+                    throw new UserAlreadyExistsException("The username is already taken");
+                }
+                else
+                {
+                    user.PwHash = GetHash(user.PwHash);
+                    await _persistenceService.AddUser(user);
+                    _totalUsersCounter.Inc();
+                }
+
             }
         }
 
@@ -70,8 +83,8 @@ namespace Minitwit_BE.DomainService
             else
             {
                 throw new UnauthorizedAccessException("Email or password does not match!");
-            } 
-            
+            }
+
         }
 
         public string GetHash(string password)

@@ -43,11 +43,7 @@ jobs:
     - dotnet build ".\Minitwit_BE\Minitwit_BE.sln" -c Release 
     - echo "TESTING PROJECT"
     - dotnet test ".\Minitwit_BE\Minitwit_BE.sln"
-  - stage: static_analysis_and_maintainance
-    name: static analysis and maintainance
-    script:
     - sonar-scanner #maintainance sonar scanner
-    #TODO: Add 2 more
   - stage: docker_build
     name: build and push docker
     if: branch = "main"

@@ -36,7 +36,6 @@ namespace Minitwit_BE.Api
                         .AllowAnyMethod();
                 });
             });
-            /* https://github.com/prometheus-net/prometheus-net#histogram */
             services.AddSystemMetrics();
         }
 

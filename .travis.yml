@@ -27,20 +27,27 @@ install:
 - docker --version
 
 stages:
-- build_and_sonarscan
+- build_and_unittest
+- static_analysis_and_maintainance
 - docker_build
-- docker_scan_container
+- docker_scan_containers
 - deploy
 
 jobs:
   include:
-  - stage: build_and_sonarscan
+  - stage: build_and_unittest
     name: build project
-    if: branch = "main"
     script:
+    - echo "BUILDING PROJECT"
     - dotnet restore ".\Minitwit_BE\Minitwit_BE.sln"
     - dotnet build ".\Minitwit_BE\Minitwit_BE.sln" -c Release 
-    - sonar-scanner 
+    - echo "TESTING PROJECT"
+    - dotnet test ".\Minitwit_BE\Minitwit_BE.sln"
+  - stage: static_analysis_and_maintainance
+    name: static analysis and maintainance
+    script:
+    - sonar-scanner #maintainance sonar scanner
+    #TODO: Add 2 more
   - stage: docker_build
     name: build and push docker
     if: branch = "main"
@@ -52,7 +59,7 @@ jobs:
       Minitwit_BE/.
     - echo "PUSHING DOCKER IMAGE TO BE TESTED"
     - docker push jrusbjerg/twitbackend:latest
-  - stage: docker_scan_container
+  - stage: docker_scan_containers
     name: scan container security
     if: branch = "main"
     script: |

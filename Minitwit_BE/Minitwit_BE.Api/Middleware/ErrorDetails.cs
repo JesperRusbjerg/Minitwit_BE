@@ -8,7 +8,7 @@ namespace Minitwit_BE.Api.Middleware
         [JsonProperty("status")]
         public int StatusCode { get; set; }
         [JsonProperty("error_msg")]
-        public string Message { get; set; }
+        public string? Message { get; set; }
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this);

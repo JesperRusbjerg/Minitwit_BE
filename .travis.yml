@@ -47,6 +47,7 @@ jobs:
     script:
     - echo "BUILDING PROJECT"
     - dotnet restore ".\Minitwit_BE\Minitwit_BE.sln"
+    - echo "Running static analysers while building"
     - dotnet build ".\Minitwit_BE\Minitwit_BE.sln" -c Release 
     - echo "TESTING PROJECT"
     - dotnet test ".\Minitwit_BE\Minitwit_BE.sln"

@@ -41,7 +41,7 @@ namespace Minitwit_BE.Api.Controllers
 
             var msg = new Message                                       // Primary keys should be auto incremented when you add entity to the table and dont explicitely specify specify the ID
             { 
-                AuthorId = input.AuthorId,
+                AuthorId = (int)input.AuthorId,
                 Flagged = false,
                 PublishDate = DateTime.Now,
                 Text = input.Text

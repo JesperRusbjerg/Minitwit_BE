@@ -1,5 +1,8 @@
 
 var fs = require('fs');
+var request = require('request');
+var sleep = require('system-sleep');
+
 
 var id = 0
 var splitLines = []
@@ -64,9 +67,6 @@ for (var i = 0; i < valuesOnly.length; i++) {
         peopleArr.push(person)
 }
 
-var request = require('request');
-
-var sleep = require('system-sleep');
 
 
 async function postPersion(person){

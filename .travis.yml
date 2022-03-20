@@ -22,9 +22,9 @@ before_install:
 - echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
 - eval "$(ssh-agent -s)"
 - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
-- sudo apt update
-- curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
-- apt install -y nodejs
+#- sudo apt update
+#- curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
+#- apt install -y nodejs
 
 install:
 - docker --version

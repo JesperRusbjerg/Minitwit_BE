@@ -29,6 +29,7 @@ install:
 stages:
 - build_and_sonarscan
 - docker_build
+- docker_scan_container
 - deploy
 
 jobs:
@@ -44,27 +45,28 @@ jobs:
     name: build and push docker
     if: branch = "main"
     script:
-    - mkdir -p ~/.docker/cli-plugins
-    - curl https://github.com/docker/scan-cli-plugin/releases/latest/download/docker-scan_linux_amd64 -L -s -S -o ~/.docker/cli-plugins/docker-scan
-    - chmod +x ~/.docker/cli-plugins/docker-scan
-    - echo "LOGIN"
+    - echo "LOGIN TO DOCKERHUB"
     - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
-    - docker pull snyklabs/tomas-goof
     - echo "BUILD"
-    #- docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile
-    #  Minitwit_BE/.
+    - docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile
+      Minitwit_BE/.
     - docker pull jrusbjerg/twitbackend
     - docker scan --login --token adde4aa8-3a7a-44e0-8ab1-09b3a1237083
     - docker scan jrusbjerg/twitbackend -y
-    #- yes | docker scan jrusbjerg/twitbackend
-    #- echo "y"
     - echo "PUSH"
     - docker push jrusbjerg/twitbackend:latest
+  - stage: docker_scan_container
+    name: scan container security
+    if: branch = "main"
+    script: |
+      ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} \
+      "cd test && \
+      bash dockerScanner.bash && \
+      exit " 
   - stage: deploy
     name: "deploy new version"
     if: branch = "main"
     install: skip
-    # -o flag to get around "add ip to known hosts prompt"
     script: |
       ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} \
       "docker-compose down && \

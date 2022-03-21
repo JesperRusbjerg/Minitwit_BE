@@ -48,10 +48,13 @@ namespace Minitwit_BE.Api.Controllers
             {
                 UserName = input.UserName,
                 Email = input.Email,
-                PwHash = input.PwHash,
+                PwHash = input.PwHash
             };
 
             int userId = await _userService.Login(user);
+
+            user.UserId = userId;
+            user.PwHash = "";
 
             return Ok(user);
         }

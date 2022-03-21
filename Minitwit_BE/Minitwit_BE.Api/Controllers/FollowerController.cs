@@ -32,7 +32,7 @@ namespace Minitwit_BE.Api.Controllers
 
             List<FollowerDtoList> list = new List<FollowerDtoList>();
 
-            for (int i = 0; i < 0; i++)
+            for (int i = 0; i < followers.Count(); i++)
             {
                 User user = await _userDomainService.GetUserById(followers.ElementAt(i).Id);
  

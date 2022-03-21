@@ -2,33 +2,44 @@
 using Minitwit_BE.Domain.Exceptions;
 using Minitwit_BE.DomainService.Interfaces;
 using Minitwit_BE.Persistence;
+using Prometheus;
 
 namespace Minitwit_BE.DomainService
 {
     public class MessageDomainService : IMessageDomainService
     {
+        private readonly Histogram _tweetOperationDuration;
+
+
         private readonly IPersistenceService _persistenceService;
 
         public MessageDomainService(IPersistenceService persistenceService)
         {
             _persistenceService = persistenceService;
+            _tweetOperationDuration = Metrics.CreateHistogram("TweetOperationDuration", "Measures the time it takes to create a tweet");
         }
 
         public async Task AddTwit(Message msg)
         {
-            await _persistenceService.AddMessage(msg);
+            using (_tweetOperationDuration.NewTimer())
+            {
+                await _persistenceService.AddMessage(msg);
+            }
         }
 
         public async Task AddTwit(Message msg, string username)
         {
-            var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
+            using (_tweetOperationDuration.NewTimer())
+            {
+                var user = (await _persistenceService.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
 
-            if (user == null)
-                throw new UserNotFoundException("No user of that username exists");
+                if (user == null)
+                    throw new UserNotFoundException("No user of that username exists");
 
-            msg.AuthorId = user.UserId;
+                msg.AuthorId = user.UserId;
 
-            await _persistenceService.AddMessage(msg);
+                await _persistenceService.AddMessage(msg);
+            }
         }
 
         public async Task<IEnumerable<Message>> GetTwits()
@@ -51,7 +62,7 @@ namespace Minitwit_BE.DomainService
         {
 
             var number = numberOfRows ?? 100;
-            
+
             var personalTwits = (await _persistenceService.GetMessages(msg => msg.AuthorId.Equals(id) && msg.Flagged != true)).Take(number);
 
             return personalTwits;
@@ -63,7 +74,7 @@ namespace Minitwit_BE.DomainService
 
             if (user == null)
                 throw new UserNotFoundException("No user of that username exists");
-            
+
             return await GetPersonalTwits(user.UserId);
         }
 
@@ -73,7 +84,7 @@ namespace Minitwit_BE.DomainService
 
             if (user == null)
                 throw new UserNotFoundException("No user of that username exists");
-            
+
             return await GetPersonalTwits(user.UserId, numberOfRows);
         }
 

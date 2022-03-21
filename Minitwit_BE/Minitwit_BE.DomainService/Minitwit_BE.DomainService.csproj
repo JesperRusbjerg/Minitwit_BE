@@ -8,6 +8,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Minitwit_BE.Persistence\Minitwit_BE.Persistence.csproj" />
+    <PackageReference Include="prometheus-net" Version="6.0.0" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="6.0.0" />
+    <PackageReference Include="prometheus-net.NetFramework.AspNet" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

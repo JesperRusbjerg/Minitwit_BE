@@ -51,12 +51,12 @@ namespace Minitwit_BE.Api.Controllers
         }
 
         [HttpGet("public-twits")]
-        public async Task<ActionResult<List<Message>>> GetTwits([FromQuery(Name = "page")] int? page, [FromQuery(Name = "pageSize")] int? pageSize)
+        public async Task<ActionResult<List<Message>>> GetTwits([FromQuery(Name = "page")] int? page, [FromQuery(Name = "pageSize")] int? pageSize, [FromQuery] int? no)
         {
 
             _logger.LogInformation("Returning all public twits");
 
-            var twits = await _messageService.GetTwits();
+            var twits = await _messageService.GetTwits(no);
 
             if (page != null && pageSize != null)
             {

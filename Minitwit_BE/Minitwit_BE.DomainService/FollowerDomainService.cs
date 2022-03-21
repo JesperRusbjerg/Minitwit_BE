@@ -91,8 +91,8 @@ namespace Minitwit_BE.DomainService
             {
                 await _persistence.AddFollower(new Follower
                     {
-                        WhomId = userWho.FirstOrDefault().UserId,
-                        WhoId = userWhom.FirstOrDefault().UserId,
+                        WhoId = userWho.FirstOrDefault().UserId,
+                        WhomId = userWhom.FirstOrDefault().UserId,
                     });
             }
         }

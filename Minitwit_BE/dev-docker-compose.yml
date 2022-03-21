@@ -1,0 +1,59 @@
+version: "3.4"
+
+networks:
+  inner_net:
+
+services:
+  minitwit_be.api:
+    image: miniapi
+    restart: always
+    ports:
+      - "8080:5000"
+      - "8081:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=toonage15
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Minitwit_BE.Api.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro
+      - ~/logs:/home/logs
+    networks:
+      - inner_net
+
+  prometheus:
+    image: quay.io/prometheus/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./dev-prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - inner_net
+    depends_on:
+      - minitwit_be.api
+
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+    user: "$UID:$GID"
+    ports:
+      - "9091:3000"
+    networks:
+      - inner_net
+
+  mariadb:
+    image: mariadb
+    restart: always
+    networks:
+      - inner_net
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: SuperSecretPassword
+      MYSQL_DATABASE: WaystoneInn
+    volumes:
+      - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:

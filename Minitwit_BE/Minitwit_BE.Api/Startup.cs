@@ -4,6 +4,7 @@ using Minitwit_BE.DomainService;
 using Minitwit_BE.DomainService.Interfaces;
 using Minitwit_BE.Persistence;
 using Prometheus;
+using Prometheus.SystemMetrics;
 
 namespace Minitwit_BE.Api
 {
@@ -35,6 +36,7 @@ namespace Minitwit_BE.Api
                         .AllowAnyMethod();
                 });
             });
+            services.AddSystemMetrics();
         }
 
         // to configure HTTP request pipeline.
@@ -55,16 +57,17 @@ namespace Minitwit_BE.Api
 
             // Prometheus setup start
             app.UseMetricServer();
+            app.UseHttpMetrics();
             // Middleware Definition
             app.Use((context, next) =>
             {
                 // Http Context
                 var counter = Metrics.CreateCounter(
-                    "PathCounter", "Count request",
-                    new CounterConfiguration
-                    {
-                        LabelNames = new[] { "method", "endpoint" }
-                    });
+                        "PathCounter", "Count request",
+                        new CounterConfiguration
+                        {
+                            LabelNames = new[] { "method", "endpoint" }
+                        });
                 // method: GET, POST etc.
                 // endpoint: Requested path
                 counter.WithLabels(context.Request.Method, context.Request.Path).Inc();

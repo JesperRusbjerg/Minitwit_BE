@@ -34,7 +34,7 @@ namespace Minitwit_BE.Api.Controllers
 
             await _userService.RegisterUser(user);
 
-            return Ok(user.UserId);
+            return Ok(user);
         }
 
         [HttpPost("login")]
@@ -48,12 +48,15 @@ namespace Minitwit_BE.Api.Controllers
             {
                 UserName = input.UserName,
                 Email = input.Email,
-                PwHash = input.PwHash,
+                PwHash = input.PwHash
             };
 
             int userId = await _userService.Login(user);
 
-            return Ok(userId);
+            user.UserId = userId;
+            user.PwHash = "";
+
+            return Ok(user);
         }
 
         #region PrivateMethods

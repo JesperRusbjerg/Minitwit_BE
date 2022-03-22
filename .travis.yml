@@ -2,70 +2,84 @@ language: csharp
 mono: none
 dotnet: 6.0
 
-# branches:
-#   only:
-#     - main
 
+addons:
+  #software maintainability sonarcloud
+  sonarcloud:
+    organization: "jesperrusbjerg"
+    token:
+      secure: "fXrn8goPPEdBYdf75x/r8klr/HNLZH98P5cwzpBM2Tf0shkaF5FzkhO85lpdwaWu45foSPkqPVzTgYRhsGOD9j46q6XzhRk3++WBOZCQsqjvvWh8LEYoD7rP75KtRDMLKqx2bSNnn+pexU2MBJhZfRJShgIzC0aGWZ6U/s6O6IjkWxVkn6dj2V3sWuffS4NbB7fxf2/YBrWlfV07T5FvxY7ighGl/6JHEenGcivRBH8mEg61BuZ05NMiYVoASC0eI1lTdCIMe2R5YrHkshOzT5UQqpyNUgsFUqJU3xsCa4ClwBLhEJt/DZ/5OXUCbZPQbHpJvDfBvXzbl16KWkgdQg7cySf0w9pXUMqeSQ6vFwieVI1NIJtXNZ5uyCbjZKiJjEoi1IsafzVnavfNzzNTbeh1eNFrmJYZ1UCI920u9QfBPaAhZHKmM6UGMknP8JLQUh7teymYZNZQ2ZuT3yeTdaA54rBKDXYqQh3lcsq8CafI0HW1OTvmWnqenU3aHK3FCtkKcG/bD7EtssQQRIxQ3Nk48jsKSRewxUtk2VcziaynlpnsUAMgqWtKmbpUdQXOuCclWe2zlK7auQXJrq9kDrCaWie9WKkKHVOgkOWZgNSx2/GAKT+9+1Mygx/6rxjx46F/OgQaPT7uKZiyUuoJzjqe/KiYFaUHM3gOl/whwr4=" # encrypted value of your token
+
+#- dotnet test ".\Minitwit_BE\Minitwit_BE.sln" -c Release -v n
+
+branches:
+  only:
+  - main
 
 before_install:
-  # Decrypt the git_deploy_key.enc key into /tmp/git_deploy_key
-  - openssl aes-256-cbc -K $encrypted_db2095f63ba3_key -iv $encrypted_db2095f63ba3_iv -in deploy_rsa.enc -out /tmp/git_deploy_key -d
-  # Make sure only the current user can read the private key
-  - chmod 600 /tmp/git_deploy_key
-  # Create a script to return the passphrase environment variable to ssh-add
-  - echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
-  # Start the authentication agent
-  - eval "$(ssh-agent -s)"
-  # Add the key to the authentication agent
-  - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
+- openssl aes-256-cbc -K $encrypted_db2095f63ba3_key -iv $encrypted_db2095f63ba3_iv
+  -in deploy_rsa.enc -out /tmp/git_deploy_key -d
+- chmod 600 /tmp/git_deploy_key
+- echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
+- eval "$(ssh-agent -s)"
+- DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
+- wget https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh -O ~/.nvm/nvm.sh
+- source ~/.nvm/nvm.sh
+- nvm install 14
+- node --version
+
 
 install:
-  - docker --version  # document the version travis is using
+- docker --version
+- node -v
 
 stages:
-  - run_tests
-  - docker_build
-  - deploy
+- build_and_unittest
+- static_analysis_and_maintainance
+- docker_build
+- docker_scan_containers
+- deploy
 
 jobs:
   include:
-  - stage: run_tests
-    name: "run unit tests"
-    # if: branch = "main"
+  - stage: build_and_unittest
+    name: build project
     script:
-      - dotnet test ".\Minitwit_BE\Minitwit_BE.sln" -c Release
-  
+    - echo "BUILDING PROJECT"
+    - dotnet restore ".\Minitwit_BE\Minitwit_BE.sln"
+    - echo "Running static analysers while building"
+    - dotnet build ".\Minitwit_BE\Minitwit_BE.sln" -c Release 
+    - echo "TESTING PROJECT"
+    - dotnet test ".\Minitwit_BE\Minitwit_BE.sln"
+    - sonar-scanner #maintainance sonar scanner
   - stage: docker_build
-    name: "build and push docker"
+    name: build and push docker
     if: branch = "main"
     script:
-      - echo "LOGIN"
-      - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
-      - echo "BUILD"
-      - docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile Minitwit_BE/.
-      - echo "PUSH"
-      - docker push jrusbjerg/twitbackend:latest
-        
-  - stage: deploy
-    name: "deploy new version"
+    - echo "LOGIN TO DOCKERHUB"
+    - docker login -u $DOCKER_USERNAME -p $DOCKER_PSW
+    - echo "BUILD"
+    - docker build -t jrusbjerg/twitbackend -f Minitwit_BE/Minitwit_BE.Api/Dockerfile
+      Minitwit_BE/.
+    - echo "PUSHING DOCKER IMAGE TO BE TESTED"
+    - docker push jrusbjerg/twitbackend:latest
+  - stage: docker_scan_containers
+    name: scan container security
     if: branch = "main"
-    install: skip
-    # -o flag to get around "add ip to known hosts prompt"
     script: |
       ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} \
-      "docker-compose down && \
-      docker-compose pull && \
+      "cd test && \
+      bash dockerScanner.bash && \
+      exit " 
+  - stage: deploy
+    name: "deploy new version"
+    if: branch = "release"
+    install: skip
+    script: |
+      ssh -o "StrictHostKeyChecking no" ${MT_USER}@${MT_SERVER} \
+      "docker-compose pull && \
+      docker-compose down && \
       docker-compose rm -f && \
       docker-compose up -d && \
       exit " 
-
-deploy:
-  provider: releases
-  api_key: $GITHUB_API_KEY
-  file: Minitwit_BE/*
-  name: Build $(date +'%d.%m.%Y %R')
-  skip_cleanup: true
-  on:
-    all_branches: true
-
 

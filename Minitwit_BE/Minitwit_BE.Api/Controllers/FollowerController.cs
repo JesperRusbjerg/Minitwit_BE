@@ -11,11 +11,13 @@ namespace Minitwit_BE.Api.Controllers
     {
         private readonly ILogger<FollowerController> _logger;
         private readonly IFollowerDomainService _followerService;
+        private readonly IUserDomainService _userDomainService;
 
-        public FollowerController(ILogger<FollowerController> logger, IFollowerDomainService followerService)
+        public FollowerController(ILogger<FollowerController> logger, IFollowerDomainService followerService, IUserDomainService userDomainService)
         {
             _logger = logger;
             _followerService = followerService;
+            _userDomainService = userDomainService;
         }
 
         [HttpGet("list/{id}")]
@@ -26,6 +28,22 @@ namespace Minitwit_BE.Api.Controllers
             _logger.LogInformation($"GetFollowedUsers endpoint was called for id: {id}");
 
             var followers = await _followerService.GetFollowedUsers(id);
+
+
+            List<FollowerDtoList> list = new List<FollowerDtoList>();
+
+            for (int i = 0; i < followers.Count(); i++)
+            {
+                User user = await _userDomainService.GetUserById(followers.ElementAt(i).Id);
+ 
+                FollowerDtoList dto = new FollowerDtoList();
+                dto.Name = user.UserName;
+                dto.Email = user.Email;
+                dto.Id = followers.ElementAt(i).Id;
+                dto.WhoId = followers.ElementAt(i).WhoId;
+                dto.WhomId = followers.ElementAt(i).WhomId;
+                list.Add(dto);
+            }
 
             return Ok(followers);
         }
@@ -59,6 +77,17 @@ namespace Minitwit_BE.Api.Controllers
             await _followerService.UnFollow(id);
 
             return Ok();
+        }
+
+        private class FollowerDtoList
+        {
+            public int Id { get; set; }
+            public int WhoId { get; set; }
+            public int WhomId { get; set; }
+
+            public String Name { get; set; }
+
+            public String Email { get; set; }
         }
 
         #region PrivateMethods

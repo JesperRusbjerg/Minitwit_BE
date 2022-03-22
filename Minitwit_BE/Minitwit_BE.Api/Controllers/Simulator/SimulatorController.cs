@@ -11,6 +11,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
     [Route("simulator")]
     public class SimulatorController : ControllerBase
     {
+
         private readonly ILogger<SimulatorController> _logger;
         private readonly IMessageDomainService _messageService;
         private readonly IFollowerDomainService _followerService;

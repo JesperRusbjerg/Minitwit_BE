@@ -2,6 +2,7 @@
 using Minitwit_BE.Api.Dtos;
 using Minitwit_BE.Domain;
 using Minitwit_BE.DomainService.Interfaces;
+using Minitwit_BE.Api.Dtos.FE;
 
 namespace Minitwit_BE.Api.Controllers
 {
@@ -11,19 +12,21 @@ namespace Minitwit_BE.Api.Controllers
     {
         private readonly ILogger<TwitController> _logger;
         private readonly IMessageDomainService _messageService;
+        private readonly IUserDomainService _userDomainService;
 
-        public TwitController(ILogger<TwitController> logger, IMessageDomainService messageService)
+        public TwitController(ILogger<TwitController> logger, IMessageDomainService messageService, IUserDomainService userDomainService)
         {
             _logger = logger;
             _messageService = messageService;
+            _userDomainService = userDomainService;
         }
 
         [HttpGet("test")]
-        public async Task<string> TestEndpoint()
+        public Task<string> TestEndpoint()
         {
             _logger.LogInformation("Test endpoint was called!");
 
-            return await Task.FromResult("test4");
+            return Task.FromResult("test4");
         }
 
 
@@ -36,7 +39,7 @@ namespace Minitwit_BE.Api.Controllers
 
             var msg = new Message                                       // Primary keys should be auto incremented when you add entity to the table and dont explicitely specify specify the ID
             { 
-                AuthorId = input.AuthorId,
+                AuthorId = (int)input.AuthorId,
                 Flagged = false,
                 PublishDate = DateTime.Now,
                 Text = input.Text
@@ -48,14 +51,56 @@ namespace Minitwit_BE.Api.Controllers
         }
 
         [HttpGet("public-twits")]
-        public async Task<ActionResult<List<Message>>> GetTwits()
+        public async Task<ActionResult<List<Message>>> GetTwits([FromQuery(Name = "page")] int? page, [FromQuery(Name = "pageSize")] int? pageSize, [FromQuery] int? no)
         {
 
             _logger.LogInformation("Returning all public twits");
 
-            var twits = await _messageService.GetTwits();
+            var twits = await _messageService.GetTwits(no);
 
-            return Ok(twits.ToList());
+            if (page != null && pageSize != null)
+            {
+
+                int startIndex = (int)(pageSize * (page - 1));
+
+                int endIndex = (int)(startIndex + pageSize);
+
+               MessageDtoHack msg = new MessageDtoHack();
+
+                List<Message> messages = twits.ToList();
+
+                if (endIndex >= messages.Count)
+                {
+                    messages = messages.GetRange(startIndex, messages.Count - startIndex);
+                }
+                else
+                {
+                    messages = twits.ToList().GetRange(startIndex, endIndex);
+                }
+
+                for (int i = 0; i < messages.Count; i++)
+                {
+                    User user = await _userDomainService.GetUserById(messages.ElementAt(i).AuthorId);
+                    MessageAndUser mau = new MessageAndUser();
+                    UserDto usrDto = new UserDto();
+                    usrDto.Email = user.Email;
+                    usrDto.UserName = user.UserName;
+                    usrDto.Email = user.Email;
+                    mau.user = usrDto; 
+                    mau.msg = messages.ElementAt(i);
+                    msg.tweets.Add(mau);
+                }
+
+                msg.page = page;
+
+                msg.totalPages = (twits.Count() / pageSize) + 1;
+
+                return Ok(msg);
+            }
+            else
+            {
+                return Ok(twits.ToList());
+            }
         }
 
         [HttpGet("personal-twits/{id}")]
@@ -80,6 +125,20 @@ namespace Minitwit_BE.Api.Controllers
             await _messageService.MarkMessage(input.MessageId, input.FlagMessage);
 
             return Ok();
+        }
+
+        private class MessageDtoHack
+        {
+            public List<MessageAndUser>? tweets = new List<MessageAndUser>();
+            public int? page { get; set; }
+
+            public int? totalPages { get; set; }
+        }
+
+        private class MessageAndUser
+        {
+            public Message msg { get; set; }
+            public UserDto user { get; set; }
         }
 
         #region PrivateMethods

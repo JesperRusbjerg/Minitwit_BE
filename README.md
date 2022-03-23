@@ -9,4 +9,4 @@
 ![Module View](/../screenshots/architecturalViews/minitwit_module_view_high_level_1.png?raw=true "Module View")
 
 ### Component & Connector View
-![Module View](/../screenshots/architecturalViews/minitwit_cc_view_1.png?raw=true "Module View")
+![C&C View](/../screenshots/architecturalViews/minitwit_cc_view.png?raw=true "C&C View")

@@ -45,7 +45,7 @@ namespace Minitwit_BE.Api.Controllers
                 list.Add(dto);
             }
 
-            return Ok(list);
+            return Ok(followers);
         }
 
 

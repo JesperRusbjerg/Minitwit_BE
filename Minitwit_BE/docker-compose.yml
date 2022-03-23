@@ -50,12 +50,41 @@ services:
     networks:
       - inner_net
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: SuperSecretPassword
       MYSQL_DATABASE: WaystoneInn
     volumes:
       - dbdata:/var/lib/mysql
 
+  Elasticsearch:
+    image: elasticsearch:7.17.1
+    container_name: elasticsearch
+    restart: always
+    volumes:
+    - elastic_data:/usr/share/elasticsearch/data/
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      discovery.type: single-node    
+    ports:
+    - '9200:9200'
+    - '9300:9300'
+    networks:
+      - inner_net
+
+  Kibana:
+    image: kibana:7.17.1
+    container_name: kibana
+    restart: always       
+    ports:
+    - '5601:5601'
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200  
+    depends_on:
+      - Elasticsearch  
+    networks:
+      - inner_net
+
 volumes:
   dbdata:
+  elastic_data: {}

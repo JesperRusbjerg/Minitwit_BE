@@ -1,5 +1,6 @@
 using Serilog;
 using Serilog.Events;
+using Serilog.Sinks.Elasticsearch;
 
 namespace Minitwit_BE.Api
 {
@@ -13,6 +14,12 @@ namespace Minitwit_BE.Api
             .Enrich.FromLogContext()
             .WriteTo.Console()
             .WriteTo.File("/home/logs/logs", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 10)
+            .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://elasticsearch:9200"))
+            {
+                IndexFormat="logs",
+                AutoRegisterTemplate = true,
+                AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv7
+            })
             .CreateLogger();
 
             try

@@ -18,11 +18,12 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         private readonly IUserDomainService _userService;
         private readonly ISimulationService _simulatorService;
 
-        public SimulatorController(ILogger<SimulatorController> logger,
-                                   IMessageDomainService messageService,
-                                   IFollowerDomainService followerService,
-                                   IUserDomainService userService,
-                                   ISimulationService simulatorService)
+        public SimulatorController(
+            ILogger<SimulatorController> logger,
+            IMessageDomainService messageService,
+            IFollowerDomainService followerService,
+            IUserDomainService userService,
+            ISimulationService simulatorService)
         {
             _logger = logger;
             _messageService = messageService;
@@ -132,7 +133,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         }
 
         [HttpGet("fllws/{username}")]
-        public async Task<ActionResult<List<FollowedUserDto>>> GetFollowedUsers([FromRoute] string username, [FromQuery] int? no, [FromQuery] int? latest)
+        public async Task<ActionResult<FollowsResponseDto>> GetFollowedUsers([FromRoute] string username, [FromQuery] int? no, [FromQuery] int? latest)
         {
             HeaderChecker(Request);
 
@@ -186,7 +187,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
 
         private void HeaderChecker(HttpRequest request)
         {
-            var headers = Request.Headers["Authorization"];
+            var headers = request.Headers["Authorization"];
             if (headers != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
             {
                 throw new UnauthorizedException("Unauthorized request");

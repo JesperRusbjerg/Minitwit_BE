@@ -54,15 +54,16 @@ namespace Minitwit_BE.DomainService
 
         public async Task Follow(Follower follower)
         {
-            var userWhom = (await _persistence.GetUsers(u => u.UserId.Equals(follower.WhomId))).FirstOrDefault();
+            var userWho = (await _persistence.GetUsers(u => u.UserId.Equals(follower.WhoId))).FirstOrDefault();
 
-            if (userWhom == null)
+            if (userWho == null)
             {
                 throw new UserNotFoundException("Users might not exist");
-            } else
+            } 
+            else
             {
-                var followings = (await GetFollowedUsers(userWhom.UserId)).ToList();
-                var isAlreadyFollowing = followings.Any(item => item.WhomId.Equals(userWhom.UserId));
+                var followings = (await GetFollowedUsers(userWho.UserId)).ToList();
+                var isAlreadyFollowing = followings.Any(item => item.WhomId.Equals(userWho.UserId));
 
                 if (isAlreadyFollowing)
                 {
@@ -83,7 +84,8 @@ namespace Minitwit_BE.DomainService
             if (userWho.FirstOrDefault() == null)
             {
                 throw new UserNotFoundException("Users do not exist");
-            }else if(userWhom.FirstOrDefault() == null)
+            }
+            else if(userWhom.FirstOrDefault() == null)
             {
                 throw new UserNotFoundException("User you are trying to follow does not exist");
             }
@@ -122,7 +124,8 @@ namespace Minitwit_BE.DomainService
             if (userWhoTask.Result.FirstOrDefault() == null )
             {
                 throw new UserNotFoundException("Users do not exist");
-            }else if(userWhomTask.Result.FirstOrDefault() == null)
+            }
+            else if(userWhomTask.Result.FirstOrDefault() == null)
             {
                 throw new UserNotFoundException("User you are trying to unfollow does not exist");
             }

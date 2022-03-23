@@ -52,7 +52,6 @@ namespace Minitwit_BE.Api
             }
 
             app.UseCors("_miniTwitAllowSpecificOrigins");
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             // Prometheus setup start
@@ -75,7 +74,8 @@ namespace Minitwit_BE.Api
             });
             // Prometheus setup end
 
-            app.UseRouting(); app.UseMiddleware<ExceptionMiddleware>();
+            app.UseRouting(); 
+            app.UseMiddleware<ExceptionMiddleware>();
 
             // app.UseAuthorization();
 

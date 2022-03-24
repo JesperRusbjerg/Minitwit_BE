@@ -28,6 +28,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Context" Version="4.2.0" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
     <PackageReference Include="Serilog.Sinks.Datadog.Logs" Version="0.3.6" />

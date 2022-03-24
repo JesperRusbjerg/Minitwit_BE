@@ -2,7 +2,7 @@
 using Minitwit_BE.Api.Dtos;
 using Minitwit_BE.Domain;
 using Minitwit_BE.DomainService.Interfaces;
-using Minitwit_BE.Api.Dtos.FE;
+using Serilog.Context;
 
 namespace Minitwit_BE.Api.Controllers
 {
@@ -24,7 +24,10 @@ namespace Minitwit_BE.Api.Controllers
         [HttpGet("test")]
         public Task<string> TestEndpoint()
         {
-            _logger.LogInformation("Test endpoint was called!");
+            using (LogContext.PushProperty("testProp", "testValue"))
+            {
+                _logger.LogInformation("Test message!");
+            }
 
             return Task.FromResult("test4");
         }
@@ -53,7 +56,6 @@ namespace Minitwit_BE.Api.Controllers
         [HttpGet("public-twits")]
         public async Task<ActionResult<List<Message>>> GetTwits([FromQuery(Name = "page")] int? page, [FromQuery(Name = "pageSize")] int? pageSize, [FromQuery] int? no)
         {
-
             _logger.LogInformation("Returning all public twits");
 
             var twits = await _messageService.GetTwits(no);

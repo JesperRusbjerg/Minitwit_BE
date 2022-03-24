@@ -12,7 +12,10 @@ namespace Minitwit_BE.Api
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .Enrich.FromLogContext()
             .WriteTo.Console()
-            .WriteTo.DatadogLogs("7c8e6d881744c5c465abd5609de3c299")
+            .WriteTo.DatadogLogs(
+                "<ENTER API KEY FROM TRELO TICKET HERE>",
+                host: "digital-ocean-be",
+                service: "minitwit_be")
             //.WriteTo.File("/home/logs/logs", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 10)
             .CreateLogger();
 

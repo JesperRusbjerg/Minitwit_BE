@@ -29,14 +29,14 @@ namespace Minitwit_BE.Api.Controllers
 
             var followers = await _followerService.GetFollowedUsers(id);
 
-
             List<FollowerDtoList> list = new List<FollowerDtoList>();
 
             for (int i = 0; i < followers.Count(); i++)
             {
-                User user = await _userDomainService.GetUserById(followers.ElementAt(i).Id);
+                User user = await _userDomainService.GetUserById(followers.ElementAt(i).WhomId);
  
                 FollowerDtoList dto = new FollowerDtoList();
+                dto.UserId = user.UserId;
                 dto.Name = user.UserName;
                 dto.Email = user.Email;
                 dto.Id = followers.ElementAt(i).Id;
@@ -45,7 +45,7 @@ namespace Minitwit_BE.Api.Controllers
                 list.Add(dto);
             }
 
-            return Ok(followers);
+            return Ok(list);
         }
 
 
@@ -85,6 +85,7 @@ namespace Minitwit_BE.Api.Controllers
             public int WhoId { get; set; }
             public int WhomId { get; set; }
 
+            public int UserId { get; set; }
             public String Name { get; set; }
 
             public String Email { get; set; }

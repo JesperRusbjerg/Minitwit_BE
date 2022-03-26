@@ -90,7 +90,7 @@ namespace Minitwit_BE.Api.Controllers
                     usrDto.Email = user.Email;
                     mau.user = usrDto; 
                     mau.msg = messages.ElementAt(i);
-                    msg.tweets.Add(mau);
+                    msg.twits.Add(mau);
                 }
 
                 msg.page = page;
@@ -143,7 +143,7 @@ namespace Minitwit_BE.Api.Controllers
 
         private class MessageDtoHack
         {
-            public List<MessageAndUser>? tweets = new List<MessageAndUser>();
+            public List<MessageAndUser>? twits = new List<MessageAndUser>();
             public int? page { get; set; }
 
             public int? totalPages { get; set; }

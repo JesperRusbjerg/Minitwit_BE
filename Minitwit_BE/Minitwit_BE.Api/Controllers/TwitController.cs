@@ -117,6 +117,7 @@ namespace Minitwit_BE.Api.Controllers
             {
                 User = new User
                 {
+                    UserId = user.UserId,
                     Email = user.Email,
                     UserName = user.UserName
                 },

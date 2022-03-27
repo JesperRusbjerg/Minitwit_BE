@@ -21,7 +21,8 @@ namespace Minitwit_BE.Api
             services.AddScoped<ISimulationService, SimulatorService>();
             services.AddScoped<IPersistenceService, PersistenceService>();
 
-            string connectionString = "Server=mariadb;Database=WaystoneInn;Uid=root;Pwd=SuperSecretPassword;";
+            string connectionString =
+                "Server=mariadb;Database=WaystoneInn;Uid=root;Pwd=SuperSecretPassword;";
             services.AddDbContext<TwitContext>(
                 options => options.UseMySql(
                     connectionString, ServerVersion.AutoDetect(connectionString)));
@@ -58,24 +59,26 @@ namespace Minitwit_BE.Api
             app.UseMetricServer();
             app.UseHttpMetrics();
             // Middleware Definition
+            Histogram responseTime = Metrics.CreateHistogram(
+                "responseTime",
+                "The time it takes for the server to process a request");
             app.Use((context, next) =>
             {
-                // Http Context
-                var counter = Metrics.CreateCounter(
+                using (responseTime.NewTimer())
+                {
+                    var counter = Metrics.CreateCounter(
                         "PathCounter", "Count request",
                         new CounterConfiguration
                         {
                             LabelNames = new[] { "method", "endpoint" }
                         });
-                // method: GET, POST etc.
-                // endpoint: Requested path
-                counter.WithLabels(context.Request.Method, context.Request.Path).Inc();
-                return next();
+                    counter.WithLabels(context.Request.Method, context.Request.Path).Inc();
+                    return next();
+                }
             });
             // Prometheus setup end
 
-            app.UseRouting(); 
-            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseRouting(); app.UseMiddleware<ExceptionMiddleware>();
 
             // app.UseAuthorization();
 

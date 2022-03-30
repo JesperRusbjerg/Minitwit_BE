@@ -54,19 +54,22 @@ namespace Minitwit_BE.Api
             app.UseMetricServer();
             app.UseHttpMetrics();
             // Middleware Definition
+            Histogram responseTime = Metrics.CreateHistogram(
+                "responseTime",
+                "The time it takes for the server to process a request");
             app.Use((context, next) =>
             {
-                // Http Context
-                var counter = Metrics.CreateCounter(
+                using (responseTime.NewTimer())
+                {
+                    var counter = Metrics.CreateCounter(
                         "PathCounter", "Count request",
                         new CounterConfiguration
                         {
                             LabelNames = new[] { "method", "endpoint" }
                         });
-                // method: GET, POST etc.
-                // endpoint: Requested path
-                counter.WithLabels(context.Request.Method, context.Request.Path).Inc();
-                return next();
+                    counter.WithLabels(context.Request.Method, context.Request.Path).Inc();
+                    return next();
+                }
             });
             // Prometheus setup end
 

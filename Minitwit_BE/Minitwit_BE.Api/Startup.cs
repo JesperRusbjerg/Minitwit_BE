@@ -10,8 +10,14 @@ namespace Minitwit_BE.Api
 {
     public class Startup
     {
-        // to add services to the application container. For instance healthcheck,
-        // etc.
+        public IConfiguration _configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        // to add services to the application container. For instance healthcheck, etc.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson();
@@ -21,10 +27,9 @@ namespace Minitwit_BE.Api
             services.AddScoped<ISimulationService, SimulatorService>();
             services.AddScoped<IPersistenceService, PersistenceService>();
 
-            string connectionString = "Server=mariadb;Database=WaystoneInn;Uid=root;Pwd=SuperSecretPassword;";
             services.AddDbContext<TwitContext>(
                 options => options.UseMySql(
-                    connectionString, ServerVersion.AutoDetect(connectionString)));
+                    _configuration["CONNECTION_STRING"], ServerVersion.AutoDetect(_configuration["CONNECTION_STRING"])));
 
             services.AddCors(options =>
             {
@@ -42,17 +47,7 @@ namespace Minitwit_BE.Api
         // to configure HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // Configure the HTTP request pipeline.
-            if (!env.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for
-                // production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
             app.UseCors("_miniTwitAllowSpecificOrigins");
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             // Prometheus setup start
@@ -75,9 +70,8 @@ namespace Minitwit_BE.Api
             });
             // Prometheus setup end
 
-            app.UseRouting(); app.UseMiddleware<ExceptionMiddleware>();
-
-            // app.UseAuthorization();
+            app.UseRouting(); 
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

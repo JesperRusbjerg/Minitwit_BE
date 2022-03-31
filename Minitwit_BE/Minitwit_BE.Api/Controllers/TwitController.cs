@@ -88,7 +88,7 @@ namespace Minitwit_BE.Api.Controllers
                     usrDto.Email = user.Email;
                     mau.user = usrDto; 
                     mau.msg = messages.ElementAt(i);
-                    msg.tweets.Add(mau);
+                    msg.twits.Add(mau);
                 }
 
                 msg.page = page;
@@ -110,9 +110,21 @@ namespace Minitwit_BE.Api.Controllers
             
             _logger.LogInformation($"Returning all personal twits for user {id}.");
 
+            var user = await _userDomainService.GetUserById(id);
             var twits = await _messageService.GetPersonalTwits(id);
 
-            return Ok(twits.ToList());
+            var userAndPersonalTwits = new UserAndPersonalTwitsDto
+            {
+                User = new User
+                {
+                    UserId = user.UserId,
+                    Email = user.Email,
+                    UserName = user.UserName
+                },
+                Twits = twits.ToList()
+            };
+
+            return Ok(userAndPersonalTwits);
         }
 
         [HttpPut("mark-message")]
@@ -129,7 +141,7 @@ namespace Minitwit_BE.Api.Controllers
 
         private class MessageDtoHack
         {
-            public List<MessageAndUser>? tweets = new List<MessageAndUser>();
+            public List<MessageAndUser>? twits = new List<MessageAndUser>();
             public int? page { get; set; }
 
             public int? totalPages { get; set; }
@@ -139,6 +151,12 @@ namespace Minitwit_BE.Api.Controllers
         {
             public Message msg { get; set; }
             public UserDto user { get; set; }
+        }
+
+        private class UserAndPersonalTwitsDto
+        {
+            public User User { get; set; }
+            public List<Message> Twits { get; set; }
         }
 
         #region PrivateMethods

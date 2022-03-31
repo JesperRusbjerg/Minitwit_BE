@@ -2,15 +2,12 @@ language: csharp
 mono: none
 dotnet: 6.0
 
-
 addons:
   #software maintainability sonarcloud
   sonarcloud:
     organization: "jesperrusbjerg"
     token:
       secure: "fXrn8goPPEdBYdf75x/r8klr/HNLZH98P5cwzpBM2Tf0shkaF5FzkhO85lpdwaWu45foSPkqPVzTgYRhsGOD9j46q6XzhRk3++WBOZCQsqjvvWh8LEYoD7rP75KtRDMLKqx2bSNnn+pexU2MBJhZfRJShgIzC0aGWZ6U/s6O6IjkWxVkn6dj2V3sWuffS4NbB7fxf2/YBrWlfV07T5FvxY7ighGl/6JHEenGcivRBH8mEg61BuZ05NMiYVoASC0eI1lTdCIMe2R5YrHkshOzT5UQqpyNUgsFUqJU3xsCa4ClwBLhEJt/DZ/5OXUCbZPQbHpJvDfBvXzbl16KWkgdQg7cySf0w9pXUMqeSQ6vFwieVI1NIJtXNZ5uyCbjZKiJjEoi1IsafzVnavfNzzNTbeh1eNFrmJYZ1UCI920u9QfBPaAhZHKmM6UGMknP8JLQUh7teymYZNZQ2ZuT3yeTdaA54rBKDXYqQh3lcsq8CafI0HW1OTvmWnqenU3aHK3FCtkKcG/bD7EtssQQRIxQ3Nk48jsKSRewxUtk2VcziaynlpnsUAMgqWtKmbpUdQXOuCclWe2zlK7auQXJrq9kDrCaWie9WKkKHVOgkOWZgNSx2/GAKT+9+1Mygx/6rxjx46F/OgQaPT7uKZiyUuoJzjqe/KiYFaUHM3gOl/whwr4=" # encrypted value of your token
-
-#- dotnet test ".\Minitwit_BE\Minitwit_BE.sln" -c Release -v n
 
 branches:
   only:
@@ -80,5 +77,6 @@ jobs:
       "docker-compose pull && \
       docker-compose down && \
       docker-compose rm -f && \
-      docker-compose up -d && \
+      docker-compose --env-file .env up -d && \
       exit " 
+

@@ -5,7 +5,7 @@ networks:
 
 services:
   minitwit_be.api:
-    image: miniapi
+    image: jrusbjerg/twitbackend
     restart: always
     ports:
       - "8080:5000"
@@ -22,7 +22,7 @@ services:
       - inner_net
 
   prometheus:
-    image: quay.io/prometheus/prometheus:latest
+    image: quay.io/prometheus/prometheus:latest:v2.34.0
     ports:
       - "9090:9090"
     volumes:
@@ -43,7 +43,7 @@ services:
       - inner_net
 
   mariadb:
-    image: mariadb
+    image: mariadb:10.8.2-rc-focal
     restart: always
     networks:
       - inner_net

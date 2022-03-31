@@ -7,14 +7,17 @@ namespace Minitwit_BE.Api
     {
         public static void Main(string[] args)
         {
+            var builder = WebApplication.CreateBuilder(args);
+            var apiKey = builder.Configuration.GetValue<string>("LOGGING_TOKEN");
+
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .Enrich.FromLogContext()
             .WriteTo.Console()
             .WriteTo.DatadogLogs(
-                "<ENTER API KEY FROM TRELO TICKET HERE>",
-                host: "digital-ocean-be",
+                apiKey,
+                host: "serilog-asp",
                 service: "minitwit_be")
             .CreateLogger();
 

@@ -44,7 +44,7 @@ namespace Minitwit_BE.Api
             services.AddSystemMetrics();
         }
 
-        // to configure HTTP request pipeline.
+        // configures HTTP request middleware pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors("_miniTwitAllowSpecificOrigins");
@@ -73,7 +73,8 @@ namespace Minitwit_BE.Api
             });
             // Prometheus setup end
 
-            app.UseRouting(); 
+            app.UseRouting();
+            app.UseMiddleware<LogContextMiddleware>();
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseEndpoints(endpoints =>

@@ -5,7 +5,6 @@ networks:
 
 services:
   minitwit_be.api:
-    container_name: api
     image: jrusbjerg/twitbackend
     restart: always
     ports:
@@ -26,7 +25,7 @@ services:
 
   prometheus:
     container_name: prom
-    image: quay.io/prometheus/prometheus:latest
+    image: prom/prometheus:v2.34.0
     ports:
       - "9090:9090"
     volumes:
@@ -40,7 +39,7 @@ services:
 
   grafana:
     container_name: graf
-    image: grafana/grafana
+    image: grafana/grafana:8.4.4-ubuntu
     depends_on:
       - prometheus
     user: "$UID:$GID"
@@ -54,13 +53,11 @@ services:
       com.datadoghq.ad.logs: '[{"source": "grafana", "service": "grafana"}]'
 
   mariadb:
-    container_name: maria
+    container_name: maria:10.8.2-rc-focal
     image: mariadb
     restart: always
     networks:
       - inner_net
-    # ports:
-    #   - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_TABLE}
@@ -74,7 +71,7 @@ services:
     environment:
       - DD_API_KEY=${DD_TOKEN}
       - DD_LOGS_ENABLED=true
-      - DD_CONTAINER_INCLUDE_LOGS="name:api name:prom name:graf name:maria"
+      - DD_CONTAINER_INCLUDE_LOGS="name:prom name:graf name:maria"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro

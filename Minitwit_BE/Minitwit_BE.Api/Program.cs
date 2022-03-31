@@ -16,7 +16,6 @@ namespace Minitwit_BE.Api
                 "<ENTER API KEY FROM TRELO TICKET HERE>",
                 host: "digital-ocean-be",
                 service: "minitwit_be")
-            //.WriteTo.File("/home/logs/logs", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 10)
             .CreateLogger();
 
             try

@@ -5,6 +5,7 @@ networks:
 
 services:
   minitwit_be.api:
+    container_name: api
     image: jrusbjerg/twitbackend
     restart: always
     ports:
@@ -24,6 +25,7 @@ services:
       - inner_net
 
   prometheus:
+    container_name: prom
     image: quay.io/prometheus/prometheus:latest
     ports:
       - "9090:9090"
@@ -33,8 +35,11 @@ services:
       - minitwit_be.api
     networks:
       - inner_net
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "prometheus", "service": "prometheus"}]'
 
   grafana:
+    container_name: graf
     image: grafana/grafana
     depends_on:
       - prometheus
@@ -45,8 +50,11 @@ services:
       - "9091:3000"
     networks:
       - inner_net
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "grafana", "service": "grafana"}]'
 
   mariadb:
+    container_name: maria
     image: mariadb
     restart: always
     networks:
@@ -58,6 +66,21 @@ services:
       MYSQL_DATABASE: ${DB_TABLE}
     volumes:
       - dbdata:/var/lib/mysql
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "mariadb", "service": "db"}]'
+
+  datadog:
+    image: "datadog/agent:latest"
+    environment:
+      - DD_API_KEY=${DD_TOKEN}
+      - DD_LOGS_ENABLED=true
+      - DD_CONTAINER_INCLUDE_LOGS="name:api name:prom name:graf name:maria"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /proc/:/host/proc/:ro
+      - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
 
 volumes:
   dbdata:

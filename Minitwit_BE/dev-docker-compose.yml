@@ -5,7 +5,7 @@ networks:
 
 services:
   minitwit_be.api:
-    image: miniapi
+    image: jrusbjerg/twitbackend
     restart: always
     ports:
       - "8080:5000"

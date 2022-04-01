@@ -53,8 +53,8 @@ services:
       com.datadoghq.ad.logs: '[{"source": "grafana", "service": "grafana"}]'
 
   mariadb:
-    container_name: maria:10.8.2-rc-focal
-    image: mariadb
+    container_name: maria
+    image: mariadb:10.8.2-rc-focal
     restart: always
     networks:
       - inner_net

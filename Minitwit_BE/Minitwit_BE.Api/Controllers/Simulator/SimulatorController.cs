@@ -32,11 +32,6 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             _simulatorService = simulatorService;
         }
 
-        private bool checkAuthorization(IEnumerable<string> headers)
-        {
-            return false;
-        }
-
         [HttpGet("latest")]
         public async Task<ActionResult<LatestResponse>> Latest()
         {

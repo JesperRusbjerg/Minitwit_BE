@@ -5,7 +5,7 @@ namespace Minitwit_BE.Api.Dtos.FE
     public class TweetDto
     {
 
-        public List<Message>? twits { get; set; }
+        public List<Message>? tweets { get; set; }
 
         public int? page { get; set; }
 

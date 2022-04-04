@@ -54,7 +54,7 @@ services:
 
   mariadb:
     container_name: maria
-    image: mariadb:10.8.2-rc-focal
+    image: mariadb:10.8.2-rc
     restart: always
     networks:
       - inner_net
@@ -67,7 +67,7 @@ services:
       com.datadoghq.ad.logs: '[{"source": "mariadb", "service": "db"}]'
 
   datadog:
-    image: "datadog/agent:latest"
+    image: "datadog/agent:7.35.0-rc.8"
     environment:
       - DD_API_KEY=${DD_TOKEN}
       - DD_LOGS_ENABLED=true

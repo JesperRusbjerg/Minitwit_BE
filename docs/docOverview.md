@@ -9,6 +9,7 @@ Argue for git and github
 * database SQL lite and later mariadb 
 * Docker
 * Digital ocean
+* Webpack
 #### Documents 
 * Detailed workflow
 

@@ -38,6 +38,7 @@ Argue for git and github
 * Unit testing
 #### Document
 * Licence 
+* UML Views
 
 ### Week 8
 #### Argue

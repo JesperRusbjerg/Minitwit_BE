@@ -2,7 +2,7 @@
 using Minitwit_BE.Api.Dtos;
 using Minitwit_BE.Domain;
 using Minitwit_BE.DomainService.Interfaces;
-using Minitwit_BE.Api.Dtos.FE;
+using Serilog.Context;
 
 namespace Minitwit_BE.Api.Controllers
 {
@@ -24,7 +24,10 @@ namespace Minitwit_BE.Api.Controllers
         [HttpGet("test")]
         public Task<string> TestEndpoint()
         {
-            _logger.LogInformation("Test endpoint was called!");
+            using (LogContext.PushProperty("testProp", "testValue"))
+            {
+                _logger.LogInformation("Test message!");
+            }
 
             return Task.FromResult("test4");
         }
@@ -53,7 +56,6 @@ namespace Minitwit_BE.Api.Controllers
         [HttpGet("public-twits")]
         public async Task<ActionResult<List<Message>>> GetTwits([FromQuery(Name = "page")] int? page, [FromQuery(Name = "pageSize")] int? pageSize, [FromQuery] int? no)
         {
-
             _logger.LogInformation("Returning all public twits");
 
             var twits = await _messageService.GetTwits(no);
@@ -88,7 +90,7 @@ namespace Minitwit_BE.Api.Controllers
                     usrDto.Email = user.Email;
                     mau.user = usrDto; 
                     mau.msg = messages.ElementAt(i);
-                    msg.twits.Add(mau);
+                    msg.tweets.Add(mau);
                 }
 
                 msg.page = page;
@@ -110,21 +112,9 @@ namespace Minitwit_BE.Api.Controllers
             
             _logger.LogInformation($"Returning all personal twits for user {id}.");
 
-            var user = await _userDomainService.GetUserById(id);
             var twits = await _messageService.GetPersonalTwits(id);
 
-            var userAndPersonalTwits = new UserAndPersonalTwitsDto
-            {
-                User = new User
-                {
-                    UserId = user.UserId,
-                    Email = user.Email,
-                    UserName = user.UserName
-                },
-                Twits = twits.ToList()
-            };
-
-            return Ok(userAndPersonalTwits);
+            return Ok(twits.ToList());
         }
 
         [HttpPut("mark-message")]
@@ -141,7 +131,7 @@ namespace Minitwit_BE.Api.Controllers
 
         private class MessageDtoHack
         {
-            public List<MessageAndUser>? twits = new List<MessageAndUser>();
+            public List<MessageAndUser>? tweets = new List<MessageAndUser>();
             public int? page { get; set; }
 
             public int? totalPages { get; set; }
@@ -151,12 +141,6 @@ namespace Minitwit_BE.Api.Controllers
         {
             public Message msg { get; set; }
             public UserDto user { get; set; }
-        }
-
-        private class UserAndPersonalTwitsDto
-        {
-            public User User { get; set; }
-            public List<Message> Twits { get; set; }
         }
 
         #region PrivateMethods

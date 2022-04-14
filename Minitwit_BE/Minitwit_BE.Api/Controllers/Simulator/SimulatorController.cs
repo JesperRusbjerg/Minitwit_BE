@@ -3,6 +3,7 @@ using Minitwit_BE.Api.Dtos.Simulation;
 using Minitwit_BE.Domain;
 using Minitwit_BE.Domain.Exceptions;
 using Minitwit_BE.DomainService.Interfaces;
+using Minitwit_BE.Persistence;
 using System.Net.Http.Headers;
 
 namespace Minitwit_BE.Api.Controllers.Simulator
@@ -17,19 +18,22 @@ namespace Minitwit_BE.Api.Controllers.Simulator
         private readonly IFollowerDomainService _followerService;
         private readonly IUserDomainService _userService;
         private readonly ISimulationService _simulatorService;
+        private readonly IPersistenceService _persistence;
 
         public SimulatorController(
             ILogger<SimulatorController> logger,
             IMessageDomainService messageService,
             IFollowerDomainService followerService,
             IUserDomainService userService,
-            ISimulationService simulatorService)
+            ISimulationService simulatorService,
+            IPersistenceService persistence)
         {
             _logger = logger;
             _messageService = messageService;
             _followerService = followerService;
             _userService = userService;
             _simulatorService = simulatorService;
+            _persistence = persistence;
         }
 
         [HttpGet("latest")]
@@ -68,13 +72,14 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             _logger.LogInformation("Get messages in the simulator");
             await _simulatorService.UpdateLatest(latest);
 
-            var msgs = await _messageService.GetTwits(no);
+            //var msgs = await _messageService.GetTwits(no);
 
-            var messageDtoTasks = MapMessagesToGetMessageDtos(msgs.ToList());
+            //var messageDtoTasks = MapMessagesToGetMessageDtos(msgs.ToList());
 
-            await Task.WhenAll(messageDtoTasks);
+            //await Task.WhenAll(messageDtoTasks);
 
-            return Ok(messageDtoTasks.Select(mTask => mTask.Result));
+            //return Ok(messageDtoTasks.Select(mTask => mTask.Result));
+            return Ok("");
         }
 
         [HttpGet("msgs/{username}")]
@@ -88,20 +93,28 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             //404 if user dosent exist
             var msgs = await _messageService.GetPersonalTwits(username, no);
 
-             var messageDtos = msgs.Select(m => new GetMessageDto
-            {
-                Text = m.Text,
-                PublishDate = m.PublishDate.ToString(),
-                UserName = username
-            });
 
-            if (!messageDtos.ToList().Any())
-            {
-                return NoContent();
-            } else
-            {
-                return Ok(messageDtos.ToList());
-            }
+            var user = (await _persistence.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
+
+            if (user == null)
+                throw new UserNotFoundException("User does not exist!");
+
+            List<string> msgsx = new List<string>();
+
+          //   var messageDtos = msgs.Select(m => new GetMessageDto
+         //   {
+          //      Text = m.Text,
+          //      PublishDate = m.PublishDate.ToString(),
+          //      UserName = username
+           // });
+
+          //  if (!messageDtos.ToList().Any())
+          //  {
+            //    return NoContent();
+            //} else
+            //{
+                return Ok(msgsx);
+            //}
         }
 
         [HttpPost("msgs/{username}")]
@@ -135,18 +148,28 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             _logger.LogInformation($"Follow endpoint was called with username: {username}");
             await _simulatorService.UpdateLatest(latest);
 
+            var user = (await _persistence.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
+
+            if (user == null)
+                throw new UserNotFoundException("User does not exist!");
+
             //404 if user dosent exist
-            var followedUsers = await _followerService.GetFollowedUsers(username, no);
+            //var followedUsers = await _followerService.GetFollowedUsers(username, no);
 
-            var followedUserDtoTask = MapFollowersToFollowedUserDto(followedUsers.ToList());
+            //var followedUserDtoTask = MapFollowersToFollowedUserDto(followedUsers.ToList());
 
-            await Task.WhenAll(followedUserDtoTask);
+            //await Task.WhenAll(followedUserDtoTask);
 
-            var followedUserDtos = followedUserDtoTask.Select(f => (f.Result).UserName);
+            // var followedUserDtos = followedUserDtoTask.Select(f => (f.Result).UserName);
+
+            //var follows = new FollowsResponseDto
+            // {
+            //    Follows = followedUserDtos.ToList()
+            // };
 
             var follows = new FollowsResponseDto
             {
-                Follows = followedUserDtos.ToList()
+               
             };
 
             return Ok(follows);

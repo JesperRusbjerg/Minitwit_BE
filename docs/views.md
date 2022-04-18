@@ -6,7 +6,7 @@ This view gives a high level overview of the structure of the system.
 
 The second module view is a zoomed in, but still high level view of the MiniTwit Backend. It shows the relationships between different layers in the architecture.
 
-![Module View](/../screenshots/architecturalViews/minitwit_module_view_v2.png?raw=true "Module View")
+![Module View](/../screenshots/architecturalViews/minitwit_module_view_v2.png?raw=true "Module View")\
 ![MiniTwit Backend](/../screenshots/architecturalViews/minitwit_module_view_v2_higher.png?raw=true "MiniTwit Backend")
 
 ## Component-and-Connector View

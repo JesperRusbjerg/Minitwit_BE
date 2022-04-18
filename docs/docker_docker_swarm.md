@@ -1,0 +1,9 @@
+## Docker
+
+Containerization, more precisely, Docker has become an industry standard in recent years because it allows the packaging of software with the operating system, libraries, dependencies to create an executable that can run on different infrastructures. It allows for a safer deployment, less errors and can provide a common environment for developers to seamlessly develop applications [[https://www.ibm.com/cloud/learn/containerization](https://www.ibm.com/cloud/learn/containerization)]
+
+In the beginning of our workflow Docker was used to containerize our front- and backend application, database, Grafana and Prometheus instances. For scalability reasons we have transitioned into using Docker Swarm, which has changed the architecture of our system.
+
+## Docker Swarm
+
+Docker Swarm is a container orchestration tool that allows the management of multiple containers deployed on different host machines. Swarm is a declarative service, which means that we define the desired state of the system that is then managed by Docker itself. Two types of nodes can be created: managers and workers. Managers are responsible to maintain the state of the cluster and to schedule services. Worker nodes are only executing containers. This technology is used for the purpose of scaling and to potentially increase availability. If a node falls, its the managers responsibility to schedule and initialize a different instance in place of the fallen node. Our system design contains worker nodes for Grafana, Prometheus, Database, and the backend for MiniTwit with three manager nodes and external load balancer routing traffic to the nodes.

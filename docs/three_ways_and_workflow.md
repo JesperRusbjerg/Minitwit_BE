@@ -1,0 +1,21 @@
+# The Three Ways and workflow
+
+The Three Ways was initially coined both in The Phoenix Project and The DevOps Handbook. The notion consists of three parts, which are the following:
+
+- Flow
+- Feedback
+- Continual Learning and Experimentation
+
+## Flow
+
+We adhered to the first principle from the beginning of the project via utilizing kanban boards to make our work more visible. We deemed that for this project using a simple Trello board was sufficient. The workspace was divided into three major parts. First, the to do backlog, the in progress column, and the done section, which was further divided into weeks. Vast majority of Tuesday’s in house knowledge sharing sessions - more elaborately discussed in the Detail Workflow section - were spent collecting all the possible tasks we might come across during the week. The thorough identification of items that had to be completed before the upcoming meeting served as our commitment to the backlog. This streamlined our workflow and gave us an initial boost to tackle the challenges. Limiting the number of work in progress items did not seem to be necessary as we did not have an overwhelming number of dependent and blocking relationships between tasks. This might have been the result of the reduction in sizes of these items. We tried focusing on what was absolutely necessary to get done, and only “gold plating” the project if sufficient time was available at hand. Each member had an accountability area, this was assigned based on member’s proficiency in a certain section of the project. This resulted in less context switching, and faster development time.
+
+## Feedback
+
+Receiving constant feedback on our work allowed us to avoid, mitigate problems closer to the source, where it was produced. Peer review has played a key role in adhering to this principle. Feedback was given by using pull requests that were opened if one wanted to merge their changes from feature branches that were created usually corresponding to a ticket in our Trello board. Communication was rather easy as comments could be easily provided pointing to a certain line in the code. Furthermore, linking a task in our common Discord channel to abruptly start a conversation about a problem surrounding it has also enhanced the effectiveness of our discussions. Unit, and exploratory testing has further increased our chances of catching errors before pushing to production environment reducing unplanned work.
+
+Although pull requests have worked in our team, and for this specific project, research shows otherwise, especially in the ‘fast’ aspect of feedbacks. According to The DevOps Handbook *“Trunk based development predicts higher throughput and better stability, and even higher job satisfaction and lower rates of burn-out”.* This type of development - where developers usually operate on one single branch, the trunk - is also echoed by Dave Farley, author of Continuous Delivery. [[https://www.youtube.com/watch?v=ASOSEiJCyEM](https://www.youtube.com/watch?v=ASOSEiJCyEM)] He emphasizes that if intended changes by a developer are not checked against the whole codebase at least once a day, continuous delivery is not possible. By having pull requests and changes ‘hidden’ in feature branches feedback is not provided fast enough. Hindsight, these aspects were noticeable in our workflow as well, sometimes even more prominent by the fact that we had different schedules that made working synchronously harder. Dave’s recommendation for trunk based development is pair programming, which is considerable in the future to not only have more thorough peer reviews, but also a faster ones. [[https://collaboration.csc.ncsu.edu/laurie/Papers/ieeeSoftware.PDF](https://collaboration.csc.ncsu.edu/laurie/Papers/ieeeSoftware.PDF)]
+
+## Continual Learning and Experimentation
+
+Adherence to the third principle was conducted by fostering an inclusive and non-judgmental working environment. We had a complete understanding that we are doing work under safe circumstances and that making a mistake is another learning opportunity that we can stash into our personal inventory. Changes were made to the codebase with no fear of failure, and mistakes pointed out served as an enhancing activity and not a destructive one. Fortunately everyone represented a growth mindset, therefore problems were discussed openly.

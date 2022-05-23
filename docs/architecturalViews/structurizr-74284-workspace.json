@@ -1,0 +1,354 @@
+{
+    "id": 74284,
+    "name": "MiniTwit",
+    "description": "MiniTwit context diagram",
+    "revision": 4,
+    "lastModifiedDate": "2022-05-16T09:20:14Z",
+    "lastModifiedUser": "lfor@itu.dk",
+    "lastModifiedAgent": "structurizr-web/2738/dsl",
+    "properties": {
+        "structurizr.dsl": "d29ya3NwYWNlICJNaW5pVHdpdCIgIk1pbmlUd2l0IGNvbnRleHQgZGlhZ3JhbSIgewoKICAgIG1vZGVsIHsKICAgICAgICB1c2VyID0gcGVyc29uICJVc2VyIiAiQSB1c2VyIG9mIE1pbmlUd2l0IgogICAgICAgIGRldmVsb3BlciA9IHBlcnNvbiAiRGV2ZWxvcGVyIiAiRGV2ZWxvcHMgYW5kIG1ha2VzIGNoYW5nZXMgdG8gTWluaVR3aXQgc3lzdGVtIgogICAgICAgIAogICAgICAgIG1pbmlUd2l0U3lzdGVtQ29udGV4dCA9IHNvZnR3YXJlU3lzdGVtICJNaW5pVHdpdCBGcm9udGVuZCIgewogICAgICAgICAgICB3ZWJBcHBDb250ZXh0ID0gY29udGFpbmVyICJNaW5pVHdpdCBXZWIgQXBwbGljYXRpb24iCiAgICAgICAgfQogICAgICAgIAogICAgICAgIGJhY2tlbmRDb250ZXh0ID0gc29mdHdhcmVTeXN0ZW0gIk1pbmlUd2l0IEJhY2tlbmQiIHsKICAgICAgICAgICAgYmFja2VuZEFwcENvbnRleHQgPSBjb250YWluZXIgIk1pbmlUd2l0IEJhY2tlbmQgQXBwbGljYXRpb24iCiAgICAgICAgICAgIGRhdGFiYXNlQ29udGV4dCA9IGNvbnRhaW5lciAiRGF0YWJhc2UiICJTdG9yZXMgaW5mb3JtYXRpb24gb2YgdHdpdHMsIHVzZXJzLCB0aGVpciBjcmVkZW50aWFscyIgIkRhdGFiYXNlIHNjaGVtYSIgIkRhdGFiYXNlIgogICAgICAgIH0KICAgIH0KICAgIAogICAgdmlld3MgewogICAgICAgIAogICAgICAgIGR5bmFtaWMgbWluaVR3aXRTeXN0ZW1Db250ZXh0IHsKICAgICAgICAgICAgdGl0bGUgIkJyb3dzZXMgcHVibGljIHR3aXRzIgogICAgICAgICAgICB1c2VyIC0+IHdlYkFwcENvbnRleHQgIlJlcXVlc3RzIHB1YmxpYyB0aW1lbGluZSBmcm9tIgogICAgICAgICAgICB3ZWJBcHBDb250ZXh0IC0+IGJhY2tlbmRBcHBDb250ZXh0ICJSZXF1ZXN0cyBmb3IgcHVibGljIHR3aXRzIgogICAgICAgICAgICBiYWNrZW5kQXBwQ29udGV4dCAtPiBkYXRhYmFzZUNvbnRleHQgIlF1ZXJpZXMgZm9yIHB1YmxpYyB0d2l0cyIKICAgICAgICAgICAgYXV0b0xheW91dCBscgogICAgICAgIH0KICAgICAgICAKICAgICAgICBkeW5hbWljIG1pbmlUd2l0U3lzdGVtQ29udGV4dCB7CiAgICAgICAgICAgIHRpdGxlICJSZWdpc3RlcnMgYW5kIGxvZ3MgaW4gdG8gdGhlaXIgYWNjb3VudCIKICAgICAgICAgICAgdXNlciAtPiB3ZWJBcHBDb250ZXh0ICJSZXF1ZXN0cyBwcml2YXRlIHRpbWVsaW5lIGZyb20iCiAgICAgICAgICAgIHdlYkFwcENvbnRleHQgLT4gYmFja2VuZEFwcENvbnRleHQgIlJlcXVlc3RzIGZvciBwcml2YXRlIHR3aXRzIgogICAgICAgICAgICBiYWNrZW5kQXBwQ29udGV4dCAtPiBkYXRhYmFzZUNvbnRleHQgIlF1ZXJpZXMgZm9yIHByaXZhdGUgdHdpdHMiCiAgICAgICAgICAgIGF1dG9MYXlvdXQgbHIKICAgICAgICB9CiAgICAgICAgCiAgICAgICAgZHluYW1pYyBtaW5pVHdpdFN5c3RlbUNvbnRleHQgewogICAgICAgICAgICB0aXRsZSAiUmVnaXN0ZXJzIGFuZCBsb2dzIGluIHRvIHRoZWlyIGFjY291bnQiCiAgICAgICAgICAgIHVzZXIgLT4gd2ViQXBwQ29udGV4dCAiRm9sbG93aW5nIG90aGVyIHVzZXJzIgogICAgICAgICAgICB3ZWJBcHBDb250ZXh0IC0+IGJhY2tlbmRBcHBDb250ZXh0ICJSZXF1ZXN0cyB0byBlc3RhYmxpc2ggZm9sbG93ZXIgY29ubmVjdGlvbiIKICAgICAgICAgICAgYmFja2VuZEFwcENvbnRleHQgLT4gZGF0YWJhc2VDb250ZXh0ICJEYXRhYmFzZSBxdWVyeSB0byBlc3RhYmxpc2ggZm9sbG93ZXIvZm9sbG93ZWQgY29ubmVjdGlvbiIKICAgICAgICAgICAgYXV0b0xheW91dCBscgogICAgICAgIH0KICAgICAgICAKICAgICAgICAKICAgICAgICAKICAgICAgICBzdHlsZXMgewogICAgICAgICAgICBlbGVtZW50ICJQZXJzb24iIHsKICAgICAgICAgICAgICAgIHNoYXBlIHBlcnNvbgogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjMDg0MjdiCiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgIH0KICAgICAgICAKICAgICAgICAgICAgZWxlbWVudCAiQ29udGFpbmVyIiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICMxMTY4YmQKICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYKICAgICAgICAgICAgfQogICAgICAgICAgICAKICAgICAgICAgICAgZWxlbWVudCAiRGF0YWJhc2UiIHsKICAgICAgICAgICAgICAgIHNoYXBlIEN5bGluZGVyCiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICB9Cn0K"
+    },
+    "model": {
+        "people": [
+            {
+                "id": "2",
+                "tags": "Element,Person",
+                "name": "Developer",
+                "description": "Develops and makes changes to MiniTwit system",
+                "location": "Unspecified"
+            },
+            {
+                "id": "1",
+                "tags": "Element,Person",
+                "name": "User",
+                "description": "A user of MiniTwit",
+                "relationships": [
+                    {
+                        "id": "9",
+                        "sourceId": "1",
+                        "destinationId": "3",
+                        "description": "Requests public timeline from",
+                        "linkedRelationshipId": "8"
+                    },
+                    {
+                        "id": "8",
+                        "tags": "Relationship",
+                        "sourceId": "1",
+                        "destinationId": "4",
+                        "description": "Requests public timeline from"
+                    }
+                ],
+                "location": "Unspecified"
+            }
+        ],
+        "softwareSystems": [
+            {
+                "id": "5",
+                "tags": "Element,Software System",
+                "name": "MiniTwit Backend",
+                "location": "Unspecified",
+                "containers": [
+                    {
+                        "id": "7",
+                        "tags": "Element,Container,Database",
+                        "name": "Database",
+                        "description": "Stores information of twits, users, their credentials",
+                        "technology": "Database schema"
+                    },
+                    {
+                        "id": "6",
+                        "tags": "Element,Container",
+                        "name": "MiniTwit Backend Application",
+                        "relationships": [
+                            {
+                                "id": "14",
+                                "tags": "Relationship",
+                                "sourceId": "6",
+                                "destinationId": "7",
+                                "description": "Queries for public twits"
+                            }
+                        ]
+                    }
+                ],
+                "documentation": {}
+            },
+            {
+                "id": "3",
+                "tags": "Element,Software System",
+                "name": "MiniTwit Frontend",
+                "relationships": [
+                    {
+                        "id": "13",
+                        "sourceId": "3",
+                        "destinationId": "5",
+                        "description": "Requests for public twits",
+                        "linkedRelationshipId": "10"
+                    },
+                    {
+                        "id": "12",
+                        "sourceId": "3",
+                        "destinationId": "6",
+                        "description": "Requests for public twits",
+                        "linkedRelationshipId": "10"
+                    }
+                ],
+                "location": "Unspecified",
+                "containers": [
+                    {
+                        "id": "4",
+                        "tags": "Element,Container",
+                        "name": "MiniTwit Web Application",
+                        "relationships": [
+                            {
+                                "id": "11",
+                                "sourceId": "4",
+                                "destinationId": "5",
+                                "description": "Requests for public twits",
+                                "linkedRelationshipId": "10"
+                            },
+                            {
+                                "id": "10",
+                                "tags": "Relationship",
+                                "sourceId": "4",
+                                "destinationId": "6",
+                                "description": "Requests for public twits"
+                            }
+                        ]
+                    }
+                ],
+                "documentation": {}
+            }
+        ],
+        "customElements": [],
+        "deploymentNodes": []
+    },
+    "documentation": {
+        "sections": [],
+        "decisions": [],
+        "images": []
+    },
+    "views": {
+        "dynamicViews": [
+            {
+                "key": "MiniTwitFrontend-Dynamic-001",
+                "order": 1,
+                "paperSize": "A4_Landscape",
+                "dimensions": {
+                    "width": 3170,
+                    "height": 958
+                },
+                "automaticLayout": {
+                    "implementation": "Graphviz",
+                    "rankDirection": "LeftRight",
+                    "rankSeparation": 300,
+                    "nodeSeparation": 300,
+                    "edgeSeparation": 0,
+                    "vertices": false
+                },
+                "title": "Browses public twits",
+                "elementId": "3",
+                "externalBoundariesVisible": true,
+                "relationships": [
+                    {
+                        "id": "8",
+                        "description": "Requests public timeline from",
+                        "order": "1",
+                        "response": false
+                    },
+                    {
+                        "id": "10",
+                        "description": "Requests for public twits",
+                        "order": "2",
+                        "response": false
+                    },
+                    {
+                        "id": "14",
+                        "description": "Queries for public twits",
+                        "order": "3",
+                        "response": false
+                    }
+                ],
+                "elements": [
+                    {
+                        "id": "1",
+                        "x": 260,
+                        "y": 257
+                    },
+                    {
+                        "id": "4",
+                        "x": 960,
+                        "y": 307
+                    },
+                    {
+                        "id": "6",
+                        "x": 1710,
+                        "y": 307
+                    },
+                    {
+                        "id": "7",
+                        "x": 2460,
+                        "y": 307
+                    }
+                ]
+            },
+            {
+                "key": "MiniTwitFrontend-Dynamic-003",
+                "order": 3,
+                "paperSize": "A4_Landscape",
+                "dimensions": {
+                    "width": 3170,
+                    "height": 958
+                },
+                "automaticLayout": {
+                    "implementation": "Graphviz",
+                    "rankDirection": "LeftRight",
+                    "rankSeparation": 300,
+                    "nodeSeparation": 300,
+                    "edgeSeparation": 0,
+                    "vertices": false
+                },
+                "title": "Registers and logs in to their account",
+                "elementId": "3",
+                "externalBoundariesVisible": true,
+                "relationships": [
+                    {
+                        "id": "8",
+                        "description": "Following other users",
+                        "order": "1",
+                        "response": false
+                    },
+                    {
+                        "id": "10",
+                        "description": "Requests to establish follower connection",
+                        "order": "2",
+                        "response": false
+                    },
+                    {
+                        "id": "14",
+                        "description": "Database query to establish follower/followed connection",
+                        "order": "3",
+                        "response": false
+                    }
+                ],
+                "elements": [
+                    {
+                        "id": "1",
+                        "x": 260,
+                        "y": 257
+                    },
+                    {
+                        "id": "4",
+                        "x": 960,
+                        "y": 307
+                    },
+                    {
+                        "id": "6",
+                        "x": 1710,
+                        "y": 307
+                    },
+                    {
+                        "id": "7",
+                        "x": 2460,
+                        "y": 307
+                    }
+                ]
+            },
+            {
+                "key": "MiniTwitFrontend-Dynamic-002",
+                "order": 2,
+                "paperSize": "A4_Landscape",
+                "dimensions": {
+                    "width": 3170,
+                    "height": 958
+                },
+                "automaticLayout": {
+                    "implementation": "Graphviz",
+                    "rankDirection": "LeftRight",
+                    "rankSeparation": 300,
+                    "nodeSeparation": 300,
+                    "edgeSeparation": 0,
+                    "vertices": false
+                },
+                "title": "Registers and logs in to their account",
+                "elementId": "3",
+                "externalBoundariesVisible": true,
+                "relationships": [
+                    {
+                        "id": "8",
+                        "description": "Requests private timeline from",
+                        "order": "1",
+                        "response": false
+                    },
+                    {
+                        "id": "10",
+                        "description": "Requests for private twits",
+                        "order": "2",
+                        "response": false
+                    },
+                    {
+                        "id": "14",
+                        "description": "Queries for private twits",
+                        "order": "3",
+                        "response": false
+                    }
+                ],
+                "elements": [
+                    {
+                        "id": "1",
+                        "x": 260,
+                        "y": 257
+                    },
+                    {
+                        "id": "4",
+                        "x": 960,
+                        "y": 307
+                    },
+                    {
+                        "id": "6",
+                        "x": 1710,
+                        "y": 307
+                    },
+                    {
+                        "id": "7",
+                        "x": 2460,
+                        "y": 307
+                    }
+                ]
+            }
+        ],
+        "configuration": {
+            "branding": {},
+            "styles": {
+                "elements": [
+                    {
+                        "tag": "Person",
+                        "background": "#08427b",
+                        "color": "#ffffff",
+                        "shape": "Person"
+                    },
+                    {
+                        "tag": "Container",
+                        "background": "#1168bd",
+                        "color": "#ffffff"
+                    },
+                    {
+                        "tag": "Database",
+                        "shape": "Cylinder"
+                    }
+                ],
+                "relationships": []
+            },
+            "terminology": {},
+            "lastSavedView": "MiniTwitFrontend-Dynamic-001",
+            "themes": []
+        },
+        "customViews": [],
+        "systemLandscapeViews": [],
+        "systemContextViews": [],
+        "containerViews": [],
+        "componentViews": [],
+        "deploymentViews": [],
+        "filteredViews": []
+    }
+}

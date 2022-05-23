@@ -91,13 +91,13 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             await _simulatorService.UpdateLatest(latest);
 
             //404 if user dosent exist
-            var msgs = await _messageService.GetPersonalTwits(username, no);
+            //var msgs = await _messageService.GetPersonalTwits(username, no);
 
 
-            var user = (await _persistence.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
-
-            if (user == null)
-                throw new UserNotFoundException("User does not exist!");
+            //var user = (await _persistence.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
+            
+            //if (user == null)
+              //  throw new UserNotFoundException("User does not exist!");
 
             List<string> msgsx = new List<string>();
 
@@ -135,7 +135,7 @@ namespace Minitwit_BE.Api.Controllers.Simulator
                 Text = input.Content
             };
 
-            await _messageService.AddTwit(msg, username);
+            //await _messageService.AddTwit(msg, username);
 
             return NoContent();
         }
@@ -148,10 +148,10 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             _logger.LogInformation($"Follow endpoint was called with username: {username}");
             await _simulatorService.UpdateLatest(latest);
 
-            var user = (await _persistence.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
+            //var user = (await _persistence.GetUsers(u => u.UserName.Equals(username))).FirstOrDefault();
 
-            if (user == null)
-                throw new UserNotFoundException("User does not exist!");
+            //if (user == null)
+           //     throw new UserNotFoundException("User does not exist!");
 
             //404 if user dosent exist
             //var followedUsers = await _followerService.GetFollowedUsers(username, no);
@@ -189,13 +189,13 @@ namespace Minitwit_BE.Api.Controllers.Simulator
             if (input.Follow != null)
             {
                 //throws 404 if either user dosent exist
-                await _followerService.Follow(username, input.Follow);
+                //await _followerService.Follow(username, input.Follow);
                 return NoContent();
             }
             else if (input.Unfollow != null)
             {
                 //throws 404 if either user dosent exist
-                await _followerService.UnFollow(username, input.Unfollow);
+                //await _followerService.UnFollow(username, input.Unfollow);
                 return NoContent();
             }
 

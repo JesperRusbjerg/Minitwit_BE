@@ -95,3 +95,5 @@ async function peoplePost(){
     }
 }
 
+peoplePost()
+

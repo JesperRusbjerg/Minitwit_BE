@@ -16,7 +16,7 @@ namespace Minitwit_BE.Api
             .Enrich.FromLogContext()
             .WriteTo.Console()
             .WriteTo.DatadogLogs(
-                apiKey,
+                "861d63d89d002af581ff8a2f8754aec9",
                 host: "serilog-asp",
                 service: "minitwit_be")
             .CreateLogger();

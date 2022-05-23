@@ -1,15 +1,83 @@
-version: '3.4'
+version: "3.4"
+
+networks:
+  inner_net:
 
 services:
   minitwit_be.api:
     image: jrusbjerg/twitbackend
+    restart: always
     ports:
-      - "7000:80"
-      - "7001:443"
+      - "8080:5000"
+      - "8081:5001"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=toonage15
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Minitwit_BE.Api.pfx
+      #- ASPNETCORE_Kestrel__Certificates__Default__Password=${ASP_KESTREL_PWD}
+      #- ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Minitwit_BE.Api.pfx
+      - CONNECTION_STRING=${DB_CONN_STR}
+      - LOGGING_TOKEN=${DD_TOKEN}
     volumes:
       - ~/.aspnet/https:/https:ro
+      - ~/logs:/home/logs
+    networks:
+      - inner_net
+
+  prometheus:
+    container_name: prom
+    image: prom/prometheus:v2.34.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - minitwit_be.api
+    networks:
+      - inner_net
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "prometheus", "service": "prometheus"}]'
+
+  grafana:
+    container_name: graf
+    image: grafana/grafana:8.4.4-ubuntu
+    depends_on:
+      - prometheus
+    user: "$UID:$GID"
+    volumes:
+      - ./gfdata:/var/lib/grafana
+    ports:
+      - "9091:3000"
+    networks:
+      - inner_net
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "grafana", "service": "grafana"}]'
+
+  mariadb:
+    container_name: maria
+    image: mariadb:10.8.2-rc
+    restart: always
+    networks:
+      - inner_net
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_TABLE}
+    volumes:
+      - dbdata:/var/lib/mysql
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "mariadb", "service": "db"}]'
+
+  datadog:
+    image: "datadog/agent:7.35.0-rc.8"
+    environment:
+      - DD_API_KEY=${DD_TOKEN}
+      - DD_LOGS_ENABLED=true
+      - DD_CONTAINER_INCLUDE_LOGS="name:prom name:graf name:maria"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /proc/:/host/proc/:ro
+      - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+
+volumes:
+  dbdata:

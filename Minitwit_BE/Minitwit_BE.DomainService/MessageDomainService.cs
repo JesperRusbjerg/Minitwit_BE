@@ -63,7 +63,7 @@ namespace Minitwit_BE.DomainService
 
             var number = numberOfRows ?? 100;
 
-            var personalTwits = (await _persistenceService.GetMessages(msg => msg.AuthorId.Equals(id) && msg.Flagged != true)).Take(number);
+            var personalTwits = (await _persistenceService.GetMessages(msg => msg.AuthorId.Equals(id) && msg.Flagged != true)).Reverse().Take(number);
 
             return personalTwits;
         }

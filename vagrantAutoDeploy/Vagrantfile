@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
     config.ssh.private_key_path = '~/.ssh/id_rsa'
     config.vm.synced_folder ".", "/vagrant", type: "rsync"
   
-    config.vm.define "minitwit", primary: true do |server|
+    config.vm.define "minitwit3", primary: true do |server|
       server.vm.provider :digital_ocean do |provider|
         provider.ssh_key_name = ENV["SSH_KEY_NAME"]
         provider.token = ENV["DIGITAL_OCEAN_TOKEN"]
@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
         provider.privatenetworking = true
       end
   
-      server.vm.hostname = "minitwit"
+      server.vm.hostname = "minitwit3"
 
       server.trigger.after :up do |trigger|
         trigger.info =  "Writing minitwit's IP to file..."
@@ -67,8 +67,7 @@ Vagrant.configure("2") do |config|
         sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
 
-        docker-compose up
-
+        
       SHELL
     end
 

@@ -1,0 +1,1 @@
+{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"C:/Users/Jesper/Documents/code/minitwit_BE/vagrantAutoDeploy","disabled":false,"__vagrantfile":true,"owner":"root","group":"root"}}}

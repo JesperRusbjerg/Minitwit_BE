@@ -27,12 +27,9 @@ namespace Minitwit_BE.Api
             services.AddScoped<ISimulationService, SimulatorService>();
             services.AddScoped<IPersistenceService, PersistenceService>();
 
-
-
-            string connectionString = "Server=mariadb;Database=WaystoneInn;Uid=root;Pwd=SuperSecretPassword;";
             services.AddDbContext<TwitContext>(
                 options => options.UseMySql(
-                    connectionString, ServerVersion.AutoDetect(connectionString)));
+                    _configuration["CONNECTION_STRING"], ServerVersion.AutoDetect(_configuration["CONNECTION_STRING"])));
 
             services.AddCors(options =>
             {

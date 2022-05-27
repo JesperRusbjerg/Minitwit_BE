@@ -25,10 +25,6 @@ jobs:
       
       - name: Install dependencies
         run: sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
-      
-      # Runs a single command using the runners shell
-      - name: Compile
-        run: echo Hello, world!
         
       - name: Compile
         run: |

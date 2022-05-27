@@ -4,10 +4,12 @@ name: Latex to pdf
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:    
+      - main
+    tags:        
+      - v*
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -31,5 +33,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: ./report/_main.pdf
-          tag_name: v0.7.4
       

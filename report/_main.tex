@@ -1,0 +1,72 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[titles]{tocloft}
+\usepackage{graphicx}
+\usepackage{biblatex}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{rotating}
+\usepackage{hyperref}
+\usepackage{sectsty}
+\usepackage{booktabs,siunitx}
+
+\graphicspath{ {./images/}}
+\addbibresource{references.bib}
+
+
+\title{%
+  \date{}
+  \begin{center}
+  
+  \includegraphics[width=\textwidth]{images/devops_banner.png} \\
+    
+    \vspace{1cm}
+    
+    \huge{\textbf{Project Report}} \\
+    
+    \vspace{1cm}
+    
+    \Large{Alicja Karolina Haraszczuk, Jesper Kronborg Rusbjerg, László Forgács, Nikolai Perlt Andersen, Szymon Aleksander Gabryel} \\
+    
+    \vspace{0.5cm}
+    
+    \Large{alih@itu.dk, jrus@itu.dk, lfor@itu.dk, npan@itu.dk, szyg@itu.dk} \\
+    
+    \vspace{1.5cm}
+    
+    \Large{05.05.2022} \\
+    
+    \vspace{0.2cm}
+    
+    \Large{KSDSESM1KU} \\
+    
+    \vspace{1.5cm}
+    
+    \includegraphics[]{images/itu_logo.png}
+  
+  \end{center}
+}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\newpage
+\setcoun\ter{page}{1}
+\tableofcontents
+\newpage
+
+\input{systems_perspective/heading_1/systems_perspective}
+\newpage
+\input{process_perspective/heading_1/process_perspective}
+\newpage
+\input{lessons_learned_perspective/heading_1/lessons_learned}
+\newpage
+\listoffigures
+\listoftables
+\printbibliography
+\newpage
+
+\end{document}

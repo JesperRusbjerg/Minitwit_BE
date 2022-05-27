@@ -1,0 +1,34 @@
+\subsection{Design and architecture of ITU-MiniTwit}
+
+The architecture is depicted through UML diagrams [draw.io] conforming to the 3+1 architecture model. These are Module, Component-and-Connector and Allocation Views. Moreover, a Container Diagram is supplied to utilize the methodology of the C4model~\cite{c4model}. All graphs are contained in .xml files on the GitHub repository and can be reimported to the website to make future changes~\cite{architecturalViews}. The following list enumerates services embedded within the project, therefore included in the diagrams:
+
+\begin{itemize}[noitemsep]
+    \item MiniTwit Vue.js Web Application
+    \item MiniTwit .NET Application
+    \item Prometheus
+    \item Grafana
+    \item DataDog Agent
+    \item Database: MariaDB
+\end{itemize}
+
+\vspace{3mm}
+
+Interactions among those is achieved with the support of the following technologies, frameworks, cloud providers and services:
+
+\begin{itemize}[noitemsep]
+    \item DigitalOcean
+    \item Docker
+    \item TravisCI
+    \item SonarQube
+    \item Snyk - Docker Scan
+    \item DataDog web server
+    \item Grafana Dashboard
+\end{itemize}
+
+\input{systems_perspective/heading_3/module_view}
+
+\input{systems_perspective/heading_3/c_and_c_view}
+
+\input{systems_perspective/heading_3/allocation_view}
+
+\input{systems_perspective/heading_3/workflow_of_change}

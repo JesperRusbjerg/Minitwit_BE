@@ -1,0 +1,13 @@
+\subsubsection*{Functional}
+
+The functional requirements can described as its  the ability support the functionality of the frontend, together with minimized error-responses from simulator requests.
+\vspace{3mm}
+
+\underline{Frontend}
+
+All required functional requirements are implemented in the frontend: the user can follow, twit, delete twits, and show the main page. However, a contract between the frontend and backend could have been beneficial. It occurred that changes had to be made multiple times to get everything working flawlessly. A contract is a powerful tool to settle expectations from both front- and backend, which makes it easy to implement the adjustments according to precise specification of requirements with no confusion.
+\vspace{3mm}
+
+\underline{Simulator}
+
+The simulator was returning errors for few weeks. Initially, the implemented functionality was incorrect. Progress occurred as the team implemented a simple logging system on DO, which enabled to analyze different status codes. Once the status codes were correctly implemented, a new problem arose; the database did not contain all the simulator's users due to the backend mishandling user registration initially. The lack of users resulted in continuous errors as the simulator expected them to be present. To stop the errors, a SQL dump was requested from another group, followed by a creation of a script that translated the data into JSON objects. This data was then sent to our API one at a time through post requests. Upon completion, the simulator stopped detecting errors. Towards the end, the simulator began detecting "Read timeouts", which we overcame by scaling the project using Docker Swarm. Eventually, the simulator requirements were fulfilled.

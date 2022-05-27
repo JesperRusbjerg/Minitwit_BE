@@ -1,0 +1,3 @@
+\subsection{Monitoring}
+
+To monitor our system, we use Prometheus to gather metrics and Grafana to visualise them. We use Prometheus because of its wide adoption, so it was easy to find help and best practices. Grafana provides a seamless integration with Prometheus. We previously encountered issues with the expected implementation of the simulator. We developed a theory that this could be due to low performance of our system. Therefore, we mainly focused on monitoring performance metrics to find potential bottlenecks. These included average response time, amount of users created, and CPU state. We later found that our problems were not due to performance, but a misalignment in the interface with the simulator.

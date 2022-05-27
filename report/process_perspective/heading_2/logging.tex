@@ -1,0 +1,3 @@
+\subsection{Logging}
+
+As our log provider, we initially wanted to use the ELK stack, which proved to be too resource-heavy, hence we pursued the alternative technology - DataDog, a more lightweight PaaS logging solution. In the backend, we use a logging library called Serilog which offers structured logging to multiple sinks, incl. DataDog. With that framework, log messages can also be enriched with information such as runtime environment or custom context supplied by a developer such as requestId. For the docker logs, we had to add the DataDog agent container to our infrastructure. It monitors Docker’s logs, formats them, and pushes them to the DataDog server.

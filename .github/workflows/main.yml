@@ -5,9 +5,6 @@ name: Latex to pdf
 # Controls when the workflow will run
 on:
   push:
-    # Sequence of patterns matched against refs/heads
-    branches:    
-      - main
     tags:        
       - v*
 

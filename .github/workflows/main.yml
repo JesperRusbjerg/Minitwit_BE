@@ -28,7 +28,7 @@ jobs:
         uses: xu-cheng/latex-action@v2
         with:
           root_file: _main.tex
-          path: ./report
+          working_directory: ./report
      
 
 

@@ -26,7 +26,7 @@ jobs:
         with:
           root_file: _main.tex
           working_directory: ./report
-          args: pdf -file-line-error -halt-on-error -interaction=nonstopmode -f
+          args: pdf -file-line-error -halt-on-error -interaction=nonstopmode 
      
 
 

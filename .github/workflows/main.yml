@@ -3,7 +3,8 @@
 name: Latex to pdf
 
 # Controls when the workflow will run
-on:
+on: push
+
   # Triggers the workflow on push or pull request events but only for the main branch
 
   # Allows you to run this workflow manually from the Actions tab
@@ -29,6 +30,8 @@ jobs:
      
       - name: Release
         uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: ./report/_main.pdf
+        
       

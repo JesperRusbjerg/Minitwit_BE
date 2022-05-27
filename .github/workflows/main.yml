@@ -21,7 +21,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
-      - name: go to report folder
+      - name: Install dependencies
+        run: sudo apt-get install texlive
+      
+      - name: Compile
         run: pdflatex -interaction=nonstopmode --output-directory=./report ./report/_main.tex
      
 

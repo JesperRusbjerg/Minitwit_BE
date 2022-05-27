@@ -27,11 +27,15 @@ jobs:
           root_file: _main.tex
           working_directory: ./report
       
-      - name: create artifact
-        uses: actions/upload-artifact@v3
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          name: my-artifact
-          path: ./report/_main.pdf
-
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
 
       

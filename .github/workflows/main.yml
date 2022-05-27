@@ -21,10 +21,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
+      - name: go to report folder
+        run: cd ./report
+      
       - uses: xu-cheng/latex-action@v2
         with:
           root_file: |
-            ./report/_main.tex
+            ./_main.tex
             
 
 

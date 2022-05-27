@@ -22,13 +22,8 @@ jobs:
       - uses: actions/checkout@v3
       
       - name: go to report folder
-        run: cd ./report
-      
-      - uses: xu-cheng/latex-action@v2
-        with:
-          root_file: |
-            ./_main.tex
-            
+        run: pdflatex -interaction=nonstopmode --output-directory=./report ./report/_main.tex
+     
 
 
       

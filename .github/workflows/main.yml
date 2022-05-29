@@ -31,12 +31,13 @@ jobs:
         with:
           root_file: _main.tex
           working_directory: ./report
+          name: report
      
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: | 
             ./report/_main.pdf
-            ./minitwit_FE
+            ./minitwit_FE/
           tag_name: ${{ env.RELEASE_VERSION }}
       

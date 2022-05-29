@@ -22,6 +22,9 @@ jobs:
       
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+        
+      - name: Clone frontend
+        run: git clone https://github.com/hvsio/minitwit_FE.git
       
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@master
@@ -32,6 +35,8 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: ./report/_main.pdf
+          files: | 
+            ./report/_main.pdf
+            ./minitwit_FE
           tag_name: ${{ env.RELEASE_VERSION }}
       

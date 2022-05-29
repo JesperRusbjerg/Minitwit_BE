@@ -7,6 +7,7 @@ on:
   push:
     tags:        
       - v*
+  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -25,19 +26,23 @@ jobs:
         
       - name: Clone frontend
         run: git clone https://github.com/hvsio/minitwit_FE.git
+        
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r minitwit_FE.zip minitwit_FE
       
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@master
         with:
           root_file: _main.tex
           working_directory: ./report
-          name: report
+          args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode -jobname report
      
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: | 
-            ./report/_main.pdf
-            ./minitwit_FE/
-          tag_name: ${{ env.RELEASE_VERSION }}
+            ./report/report.pdf
+            ./minitwit_FE.zip
+          tag_name: v0.7.9.1
       

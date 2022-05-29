@@ -36,7 +36,7 @@ jobs:
         with:
           root_file: _main.tex
           working_directory: ./report
-          args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode -jobname report
+          args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode -jobname=report
      
       - name: Release
         uses: softprops/action-gh-release@v1

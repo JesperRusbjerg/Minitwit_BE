@@ -1,0 +1,80 @@
+version: "3.4"
+
+networks:
+  swarm_net:
+    driver: overlay
+
+services:
+  minitwit_be:
+    image: jrusbjerg/twitbackend
+    restart: always
+    ports:
+      - "8080:5000"
+      - "8081:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      #- ASPNETCORE_Kestrel__Certificates__Default__Password=
+      #- ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Minitwit_BE.pfx
+      - CONNECTION_STRING="Server=mariadb;Database=Uid=Pwd="
+      - LOGGING_TOKEN=""
+    volumes:
+      - ~/.aspnet/https:/https:ro
+      #- ~/logs:/home/logs
+    networks:
+      - swarm_net
+    deploy:
+      replicas: 3
+
+  prometheus:
+    container_name: prom
+    image: prom/prometheus:v2.34.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - minitwit_be
+    networks:
+      - swarm_net
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "prometheus", "service": "prometheus"}]'
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  grafana:
+    container_name: graf
+    image: grafana/grafana:8.4.4-ubuntu
+    depends_on:
+      - prometheus
+    user: "$UID:$GID"
+    volumes:
+      - ./gfdata:/var/lib/grafana
+    ports:
+      - "9091:3000"
+    networks:
+      - swarm_net
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "grafana", "service": "grafana"}]'
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  mariadb:
+    container_name: maria
+    image: mariadb:10.8.2-rc
+    restart: always
+    networks:
+      - swarm_net
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: ""
+    volumes:
+      - dbdata:/var/lib/mysql
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+volumes:
+  dbdata:

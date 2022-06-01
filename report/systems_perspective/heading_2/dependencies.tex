@@ -1,6 +1,6 @@
 \subsection{Dependencies}
 
-The following table contains dependencies in the backend application and the date of their addition to the project. The topic of dependencies is also introduced in the Licenses section, where we have collected all the dependencies with their licenses by several tools. Those files can also be found on the GitHub repository\cite{githubrepo}.
+The following table contains dependencies in the backend application and the date of their addition to the project. The topic of dependencies is also touched upon in the Licenses section, where we have collected all the dependencies with their licenses by several tools.
 
 \newpage
 \begin{table}[h!]
@@ -135,11 +135,11 @@ The following table contains dependencies in the backend application and the dat
         \end{tabular}
     }
     
-    \caption{Back-end Dependencies}
+    \caption{Backend Dependencies.}
     \label{fig:backendDependencyTable}
 \end{table}
 
-{\color{red} \textbf{At this point in time I have yet to find a reliable tool that creates a graph for nuget packages}}
+The visualization of dependency assemblies ~\cite{backendDependencyGraph} has been made by an extension of Visual Studio Enterprise, called ndepend. ~\cite{ndepend} A dependency matrix ~\cite{backendDependencyMatrix} is also provided for analysis, where matrix header elements correspond to graph boxes, non-empty cells to graph arrows. ~\cite{ndependDependencyMatrixGuide}
 
 The following table contains dependencies in the frontend application and the date of addition to the project:
 
@@ -219,10 +219,10 @@ The following table contains dependencies in the frontend application and the da
       \bottomrule
     \end{tabular}
     
-    \caption{Front-end Dependencies}
+    \caption{Frontend Dependencies.}
     \label{fig:frontendDependencyTable}
 \end{table}
 
-The visualization of all the dependencies has been made by an online tool~\cite{packageLockVisualizer} and it has produced the following graph~\cite{frontendDependencyGraph}:
+The visualization of all the dependencies has been made by an online tool~\cite{packageLockVisualizer}, and it has produced the following graph~\cite{frontendDependencyGraph}:
 
 % \includegraphics[scale=0.05]{images/dependency_graphs/minitwit_fe_package_lock_graph.png}

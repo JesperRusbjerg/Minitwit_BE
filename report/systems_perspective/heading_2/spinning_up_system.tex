@@ -3,6 +3,7 @@
 There are two possibilities to spin up the system:
 
 \begin{enumerate}
-  \item The vagrant file script in the "Minitwit\_BE/vagrantAutoDeploy" folder of GitHub repository can spin up a Digital Ocean server and automatically deploy all of the images from our dockerhub through the \texttt{docker-compose.yml} file. This is achived by adding a Digital Ocean auth token and running \texttt{vagrant up}.
-  \item In the "Minitwit\_BE/group\_m\_terraform" folder a terraform setup is located. It spins up three Digital Ocean servers. It creates a swarm cluster (1 manager, 2 workers) and deploys the system from the manager. To complete this setup the \texttt{secrets} file needs to be filled in. Then generate a fresh pair of ssh keys in the ssh\_key folder and finally run \texttt{bash bootstrap.sh}. When everything is complete a terminal printout of all relevant IPs is shown.
+  \item The vagrant file script in the "Minitwit\_BE/vagrantAutoDeploy" folder of GitHub repository can spin up a Digital Ocean server and automatically deploy all of the images from our DockerHub through the \texttt{docker-compose.yml} file~\cite{vagrant}~\cite{dockerComposeDefault}. This is achived by adding a Digital Ocean auth token and running \texttt{vagrant up}.
+  
+  \item In the "Minitwit\_BE/group\_m\_terraform" folder a terraform setup is located~\cite{terraform}. It spins up three Digital Ocean servers, creates a swarm cluster (1 manager, 2 workers) and deploys the system from the manager. To complete this setup, the \texttt{secrets} file needs to be filled in. Then, generate a fresh pair of ssh keys in the ssh\_key folder, and finally run \texttt{bash bootstrap.sh}. When everything is complete, a terminal printout of all relevant IPs is shown.
 \end{enumerate}

@@ -1,6 +1,6 @@
 \subsection{State of System}\label{stateofsystem}
 
-In this section the report discusses the current state of the system in terms of curriculum's and personally imposed requirements fulfillment - both functional and non-functional. 
+In this section the report discusses the current state of the system in the fulfillment of the curriculum's and personally imposed requirements, both functional and non-functional. 
 
 
 \input{systems_perspective/heading_3/non functional}
@@ -8,14 +8,24 @@ The non-functional requirements are derived from the curriculum, generic require
 
 \begin{enumerate}[noitemsep]
   \item Maintainability through scanning project using Sonarcloud.
-  \item 2 static analysis nugget packages "AsyncFixer", "SonarAnalyzer".
+  \item 2 static analysis NuGet packages "AsyncFixer", "SonarAnalyzer".
   \item Scanning docker containers for vulnerabilities.
   \item The project must pass all test cases.
 \end{enumerate}
 
-Sonarcloud, a maintenance tool detecting technical debt and known security vulnerabilities, sonarcloud has continuously helped the team find security vulnerabilities and insufficient code. If the project was to further develop, there are still code smells remaining to fix to lower any technical debt further.\\ \includegraphics[width=14cm, height=6cm]{images/sonarscan.PNG}\\ The current ratings has reassured the team that the practices agreed upon are held up and implemented rather correctly. The team aimed to structure the codebase using SE practices such as interface programming code, low cyclomatic complexity, single responsibility, low couplings, and high cohesion. It was essential to write structured code in case changes occurred. As for static analysis, the project would fail its build, if the analyzers found any flaws. The "AsyncFixer" package finds flaws in async calls, which would be a good addition to this REST-API project. The "SonarAnalyzer" spots apparent bugs and known security vulnerabilities. The project cannot build if either of the analyzers detect any issues. 
+Sonarcloud — a maintenance tool detecting technical debt and known security vulnerabilities — has continuously helped the team find security vulnerabilities and insufficient code. If the project was to further developed, there were still code smells remaining to fix to lower any technical debt.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/sonarscan.PNG}
+    \caption{SonarCloud scan dashboard.}
+    \label{fig:scanCode}
+\end{figure}
+
+The current ratings has reassured the team that the practices agreed upon are held up and implemented rather correctly. The team aimed to structure the codebase using SE practices such as interface programming code, low cyclomatic complexity, single responsibility, low couplings, and high cohesion. It was essential to write structured code in case changes occurred. As for static analysis, the project would fail its build, if the analyzers found any flaws. The "AsyncFixer" package finds flaws in async calls, which would be a good addition to this REST-API project. The "SonarAnalyzer" spots apparent bugs and known security vulnerabilities. The project can not build if either of the analyzers detect any issues. 
+
 \vspace{3mm}
 
-In addition to the analyzers, the docker containers get scanned using "docker scan" prior to any deployments and any build containing a "critical vulnerability". The team wrote a regex script\cite{script} that analyzed the docker scan's output to accomplish this feature. Lastly, the project must also pass all unit tests. The project currently contains 27 test cases, but the test suite should be improved and more thorough, if the project is to become a real-world application. The team felt the importance of test cases to ensure functionality does not break when implementing new features or trying to optimize the code.
+In addition to the analyzers, the docker containers get scanned using "docker scan" prior to any deployments and stops any build containing a "critical vulnerability". The team wrote a regex script that analyzed the docker scan's output to accomplish this feature~\cite{dockerScanner}. Lastly, the project must also pass all unit tests. The project currently contains 27 test cases, but the test suite should be improved and be more thorough, if the project is to become a real-world application. The team felt the importance of test cases to ensure no functionality breaks when implementing new features or trying to optimize the code.
 
 \input{systems_perspective/heading_3/functional}
